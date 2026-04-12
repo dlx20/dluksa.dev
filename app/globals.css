@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+
+
 /* Root colors */
 @layer base {
   :root {
@@ -21,6 +23,7 @@
     --accent-steel-light: #6B7280;
 
   }
+
 }
 
 
@@ -133,6 +136,9 @@
   }
   p {
     @apply text-ui text-fg-base tracking-default
+  }
+  html { 
+    @apply bg-black
   }
 
 
