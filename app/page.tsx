@@ -136,11 +136,11 @@ const Page = () => {
           </TerminalSection>
 
 
-        {/* System.Terminal.Initialize() */}
-        {/* <footer className="mt-10 flex border-t pt-5 justify-between items-center text-ui text-fg-base tracking-wide ">
+        System.Terminal.Initialize()
+        <footer className="mt-10 flex border-t pt-5 justify-between items-center text-ui text-fg-base tracking-wide ">
           <Initialize endTransmission={true} />
           <Socials />
-        </footer> */}
+        </footer>
       </div>
     </div>
   );

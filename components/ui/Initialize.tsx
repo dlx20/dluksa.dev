@@ -5,7 +5,7 @@ type IProps = {
 
 const Initialize = ({ fileName, endTransmission }: IProps) => {
     return (
-        <div className="mb-10 pl-2">
+        <div className="mb-5 px-4 md:px-0">
             <div className="text-ui text-fg-base mb-2 tracking-default uppercase">
                 {`System.Terminal.${endTransmission ? 'End()' : 'Initialize()'}`}
             </div>
