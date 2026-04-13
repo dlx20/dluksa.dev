@@ -40,7 +40,7 @@ const TerminalSection = ({ label, title, children }: TerminalSectionProps) => {
 
 
   return (
-    <div className="font-display group relative border-l border-fg-base/10 pl-8 pr-8 pb-16">
+    <div className="font-display group relative border-l border-fg-base/10 pl-4 pr-8 pb-16 md:pl-8">
       <div className='absolute -left-px top-0 h-4 w-0.5 bg-accent' />
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-2">

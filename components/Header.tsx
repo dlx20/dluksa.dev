@@ -25,7 +25,7 @@ const Header = () => {
             <div className="flex-1">
 
                 <TerminalHeader />
-                <div className="w-full flex items-center justify-between px-2 py-4">
+                <div className="w-full flex items-center justify-between px-4 py-4">
                     <div className="site-header__title">
                         <h2 className="text-accent font-bold">
                             ddev@dluksa.dev
