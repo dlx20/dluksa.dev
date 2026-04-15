@@ -27,7 +27,7 @@ const Page = () => {
             label="usr"
             title="who am i"
           >
-            <p className="text-subheading font-display leading-10 tracking-wide text-fg-base ">
+            <p className="text-subheading font-display leading-10 tracking-wide text-fg-base text-left">
               Junior <span className='text-accent underline underline-offset-5'>Full-Stack</span> Developer crafting performance-optimized web experiences.
               My current companions <span className='text-accent underline underline-offset-5'>Next.js</span> for responsive,
               SEO-friendly frontends and <span className='text-accent underline underline-offset-5'>Django</span> for scalable API architectures.
@@ -43,7 +43,7 @@ const Page = () => {
             label="sys"
             title="core stack"
           >
-            <div className='flex flex-wrap justify-between'>
+            <div className='flex flex-wrap'>
               {
                 SKILLS.map(({ section, skills }) => (
                   <SkillBadges key={section} title={section} skills={skills} />

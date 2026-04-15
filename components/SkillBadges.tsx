@@ -14,7 +14,7 @@ const SkillBadges = ({ title, skills, skillsArray, filter = false }: CardProps) 
     if (filter && (!skillsArray?.length || filteredSkills.length === 0)) return null;
 
     return (
-        <div className="flex p-2 font-display tracking-default text-ui text-fg-base">
+        <div className="flex font-display text-ui text-fg-base">
             {!filter ? (
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-2">
