@@ -78,19 +78,23 @@ const Page = () => {
         {/* SECTION 04: UI_SETTINGS */}
 
         <TerminalSection label='bin' title='system settings'>
-
           {/* Themes */}
-          <div className='flex flex-wrap gap-2'>
-            <div className='flex flex-col container-elevated justify-between gap-3 p-5'>
-              <ThemeSwitcher />
-              <AccentSwitcher shape='square' size='auto' />
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2'>
+
+            {/* Theme Switcher — col 1 on all sizes */}
+            <div className='flex flex-col gap-4 md:gap-0 justify-around p-4 container-elevated'>
+              <div className=''>
+                <ThemeSwitcher />
+              </div>
+                <div className=''>
+                  <AccentSwitcher shape='square' size='auto' />
+                </div>
             </div>
 
-            {/* System Status */}
-            <div className='flex border container-elevated p-5 '>
+            {/* System Status — col 2 on md+, full width on mobile */}
+            <div className='border container-elevated p-5'>
               <div className='space-y-3'>
                 <div className='text-[10px] uppercase tracking-wider text-accent/50 font-mono'>System Status</div>
-
                 <div className='space-y-2'>
                   <div className='flex items-center justify-between text-xs font-mono'>
                     <span className='text-text/60'>Services</span>
@@ -99,7 +103,6 @@ const Page = () => {
                       <span className='text-accent/70'>Online</span>
                     </div>
                   </div>
-
                   <div className='flex items-center justify-between text-xs font-mono'>
                     <span className='text-text/60'>Deploy</span>
                     <div className='flex items-center gap-1.5'>
@@ -107,14 +110,11 @@ const Page = () => {
                       <span className='text-accent/70'>Ready</span>
                     </div>
                   </div>
-
                   <div className='flex items-center justify-between text-xs font-mono'>
                     <span className='text-text/60'>Uptime</span>
                     <span className='text-accent/70'>99.8%</span>
                   </div>
-
                   <div className='h-px bg-accent/10 my-2'></div>
-
                   <div className='flex items-center justify-between text-xs font-mono'>
                     <span className='text-text/60'>Last Deploy</span>
                     <span className='text-accent/70'>2h ago</span>
@@ -123,9 +123,9 @@ const Page = () => {
               </div>
             </div>
 
-            <div className='flex-1 container-elevated'>
+            {/* Location — col 3 on lg, full width on md (spans 2 cols), full width on mobile */}
+            <div className='container-elevated h-50 md:col-span-2 lg:col-span-1'></div>
 
-            </div>
           </div>
         </TerminalSection>
         {/* Contact me form */}

@@ -41,7 +41,7 @@ const Button: React.FC<ButtonProps> = ({
     sm: "h-8 min-w-8 p-2 text-sm",
     md: "h-10 min-w-10 p-4 text-md",
     lg: "h-12 min-w-12 p-6 text-lg",
-    auto: 'w-full min-h-10 min-w-10 aspect-square p-0 text-base',
+    auto: 'w-full min-h-5 max-h-10 min-w-5 max-w-10 aspect-square p-0 text-base',
   }
 
   return (

@@ -21,7 +21,7 @@ const AccentSwitcher = ({shape, size}:accentSwitcherProps) => {
 
 
     return (
-        <div className="relative grid grid-cols-7 gap-2">
+        <div className="flex justify-start gap-2">
     {ACCENT_COLORS.map(color => {
         const isActive = color === localStorage.getItem('accent-color')
         
