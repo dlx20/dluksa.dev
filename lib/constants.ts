@@ -155,18 +155,22 @@ export const SKILLS: {
 export const SOCIALS: {
     title: string;
     icon: IconType;
+    url: string;
 }[] = [
         {
             title: 'LinkedIn',
             icon: TbBrandLinkedin,
+            url: 'https://www.linkedin.com/in/dovydas-luk/',
         },
         {
             title: 'GitHub',
             icon: FiGithub,
+            url: 'https://github.com/dluksa20',
         },
         {
             title: 'Email',
             icon: HiOutlineMail,
+            url: '',
         }
     ]
 
