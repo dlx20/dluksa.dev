@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.8",
+    "@vis.gl/react-google-maps": "^1.8.3",
     "clsx": "^2.1.1",
     "latest-version": "^9.0.0",
     "next": "^16.1.6",
