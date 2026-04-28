@@ -17,7 +17,7 @@ export default function MiniMap() {
     <APIProvider apiKey={apiKey} onLoad={() => console.log('Maps API has loaded.')}>
       <Map
         defaultZoom={13}
-        defaultCenter={{ lat: 51.5074, lng: -0.1278}}
+        defaultCenter={center}
         onCameraChanged={(ev: MapCameraChangedEvent) =>
           console.log('camera changed:', ev.detail.center, 'zoom:', ev.detail.zoom)
         }>
