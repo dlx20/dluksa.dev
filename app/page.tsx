@@ -17,11 +17,6 @@ const Page = () => {
     <div className="site-page__home">
 
       <div className="site-page__home-inner">
-
-        {/* System.Terminal.Initialize() */}
-        {/* <Initialize fileName='Readme.md' /> */}
-
-
         {/* SECTION 01: WHO_AM_I */}
         <TerminalSection
           label="usr"
