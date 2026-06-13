@@ -1,0 +1,9 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/ddev'
+      - '-f'
+      - 'ddev/Dockerfile'  # ← update this path to match your actual location
+      - '.'
