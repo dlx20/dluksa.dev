@@ -5,5 +5,5 @@ steps:
       - '-t'
       - 'gcr.io/$PROJECT_ID/ddev'
       - '-f'
-      - 'ddev/Dockerfile'  # ← update this path to match your actual location
+      - 'Dockerfile'
       - '.'
