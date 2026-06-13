@@ -5,5 +5,6 @@ steps:
       - '-t'
       - 'gcr.io/$PROJECT_ID/ddev'
       - '-f'
-      - 'Dockerfile'
-      - '.'
+      - 'ddev/Dockerfile'
+      - '-'
+    dir: 'ddev'
