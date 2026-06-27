@@ -7,14 +7,38 @@ const EmailFormSideBySide = () => {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('sending');
-    setTimeout(() => {
-      setStatus('success');
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setTimeout(() => setStatus('idle'), 3000);
-    }, 2000);
-  };
+  e.preventDefault();
+  setStatus("sending");
+
+  try {
+    const res = await fetch("/api/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to send");
+    }
+
+    setStatus("success");
+    setFormData({
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    });
+
+    setTimeout(() => setStatus("idle"), 3000);
+  } catch (err) {
+    console.error(err);
+    setStatus("error");
+
+    setTimeout(() => setStatus("idle"), 3000);
+  }
+};
 
   return (
     <div className="backdrop-blur-lg bg-surface-elevated/30 border border-accent/20 rounded-2xl overflow-hidden shadow-xl">
