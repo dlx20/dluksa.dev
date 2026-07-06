@@ -128,7 +128,7 @@ const Page = () => {
 
           </div>
         </TerminalSection>
-        {/* Contact me form */}
+        {/* Contact me */}
         <TerminalSection label='etc' title='Helo World'>
           <EmailForm />
           <div className='absolute right-14'>
