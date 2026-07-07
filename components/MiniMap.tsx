@@ -4,11 +4,7 @@ import React from 'react';
 import {createRoot} from "react-dom/client";
 import {APIProvider, Map, MapCameraChangedEvent} from '@vis.gl/react-google-maps';
 
-const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
-if (!apiKey) {
-  throw new Error('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is not set');
-}
+const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? '';
 
 const center = {
   lat: 51.5074,
