@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^2.1.1",
     "@react-google-maps/api": "^2.20.8",
     "@vis.gl/react-google-maps": "^1.8.3",
     "clsx": "^2.1.1",
