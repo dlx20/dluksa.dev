@@ -1,7 +1,6 @@
 
 FROM dhi.io/node:24-alpine3.22-dev AS dependencies
 
-# Set working directory
 WORKDIR /app
 
 # Copy package-related files first to leverage Docker's caching mechanism
