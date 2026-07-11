@@ -55,7 +55,7 @@ RUN if [ -f package-lock.json ]; then \
 # Stage 3: Run Next.js application
 # ============================================
 
-FROM dhi.io/node:24-alpine3.22-dev AS runner
+FROM node:24-alpine3.22 AS runner
 
 # Set working directory
 WORKDIR /app
