@@ -6,7 +6,9 @@ availableSecrets:
       env: 'APP_URL'
 
 steps:
+  # Build the image (BuildKit enabled for --mount=type=cache support)
   - name: 'gcr.io/cloud-builders/docker'
+    id: Build
     entrypoint: 'bash'
     env:
       - 'DOCKER_BUILDKIT=1'
@@ -16,7 +18,9 @@ steps:
         docker build \
           --build-arg NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="$$MAPS_KEY" \
           --build-arg NEXT_PUBLIC_APP_URL="$$APP_URL" \
-          -t europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:$COMMIT_SHA .
+          -t europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:$COMMIT_SHA \
+          -t europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:latest \
+          .
     secretEnv: ['MAPS_KEY', 'APP_URL']
 
   # Push both tags
