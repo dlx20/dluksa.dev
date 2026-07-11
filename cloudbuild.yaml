@@ -6,9 +6,7 @@ availableSecrets:
       env: 'APP_URL'
 
 steps:
-  # Build the image, baking the NEXT_PUBLIC_* vars in at build time
   - name: 'gcr.io/cloud-builders/docker'
-    id: Build
     entrypoint: 'bash'
     args:
       - '-c'
@@ -16,22 +14,13 @@ steps:
         docker build \
           --build-arg NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="$$MAPS_KEY" \
           --build-arg NEXT_PUBLIC_APP_URL="$$APP_URL" \
-          -t europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:$COMMIT_SHA \
-          -t europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:latest \
-          .
+          -t europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:$COMMIT_SHA .
     secretEnv: ['MAPS_KEY', 'APP_URL']
 
-  # Push both tags
   - name: 'gcr.io/cloud-builders/docker'
-    id: Push
-    args:
-      - 'push'
-      - '--all-tags'
-      - 'europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev'
+    args: ['push', 'europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:$COMMIT_SHA']
 
-  # Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    id: Deploy
     entrypoint: gcloud
     args:
       - 'run'
@@ -39,13 +28,7 @@ steps:
       - 'dluksa-dev'
       - '--image=europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:$COMMIT_SHA'
       - '--region=europe-west1'
-      - '--platform=managed'
-      - '--port=3000'
       - '--set-secrets=EMAIL_USER=EMAIL_USER:latest,GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID:latest,GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:latest,GOOGLE_REFRESH_TOKEN=GOOGLE_REFRESH_TOKEN:latest,NEXT_PUBLIC_APP_URL=NEXT_PUBLIC_APP_URL:latest,NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:latest'
 
 images:
   - 'europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:$COMMIT_SHA'
-  - 'europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:latest'
-
-options:
-  logging: CLOUD_LOGGING_ONLY
