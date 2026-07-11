@@ -13,7 +13,6 @@ RUN npm run build
 # ---------- Runner ----------
 FROM node:20-alpine AS runner
 WORKDIR /app
-ENV NODE_ENV=production
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
