@@ -56,7 +56,8 @@ const Page = () => {
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {
-              PROJECT_DATA.map(({ id, name, status, description, technologies }) => (
+              PROJECT_DATA.map(({ id, slug, name, status, description, technologies }) => (
+                <Link key={id} href={`/projects/${slug}`} className="w-full">
                 <ProjectCard
                   key={id}
                   name={name}
@@ -64,6 +65,7 @@ const Page = () => {
                   desc={description}
                   tech={technologies}
                 />
+                </Link>
               ))
             }
           </div>

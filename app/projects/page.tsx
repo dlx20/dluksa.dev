@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import TerminalSection from '@/components/TerminalSection';
 import ProjectCard from '@/components/ProjectCard';
 import { PROJECT_DATA } from '@/lib/constants';
+import Link from 'next/link';
 
 const ProjectsPage = () => {
   const [filter, setFilter] = useState<'ALL' | 'LIVE' | 'MAINTENANCE' | 'OFFLINE'>('ALL');
@@ -121,7 +122,11 @@ const ProjectsPage = () => {
             }`}
           >
             {filteredProjects.length > 0 ? (
-              filteredProjects.map(({ id, name, status, description, technologies }) => (
+              filteredProjects.map(({ id, slug, name, status, description, technologies }) => (
+                <Link 
+                  key={id} 
+                  href={`/projects/${slug}`} 
+                  >
                 <ProjectCard
                   key={id}
                   name={name}
@@ -129,6 +134,7 @@ const ProjectsPage = () => {
                   desc={description}
                   tech={technologies}
                 />
+                </Link>
               ))
             ) : (
               <div className="col-span-full text-center py-12">
