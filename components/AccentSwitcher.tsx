@@ -11,7 +11,7 @@ type AccentSwitcherProps = {
 
 const AccentSwitcher = ({
     shape = "circle",
-    size = "sm",
+    size = "lg",
 }: AccentSwitcherProps) => {
     const [activeColor, setActiveColor] = useState<string>("")
 

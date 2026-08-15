@@ -83,7 +83,7 @@ const Page = () => {
             <div className='flex flex-col gap-4 md:gap-0 justify-around p-4 container-elevated'>
                 <ThemeSwitcher />
 
-                  <AccentSwitcher shape='square' size='auto' />
+                  <AccentSwitcher shape='square' size='sm' />
 
             </div>
 
