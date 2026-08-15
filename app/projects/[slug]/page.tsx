@@ -25,8 +25,8 @@ export default async function ProjectPage({
   }
 
   return (
-    <main className="min-h-screen">
-      <div className="mx-auto max-w-5xl px-4 py-8 md:px-8">
+    <main className="min-h-screen w-full">
+      <div className="mx-auto max-w-7xl px-4 py-8 md:px-8">
 
         {/* Back button */}
         <Link

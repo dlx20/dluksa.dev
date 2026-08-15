@@ -20,6 +20,8 @@ export default function RootLayout({
             <main className="flex flex-1 items-center justify-center">
               {children}
             </main>
+          </div>
+          <div className="fixed bottom-0 left-0 right-0">
             <TerminalFooter />
           </div>
         </ThemeProvider>
