@@ -19,7 +19,7 @@ type SidebarProps = {
 
 const Sidebar = ({ onClose }: SidebarProps) => {
     return (
-        <aside className="fixed inset-y-0 right-0 z-50 w-100 h-lvh border-l border-accent/10 bg-surface-elevated">
+        <aside className="fixed inset-y-0 right-0 z-50 w-90 h-lvh border-l border-accent/10 bg-surface-elevated">
             <div className="flex h-full flex-col">
 
                 {/* Header */}
