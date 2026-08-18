@@ -9,6 +9,7 @@ import SkillBadges from '@/components/SkillBadges';
 import EmailForm from '@/components/EmailForm';
 import Socials from '@/components/ui/Socials';
 import MiniMap from '@/components/MiniMap';
+import { MdOutlinePalette } from 'react-icons/md'
 
 
 
@@ -77,14 +78,29 @@ const Page = () => {
 
         <TerminalSection label='bin' title='system settings'>
           {/* Themes */}
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2'>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 '>
+
 
             {/* Theme Switcher — col 1 on all sizes */}
-            <div className='flex flex-col gap-4 md:gap-0 justify-around p-4 container-elevated'>
+            <div className='flex flex-col justify-evenly  justify-around p-3 container-elevated'>
+              <div className="mb-2 flex items-center gap-4">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
+                      <MdOutlinePalette
+                          size={20}
+                          className="fill-accent"
+                      />
+                  </div>
+                  <div>
+                      <h2 className="font-semibold text-accent">
+                          Appearance
+                      </h2>
+                  </div>
+              </div>
                 <ThemeSwitcher />
+                <div className='mt-2 flex'>
 
                   <AccentSwitcher shape='square' size='sm' />
-
+                </div>
             </div>
 
             {/* System Status — col 2 on md+, full width on mobile */}
