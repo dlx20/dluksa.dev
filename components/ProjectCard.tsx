@@ -1,4 +1,4 @@
-import { SKILLS } from '@/lib/constants';
+import { SKILLS } from '@/lib/projects';
 import SkillBadges from './SkillBadges';
 import { FaFolderOpen } from "react-icons/fa";
 
@@ -12,7 +12,7 @@ type ProjectCardProps = {
 
 const ProjectCard = ({ name, tech, status, desc }: ProjectCardProps) => {
   return (
-    <div className="relative container-elevated p-6 cursor-pointer hover:bg-surface-elevated hover:border-accent transition-all duration-500">  
+    <div className="relative h-full container-elevated p-6 cursor-pointer hover:bg-surface-elevated hover:border-accent transition-all duration-500">  
       {/* Content */}
       <div className="z-10 space-y-6">
         {/* Header */}
@@ -48,7 +48,7 @@ const ProjectCard = ({ name, tech, status, desc }: ProjectCardProps) => {
         <div className="h-px bg-linear-to-r from-transparent via-accent/15 to-transparent" />
 
         {/* Tech badges */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex">
           {SKILLS.map(({ skills }) => (
             <SkillBadges
               key={skills[0]?.title}
