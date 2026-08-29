@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { FaArrowLeft, FaFolderOpen } from "react-icons/fa";
-import { PROJECT_DATA } from "@/lib/constants";
+import { FaArrowLeft, FaExternalLinkAlt, FaFolderOpen, FaGithub } from "react-icons/fa";
+import { getGitHubProject, getGitHubProjects } from "@/lib/github";
 
 type ProjectPageProps = {
   params: Promise<{
@@ -11,14 +11,17 @@ type ProjectPageProps = {
   }>;
 };
 
+export async function generateStaticParams() {
+  const projects = await getGitHubProjects();
+  return projects.map((project) => ({ slug: project.slug }));
+}
+
 export default async function ProjectPage({
   params,
 }: ProjectPageProps) {
   const { slug } = await params;
 
-  const project = PROJECT_DATA.find(
-    (project) => project.slug === slug
-  );
+  const project = await getGitHubProject(slug);
 
   if (!project) {
     notFound();
@@ -113,6 +116,29 @@ export default async function ProjectPage({
                   </span>
                 ))}
               </div>
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-4">
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md border border-accent/20 px-3 py-2 font-mono text-xs text-accent/70 transition-colors hover:border-accent/40 hover:text-accent"
+              >
+                <FaGithub />
+                GitHub
+              </a>
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-md border border-accent/20 px-3 py-2 font-mono text-xs text-accent/70 transition-colors hover:border-accent/40 hover:text-accent"
+                >
+                  <FaExternalLinkAlt />
+                  Live
+                </a>
+              )}
             </div>
           </div>
 

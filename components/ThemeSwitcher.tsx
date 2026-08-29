@@ -1,3 +1,5 @@
+'use client'
+
 import { THEMES } from "@/lib/constants"
 import Button from "./ui/Button"
 import { useTheme } from "next-themes"

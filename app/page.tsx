@@ -1,19 +1,18 @@
-'use client'
 import TerminalSection from '@/components/TerminalSection';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
 import AccentSwitcher from '@/components/AccentSwitcher';
 import ProjectCard from '@/components/ProjectCard';
-import { PROJECT_DATA, SKILLS, SOCIALS } from '@/lib/constants';
-import Link from 'next/link';
+import { SKILLS } from '@/lib/constants';
 import SkillBadges from '@/components/SkillBadges';
 import EmailForm from '@/components/EmailForm';
 import Socials from '@/components/ui/Socials';
 import MiniMap from '@/components/MiniMap';
-import { MdOutlinePalette } from 'react-icons/md'
+import { MdOutlinePalette } from 'react-icons/md';
+import { getGitHubProjects } from '@/lib/github';
 
+const Page = async () => {
+  const projects = (await getGitHubProjects()).slice(0, 4);
 
-
-const Page = () => {
   return (
     <div className="site-page__home">
 
@@ -56,19 +55,15 @@ const Page = () => {
           title="active projects"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {
-              PROJECT_DATA.map(({ id, slug, name, status, description, technologies }) => (
-                <Link key={id} href={`/projects/${slug}`} className="w-full">
-                <ProjectCard
-                  key={id}
-                  name={name}
-                  status={status}
-                  desc={description}
-                  tech={technologies}
-                />
-                </Link>
+            {projects.length > 0 ? (
+              projects.map((project) => (
+                <ProjectCard key={project.id} {...project} />
               ))
-            }
+            ) : (
+              <p className="col-span-full text-sm font-mono text-text/50">
+                GitHub projects could not be loaded right now.
+              </p>
+            )}
           </div>
         </TerminalSection>
 
