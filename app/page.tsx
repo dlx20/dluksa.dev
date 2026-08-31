@@ -1,157 +1,135 @@
+import Link from 'next/link';
+import { FaArrowRight, FaGithub, FaRegClock, FaRegFolder, FaRegStar } from 'react-icons/fa';
 import TerminalSection from '@/components/TerminalSection';
-import ThemeSwitcher from '@/components/ThemeSwitcher';
-import AccentSwitcher from '@/components/AccentSwitcher';
-import ProjectCard from '@/components/ProjectCard';
-import { SKILLS } from '@/lib/constants';
+import AppearanceSettings from '@/components/AppearanceSettings';
+import ProjectGrid from '@/components/ProjectGrid';
 import SkillBadges from '@/components/SkillBadges';
 import EmailForm from '@/components/EmailForm';
 import Socials from '@/components/ui/Socials';
 import MiniMap from '@/components/MiniMap';
-import { MdOutlinePalette } from 'react-icons/md';
-import { getGitHubProjects } from '@/lib/github';
+import { SKILLS } from '@/lib/constants';
+import { formatDate } from '@/lib/format';
+import { getProjects } from '@/lib/github';
+
+const FEATURED_COUNT = 3;
 
 const Page = async () => {
-  const projects = (await getGitHubProjects()).slice(0, 4);
+    const projects = await getProjects();
+    const featured = projects.slice(0, FEATURED_COUNT);
 
-  return (
-    <div className="site-page__home">
+    const stats = [
+        {
+            label: 'Public repos',
+            value: String(projects.length),
+            icon: FaRegFolder,
+        },
+        {
+            label: 'Total stars',
+            value: String(projects.reduce((total, project) => total + project.stars, 0)),
+            icon: FaRegStar,
+        },
+        {
+            label: 'Last push',
+            value: projects[0] ? formatDate(projects[0].updatedAt) : '—',
+            icon: FaRegClock,
+        },
+    ];
 
-      <div className="site-page__home-inner">
-        {/* SECTION 01: WHO_AM_I */}
-        <TerminalSection
-          label="usr"
-          title="who am i"
-        >
-          <p className="text-subheading font-display leading-10 tracking-wide text-fg-base text-left">
-            Junior <span className='text-accent underline underline-offset-5'>Full-Stack</span> Developer crafting performance-optimized web experiences.
-            My current companions <span className='text-accent underline underline-offset-5'>Next.js</span> for responsive,
-            SEO-friendly frontends and <span className='text-accent underline underline-offset-5'>Django</span> for scalable API architectures.
-            Always learning, always shipping.
-          </p>
-          <Socials />
-        </TerminalSection>
+    return (
+        <div className="site-page pb-16">
+            <div className="site-page__inner">
 
+                {/* 01 — Intro */}
+                <TerminalSection label="usr" title="who am i">
+                    <p className="text-subheading leading-8 tracking-wide sm:leading-9">
+                        MSc graduate in{' '}
+                        <span className="text-accent underline underline-offset-4">
+                            Robotics &amp; AI
+                        </span>
+                        , now building for the web. I train and deploy models in{' '}
+                        <span className="text-accent underline underline-offset-4">Python</span> with
+                        PyTorch and TensorFlow, then wrap them in{' '}
+                        <span className="text-accent underline underline-offset-4">Next.js</span>{' '}
+                        interfaces people can actually use. Always learning, always shipping.
+                    </p>
 
+                    <Socials />
+                </TerminalSection>
 
-        {/* SECTION 02: CORE_STACK */}
-        <TerminalSection
-          label="sys"
-          title="core stack"
-        >
-          <div className='flex flex-wrap'>
-            {
-              SKILLS.map(({ section, skills }) => (
-                <SkillBadges key={section} title={section} skills={skills} />
-              ))
-            }
-          </div>
-        </TerminalSection>
-
-
-
-        {/* SECTION 03: ACTIVE_PROJECTS */}
-        <TerminalSection
-          label="exe"
-          title="active projects"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {projects.length > 0 ? (
-              projects.map((project) => (
-                <ProjectCard key={project.id} {...project} />
-              ))
-            ) : (
-              <p className="col-span-full text-sm font-mono text-text/50">
-                GitHub projects could not be loaded right now.
-              </p>
-            )}
-          </div>
-        </TerminalSection>
-
-
-
-        {/* SECTION 04: UI_SETTINGS */}
-
-        <TerminalSection label='bin' title='system settings'>
-          {/* Themes */}
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 '>
-
-
-            {/* Theme Switcher — col 1 on all sizes */}
-            <div className='flex flex-col justify-evenly  justify-around p-3 container-elevated'>
-              <div className="mb-2 flex items-center gap-4">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
-                      <MdOutlinePalette
-                          size={20}
-                          className="fill-accent"
-                      />
-                  </div>
-                  <div>
-                      <h2 className="font-semibold text-accent">
-                          Appearance
-                      </h2>
-                  </div>
-              </div>
-                <ThemeSwitcher />
-                <div className='mt-2 flex'>
-
-                  <AccentSwitcher shape='square' size='sm' />
-                </div>
-            </div>
-
-            {/* System Status — col 2 on md+, full width on mobile */}
-            <div className='border container-elevated p-5'>
-              <div className='space-y-3'>
-                <div className='text-[10px] uppercase tracking-wider text-accent/50 font-mono'>System Status</div>
-                <div className='space-y-2'>
-                  <div className='flex items-center justify-between text-xs font-mono'>
-                    <span className='text-text/60'>Services</span>
-                    <div className='flex items-center gap-1.5'>
-                      <span className='w-1.5 h-1.5 rounded-full bg-green-400'></span>
-                      <span className='text-accent/70'>Online</span>
+                {/* 02 — Stack */}
+                <TerminalSection label="sys" title="core stack">
+                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                        {SKILLS.map(({ section, technologies }) => (
+                            <SkillBadges key={section} title={section} technologies={technologies} />
+                        ))}
                     </div>
-                  </div>
-                  <div className='flex items-center justify-between text-xs font-mono'>
-                    <span className='text-text/60'>Deploy</span>
-                    <div className='flex items-center gap-1.5'>
-                      <span className='w-1.5 h-1.5 rounded-full bg-green-400'></span>
-                      <span className='text-accent/70'>Ready</span>
+                </TerminalSection>
+
+                {/* 03 — Projects */}
+                <TerminalSection label="exe" title="active projects">
+                    <ProjectGrid projects={featured} />
+
+                    {projects.length > FEATURED_COUNT && (
+                        <Link
+                            href="/projects"
+                            className="btn-outline group mt-6"
+                        >
+                            All {projects.length} projects
+                            <FaArrowRight className="transition-transform group-hover:translate-x-0.5" />
+                        </Link>
+                    )}
+                </TerminalSection>
+
+                {/* 04 — Settings */}
+                <TerminalSection label="bin" title="system settings">
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+
+                        {/* Appearance */}
+                        <div className="card">
+                            <AppearanceSettings shape="square" />
+                        </div>
+
+                        {/* GitHub activity */}
+                        <div className="card flex flex-col gap-4">
+                            <div className="flex items-center gap-3">
+                                <span className="icon-tile">
+                                    <FaGithub size={18} className="text-accent" />
+                                </span>
+                                <h3 className="font-semibold text-accent">GitHub activity</h3>
+                            </div>
+
+                            <dl className="space-y-3">
+                                {stats.map(({ label, value, icon: Icon }) => (
+                                    <div
+                                        key={label}
+                                        className="flex items-center justify-between gap-4 text-ui"
+                                    >
+                                        <dt className="flex items-center gap-2 text-fg-muted">
+                                            <Icon className="shrink-0 text-accent/60" />
+                                            {label}
+                                        </dt>
+                                        <dd className="font-bold text-accent/80">{value}</dd>
+                                    </div>
+                                ))}
+                            </dl>
+                        </div>
+
+                        {/* Location */}
+                        <div className="card overflow-hidden p-0 md:col-span-2 xl:col-span-1">
+                            <div className="h-48 w-full xl:h-full xl:min-h-56">
+                                <MiniMap />
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div className='flex items-center justify-between text-xs font-mono'>
-                    <span className='text-text/60'>Uptime</span>
-                    <span className='text-accent/70'>99.8%</span>
-                  </div>
-                  <div className='h-px bg-accent/10 my-2'></div>
-                  <div className='flex items-center justify-between text-xs font-mono'>
-                    <span className='text-text/60'>Last Deploy</span>
-                    <span className='text-accent/70'>2h ago</span>
-                  </div>
-                </div>
-              </div>
+                </TerminalSection>
+
+                {/* 05 — Contact */}
+                <TerminalSection label="etc" title="say hello">
+                    <EmailForm />
+                </TerminalSection>
             </div>
-
-
-
-            {/* Location — col 3 on lg, full width on md (spans 2 cols), full width on mobile */}
-            <div className='container-elevated h-50 md:col-span-2 lg:col-span-1'>
-              <MiniMap />
-              <div className='h-10'>
-              </div>
-            </div>
-
-          </div>
-        </TerminalSection>
-        {/* Contact me */}
-        <TerminalSection label='etc' title='Helo World'>
-          <EmailForm />
-          <div className='absolute right-14'>
-            <Socials />
-          </div>
-
-        </TerminalSection>
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default Page;

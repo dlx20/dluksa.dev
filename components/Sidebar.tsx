@@ -1,101 +1,63 @@
+'use client'
+
 import Link from 'next/link'
-import Button from './ui/Button'
-import {
-    FaGithub,
-    FaLinkedin,
-    FaChevronRight,
-} from 'react-icons/fa'
-import { MdOutlinePalette } from 'react-icons/md'
+import { useEffect } from 'react'
+import { FaChevronRight, FaTimes } from 'react-icons/fa'
 import { PiLinkSimpleLight } from 'react-icons/pi'
-import { IoMail } from 'react-icons/io5'
+import { links, SOCIALS } from '@/lib/constants'
+import AppearanceSettings from './AppearanceSettings'
 
-import { links } from '@/lib/constants'
-import ThemeSwitcher from './ThemeSwitcher'
-import AccentSwitcher from './AccentSwitcher'
+const Sidebar = ({ onClose }: { onClose: () => void }) => {
+    useEffect(() => {
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') onClose()
+        }
 
-type SidebarProps = {
-    onClose: () => void
-}
+        document.addEventListener('keydown', closeOnEscape)
+        // Prevent the page behind the drawer from scrolling on touch devices.
+        document.body.style.overflow = 'hidden'
 
-const Sidebar = ({ onClose }: SidebarProps) => {
+        return () => {
+            document.removeEventListener('keydown', closeOnEscape)
+            document.body.style.overflow = ''
+        }
+    }, [onClose])
+
     return (
-        <aside className="fixed inset-y-0 right-0 z-50 w-90 h-lvh border-l border-accent/10 bg-surface-elevated">
-            <div className="flex h-full flex-col">
+        <>
+            <div className="site-sidebar__backdrop" onClick={onClose} aria-hidden />
 
-                {/* Header */}
-                <header className="border-b border-accent/10 px-6 py-5">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent/40">
-                                Menu
-                            </p>
-                            <h1 className="text-xl font-bold tracking-tight text-accent">
-                                Navigation
-                            </h1>
-                        </div>
-
-                        <Button
-                            size="sm"
-                            onClick={onClose}
-                            className="
-                                flex h-9 w-9 items-center justify-center
-                                border border-accent/10
-                                bg-accent/5 text-accent
-                                transition-all duration-200
-                                hover:bg-accent hover:text-surface-base
-                            "
-                        >
-                            <FaChevronRight size={13} />
-                        </Button>
+            <aside className="site-sidebar" aria-label="Site menu">
+                <header className="site-sidebar__section flex items-center justify-between">
+                    <div>
+                        <p className="text-ui uppercase tracking-wide text-accent/50">Menu</p>
+                        <h2 className="text-subheading font-bold text-accent">Navigation</h2>
                     </div>
+
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        aria-label="Close menu"
+                        className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-card border border-accent/20 bg-accent/5 text-accent transition-colors hover:bg-accent hover:text-surface-base"
+                    >
+                        <FaTimes size={14} />
+                    </button>
                 </header>
 
-                {/* Content */}
-                <div className="flex flex-1 flex-col overflow-y-auto">
-
-                    {/* Themes */}
-                    <section className="border-b border-accent/10 px-6 py-6 ">
-                        <div className="mb-5 flex items-center gap-4">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10">
-                                <MdOutlinePalette
-                                    size={20}
-                                    className="fill-accent"
-                                />
-                            </div>
-
-                            <div>
-                                <h2 className="font-semibold text-accent">
-                                    Appearance
-                                </h2>
-                                <p className="text-xs text-accent/50">
-                                    Customize your experience
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="space-y-6 rounded-xl border border-accent/10 bg-accent/[0.03] p-3 ">
-                            <ThemeSwitcher />
-                            <AccentSwitcher size="sm" />
-                        </div>
+                <div className="scrollbar flex-1 overflow-y-auto">
+                    <section className="site-sidebar__section">
+                        <AppearanceSettings />
                     </section>
 
-                    {/* Links */}
-                    <section className="px-6 py-6">
+                    <section className="site-sidebar__section border-b-0">
                         <div className="mb-4 flex items-center gap-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10">
-                                <PiLinkSimpleLight
-                                    size={20}
-                                    className="fill-accent"
-                                />
-                            </div>
+                            <span className="icon-tile">
+                                <PiLinkSimpleLight size={20} className="fill-accent" />
+                            </span>
 
                             <div>
-                                <h2 className="font-semibold text-accent">
-                                    Links
-                                </h2>
-                                <p className="text-xs text-accent/50">
-                                    Explore the site
-                                </p>
+                                <h3 className="font-semibold text-accent">Links</h3>
+                                <p className="text-ui text-fg-muted">Explore the site</p>
                             </div>
                         </div>
 
@@ -105,27 +67,13 @@ const Sidebar = ({ onClose }: SidebarProps) => {
                                     key={url}
                                     href={url}
                                     onClick={onClose}
-                                    className="
-                                        group flex items-center justify-between
-                                        rounded-lg px-4 py-3
-                                        text-sm font-medium
-                                        text-accent/70
-                                        transition-all duration-200
-                                        hover:bg-accent/10
-                                        hover:pl-5
-                                        hover:text-accent
-                                    "
+                                    className="site-sidebar__link group"
                                 >
                                     <span>{title}</span>
 
                                     <FaChevronRight
                                         size={10}
-                                        className="
-                                            opacity-0 -translate-x-1
-                                            transition-all duration-200
-                                            group-hover:translate-x-0
-                                            group-hover:opacity-100
-                                        "
+                                        className="-translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
                                     />
                                 </Link>
                             ))}
@@ -133,69 +81,26 @@ const Sidebar = ({ onClose }: SidebarProps) => {
                     </section>
                 </div>
 
-                {/* Footer */}
-                <footer className="border-t border-accent/10 px-6 py-5">
-                    <div className="mb-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent/40">
-                            Connect
-                        </p>
-                    </div>
+                <footer className="border-t border-accent/10 px-5 py-5 sm:px-6">
+                    <p className="mb-4 text-ui uppercase tracking-wide text-accent/50">Connect</p>
 
                     <div className="flex gap-2">
-                        <a
-                            href="#"
-                            aria-label="GitHub"
-                            className="
-                                flex h-10 w-10 items-center justify-center
-                                rounded-lg border border-accent/10
-                                bg-accent/5
-                                text-accent/60
-                                transition-all duration-200
-                                hover:-translate-y-0.5
-                                hover:bg-accent
-                                hover:text-surface-base
-                            "
-                        >
-                            <FaGithub size={18} />
-                        </a>
-
-                        <a
-                            href="#"
-                            aria-label="LinkedIn"
-                            className="
-                                flex h-10 w-10 items-center justify-center
-                                rounded-lg border border-accent/10
-                                bg-accent/5
-                                text-accent/60
-                                transition-all duration-200
-                                hover:-translate-y-0.5
-                                hover:bg-accent
-                                hover:text-surface-base
-                            "
-                        >
-                            <FaLinkedin size={18} />
-                        </a>
-
-                        <a
-                            href="mailto:"
-                            aria-label="Email"
-                            className="
-                                flex h-10 w-10 items-center justify-center
-                                rounded-lg border border-accent/10
-                                bg-accent/5
-                                text-accent/60
-                                transition-all duration-200
-                                hover:-translate-y-0.5
-                                hover:bg-accent
-                                hover:text-surface-base
-                            "
-                        >
-                            <IoMail size={19} />
-                        </a>
+                        {SOCIALS.map(({ title, icon: Icon, url }) => (
+                            <a
+                                key={title}
+                                href={url}
+                                aria-label={title}
+                                target={url.startsWith('http') ? '_blank' : undefined}
+                                rel="noopener noreferrer"
+                                className="site-sidebar__social"
+                            >
+                                <Icon size={18} />
+                            </a>
+                        ))}
                     </div>
                 </footer>
-            </div>
-        </aside>
+            </aside>
+        </>
     )
 }
 

@@ -40,6 +40,12 @@ ENV NODE_ENV=production
 ARG NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 ENV NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=$NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 
+# Projects are prerendered from the GitHub API at build time.
+ARG GITHUB_USERNAME
+ENV GITHUB_USERNAME=$GITHUB_USERNAME
+ARG GITHUB_TOKEN
+ENV GITHUB_TOKEN=$GITHUB_TOKEN
+
 
 RUN if [ -f package-lock.json ]; then \
     npm run build; \
@@ -63,6 +69,12 @@ WORKDIR /app
 # Set production environment variables
 ENV NODE_ENV=production
 ENV PORT=3000
+
+# Needed again at runtime so hourly revalidation can refresh the project list.
+ARG GITHUB_USERNAME
+ENV GITHUB_USERNAME=$GITHUB_USERNAME
+ARG GITHUB_TOKEN
+ENV GITHUB_TOKEN=$GITHUB_TOKEN
 
 
 # Copy production assets

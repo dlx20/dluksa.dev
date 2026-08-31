@@ -1,54 +1,48 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const TerminalHeader = () => {
   const [time, setTime] = useState('')
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+  const [viewport, setViewport] = useState('')
 
   useEffect(() => {
-    const updateTime = () => {
+    const tick = () =>
       setTime(
-        new Date().toLocaleTimeString([], {
+        new Date().toLocaleTimeString('en-GB', {
           hour: '2-digit',
           minute: '2-digit',
           second: '2-digit',
         })
       )
-    }
 
-    updateTime()
-    const interval = setInterval(updateTime, 1000)
+    tick()
+    const interval = setInterval(tick, 1000)
     return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
-    const updateDimensions = () => {
-      setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      })
-    }
-    updateDimensions()
-    window.addEventListener('resize', updateDimensions)
-    return () => window.removeEventListener('resize', updateDimensions)
+    const measure = () => setViewport(`${window.innerWidth}×${window.innerHeight}`)
+
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
   }, [])
 
   return (
-    <div className="flex items-center justify-between px-4  py-2 bg-surface-elevated border-b border-accent/10">
-      <div className="flex gap-2">
-        <div className="w-3 h-3 rounded-full bg-red-400 shadow-inner" />
-        <div className="w-3 h-3 rounded-full bg-yellow-400 shadow-inner" />
-        <div className="w-3 h-3 rounded-full bg-green-400 shadow-inner" />
+    <div className="flex items-center justify-between gap-3 border-b border-accent/10 bg-surface-elevated px-4 py-2 sm:px-6 lg:px-10">
+      <div className="flex shrink-0 gap-2">
+        <span className="size-3 rounded-full bg-danger/80" />
+        <span className="size-3 rounded-full bg-warning/80" />
+        <span className="size-3 rounded-full bg-success/80" />
       </div>
 
-      <div className="text-ui uppercase tracking-default text-accent/60 font-bold">
-        ddev — zsh — {dimensions.width}×{dimensions.height}
-      </div>
+      {/* Too narrow to be useful on phones. */}
+      <span className="hidden truncate text-ui font-bold uppercase tracking-default text-accent/60 md:block">
+        ddev — zsh — {viewport}
+      </span>
 
-      <div className="text-ui text-accent/90  text-right">
-        {time}
-      </div>
+      <span className="shrink-0 text-ui tabular-nums text-accent/90">{time}</span>
     </div>
   )
 }

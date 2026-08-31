@@ -1,27 +1,32 @@
-// components/MiniMap.js
-"use client";
-import React from 'react';
-import {createRoot} from "react-dom/client";
-import {APIProvider, Map, MapCameraChangedEvent} from '@vis.gl/react-google-maps';
+'use client';
 
-const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
+import { APIProvider, Map } from '@vis.gl/react-google-maps';
+import { LOCATION } from '@/lib/constants';
 
-const center = {
-  lat: 51.5074,
-  lng: -0.1278,
+const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
+const LONDON = { lat: 51.5074, lng: -0.1278 };
+
+const MiniMap = () => {
+    if (!apiKey) {
+        return (
+            <div className="flex h-full items-center justify-center p-4 text-center text-ui text-fg-muted">
+                {LOCATION}
+            </div>
+        );
+    }
+
+    return (
+        <APIProvider apiKey={apiKey}>
+            <Map
+                defaultZoom={11}
+                defaultCenter={LONDON}
+                disableDefaultUI
+                gestureHandling="cooperative"
+                style={{ width: '100%', height: '100%' }}
+            />
+        </APIProvider>
+    );
 };
 
-
-export default function MiniMap() {
-  return (
-    <APIProvider apiKey={apiKey} onLoad={() => console.log('Maps API has loaded.')}>
-      <Map
-        defaultZoom={13}
-        defaultCenter={center}
-        onCameraChanged={(ev: MapCameraChangedEvent) =>
-          console.log('camera changed:', ev.detail.center, 'zoom:', ev.detail.zoom)
-        }>
-      </Map>
-    </APIProvider>
-  );
-}
+export default MiniMap;

@@ -1,151 +1,169 @@
-export type ProjectStatus = 'LIVE' | 'MAINTENANCE' | 'OFFLINE';
+import { cache } from 'react';
+import { toExcerpt } from './markdown';
 
 export type Project = {
-  id: string;
-  slug: string;
-  name: string;
-  status: ProjectStatus;
-  description: string;
-  technologies: string[];
-  githubUrl: string;
-  liveUrl?: string;
+    slug: string;
+    /** Repository name, shown verbatim to keep the terminal feel. */
+    name: string;
+    /** One-line summary taken from the README, for project cards. */
+    excerpt: string;
+    /** Full README markdown, for the dedicated project page. */
+    readme: string;
+    technologies: string[];
+    language: string | null;
+    stars: number;
+    /** ISO date of the most recent push. */
+    updatedAt: string;
+    githubUrl: string;
+    liveUrl: string | null;
 };
 
 type GitHubRepo = {
-  id: number;
-  name: string;
-  description: string | null;
-  html_url: string;
-  homepage: string | null;
-  language: string | null;
-  topics?: string[];
-  archived: boolean;
-  fork: boolean;
-  updated_at: string;
+    name: string;
+    description: string | null;
+    html_url: string;
+    homepage: string | null;
+    language: string | null;
+    topics?: string[];
+    stargazers_count: number;
+    pushed_at: string;
+    archived: boolean;
+    fork: boolean;
+    private: boolean;
 };
 
-const TOPIC_TO_SKILL: Record<string, string> = {
-  react: 'React',
-  nextjs: 'Next.js',
-  'next-js': 'Next.js',
-  tailwind: 'Tailwindcss',
-  tailwindcss: 'Tailwindcss',
-  typescript: 'TypeScript',
-  javascript: 'JavaScript',
-  node: 'Node.js',
-  nodejs: 'Node.js',
-  'node-js': 'Node.js',
-  django: 'Django',
-  python: 'Python',
-  postgresql: 'PostgreSQL',
-  postgres: 'PostgreSQL',
-  supabase: 'Supabase',
-  docker: 'Docker',
-  vercel: 'Vercel',
-};
+const USERNAME = process.env.GITHUB_USERNAME ?? 'dluksa20';
+const API = 'https://api.github.com';
 
-const LANGUAGE_TO_SKILL: Record<string, string> = {
-  TypeScript: 'TypeScript',
-  JavaScript: 'JavaScript',
-  Python: 'Python',
-  HTML: 'HTML',
-  CSS: 'CSS',
-  Go: 'Go',
-  Rust: 'Rust',
-  Java: 'Java',
-  PHP: 'PHP',
-  Ruby: 'Ruby',
-  Shell: 'Shell',
-  Dockerfile: 'Docker',
-};
+/** Cache GitHub responses for an hour so page views don't burn rate limit. */
+const REVALIDATE_SECONDS = 3600;
 
-function toTechnologies(language: string | null, topics: string[]): string[] {
-  const technologies: string[] = [];
-  const seen = new Set<string>();
+/** Ignore languages that make up less than this share of a repository. */
+const MIN_LANGUAGE_SHARE = 0.03;
 
-  const add = (value: string) => {
-    if (!value || seen.has(value.toLowerCase())) return;
-    seen.add(value.toLowerCase());
-    technologies.push(value);
-  };
+const MAX_TECHNOLOGIES = 8;
 
-  if (language) {
-    add(LANGUAGE_TO_SKILL[language] ?? language);
-  }
+async function request(path: string, accept: string): Promise<Response | null> {
+    const headers: Record<string, string> = {
+        Accept: accept,
+        'X-GitHub-Api-Version': '2022-11-28',
+        // GitHub requires a User-Agent on every API request.
+        'User-Agent': 'ddev-portfolio',
+    };
 
-  for (const topic of topics) {
-    add(TOPIC_TO_SKILL[topic.toLowerCase()] ?? topic.replace(/-/g, ' '));
-  }
-
-  return technologies;
-}
-
-function toLiveUrl(homepage: string | null): string | undefined {
-  if (!homepage?.trim()) return undefined;
-  if (homepage.startsWith('http://') || homepage.startsWith('https://')) {
-    return homepage;
-  }
-  return `https://${homepage}`;
-}
-
-function toProject(repo: GitHubRepo): Project {
-  const liveUrl = toLiveUrl(repo.homepage);
-
-  return {
-    id: String(repo.id),
-    slug: repo.name,
-    name: repo.name.replace(/-/g, '_').toUpperCase(),
-    status: liveUrl ? 'LIVE' : 'OFFLINE',
-    description: repo.description ?? '',
-    technologies: toTechnologies(repo.language, repo.topics ?? []),
-    githubUrl: repo.html_url,
-    liveUrl,
-  };
-}
-
-async function fetchRepos(): Promise<GitHubRepo[]> {
-  const username = process.env.GITHUB_USERNAME ?? 'dlx20';
-  const token = process.env.GITHUB_TOKEN;
-
-  const headers: HeadersInit = {
-    Accept: 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28',
-    'User-Agent': 'ddev-portfolio',
-  };
-
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
-  const response = await fetch(
-    `https://api.github.com/users/${username}/repos?sort=updated&per_page=100&type=owner`,
-    {
-      next: { revalidate: 3600 },
-      headers,
+    if (process.env.GITHUB_TOKEN) {
+        headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
     }
-  );
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch GitHub repositories (${response.status})`);
-  }
+    try {
+        const response = await fetch(`${API}${path}`, {
+            headers,
+            next: { revalidate: REVALIDATE_SECONDS },
+        });
 
-  return response.json();
+        if (!response.ok) {
+            // Plenty of repositories have no README; only flag real problems
+            // such as rate limiting.
+            if (response.status !== 404) {
+                console.error(`GitHub ${path} responded ${response.status}`);
+            }
+            return null;
+        }
+
+        return response;
+    } catch (error) {
+        console.error(`GitHub ${path} failed`, error);
+        return null;
+    }
 }
 
-export async function getGitHubProjects(): Promise<Project[]> {
-  try {
-    const repos = await fetchRepos();
-
-    return repos
-      .filter((repo) => !repo.fork && !repo.archived)
-      .map(toProject);
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
+async function fetchJson<T>(path: string): Promise<T | null> {
+    const response = await request(path, 'application/vnd.github+json');
+    return response ? (response.json() as Promise<T>) : null;
 }
 
-export async function getGitHubProject(slug: string): Promise<Project | undefined> {
-  const projects = await getGitHubProjects();
-  return projects.find((project) => project.slug === slug);
+/** READMEs are requested raw so the markdown can be rendered as-is. */
+async function fetchReadme(repo: string): Promise<string> {
+    const response = await request(`/repos/${USERNAME}/${repo}/readme`, 'application/vnd.github.raw');
+    return response ? response.text() : '';
+}
+
+/**
+ * Repository topics are the intended source of technologies, but they are
+ * optional. Byte counts from the languages endpoint fill the gap, with the
+ * long tail of incidental languages dropped.
+ */
+function toTechnologies(languageBytes: Record<string, number>, topics: string[]): string[] {
+    const totalBytes = Object.values(languageBytes).reduce((sum, bytes) => sum + bytes, 0);
+
+    const languages = Object.entries(languageBytes)
+        .filter(([, bytes]) => totalBytes > 0 && bytes / totalBytes >= MIN_LANGUAGE_SHARE)
+        .sort(([, a], [, b]) => b - a)
+        .map(([language]) => language);
+
+    const unique = new Map<string, string>();
+    for (const entry of [...languages, ...topics]) {
+        unique.set(entry.toLowerCase(), entry);
+    }
+
+    return [...unique.values()].slice(0, MAX_TECHNOLOGIES);
+}
+
+function toLiveUrl(homepage: string | null): string | null {
+    const trimmed = homepage?.trim();
+    if (!trimmed) return null;
+    return /^https?:\/\//.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
+async function toProject(repo: GitHubRepo): Promise<Project> {
+    const [languageBytes, readme] = await Promise.all([
+        fetchJson<Record<string, number>>(`/repos/${USERNAME}/${repo.name}/languages`),
+        fetchReadme(repo.name),
+    ]);
+
+    return {
+        slug: repo.name,
+        name: repo.name,
+        excerpt: toExcerpt(readme) || repo.description || 'No description available yet.',
+        readme,
+        technologies: toTechnologies(languageBytes ?? {}, repo.topics ?? []),
+        language: repo.language,
+        stars: repo.stargazers_count,
+        updatedAt: repo.pushed_at,
+        githubUrl: repo.html_url,
+        liveUrl: toLiveUrl(repo.homepage),
+    };
+}
+
+/**
+ * Public, owned, non-fork repositories, most recently pushed first.
+ * Wrapped in `cache` so the several pages that need the list during one render
+ * share a single set of GitHub requests.
+ */
+export const getProjects = cache(async (): Promise<Project[]> => {
+    const repos = await fetchJson<GitHubRepo[]>(
+        `/users/${USERNAME}/repos?sort=pushed&per_page=100&type=owner`
+    );
+
+    if (!repos) return [];
+
+    const visible = repos.filter(
+        (repo) =>
+            !repo.fork &&
+            !repo.archived &&
+            !repo.private &&
+            // The repository named after the account only holds the profile README.
+            repo.name.toLowerCase() !== USERNAME.toLowerCase()
+    );
+
+    return Promise.all(visible.map(toProject));
+});
+
+export async function getProject(slug: string): Promise<Project | undefined> {
+    const projects = await getProjects();
+    return projects.find((project) => project.slug === slug);
+}
+
+export function readmeBaseUrl(slug: string): string {
+    return `https://raw.githubusercontent.com/${USERNAME}/${slug}/HEAD`;
 }

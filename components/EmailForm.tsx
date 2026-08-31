@@ -1,138 +1,147 @@
 'use client';
 
 import { useState } from 'react';
+import { HiOutlineLocationMarker, HiOutlineMail } from 'react-icons/hi';
+import { EMAIL, LOCATION } from '@/lib/constants';
 
-const EmailFormSideBySide = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+type Status = 'idle' | 'sending' | 'success' | 'error';
 
-  const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setStatus("sending");
+const EMPTY_FORM = { name: '', email: '', subject: '', message: '' };
 
-  try {
-    const res = await fetch("/api/send-email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+const EmailForm = () => {
+  const [formData, setFormData] = useState(EMPTY_FORM);
+  const [status, setStatus] = useState<Status>('idle');
 
-    if (!res.ok) {
-      throw new Error("Failed to send");
+  const update = (field: keyof typeof EMPTY_FORM) => (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setFormData((previous) => ({ ...previous, [field]: event.target.value }));
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setStatus('sending');
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error(`Request failed with ${response.status}`);
+
+      setStatus('success');
+      setFormData(EMPTY_FORM);
+    } catch (error) {
+      console.error(error);
+      setStatus('error');
+    } finally {
+      setTimeout(() => setStatus('idle'), 4000);
     }
-
-    setStatus("success");
-    setFormData({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
-
-    setTimeout(() => setStatus("idle"), 3000);
-  } catch (err) {
-    console.error(err);
-    setStatus("error");
-
-    setTimeout(() => setStatus("idle"), 3000);
-  }
-};
+  };
 
   return (
-    <div className="backdrop-blur-lg bg-surface-elevated/30 border border-accent/20 rounded-2xl overflow-hidden shadow-xl">
-      <div className="grid md:grid-cols-5 gap-6 p-6">
-        {/* Info Side */}
-        <div className="md:col-span-2 space-y-4">
+    <div className="card">
+      <div className="grid gap-8 lg:grid-cols-5">
+
+        <div className="space-y-5 lg:col-span-2">
           <div>
-            <h2 className="text-lg font-bold text-text/95 font-mono mb-2">Get in Touch</h2>
-            <p className="text-sm text-text/60 leading-relaxed">
-              Have a project in mind? Let's discuss how we can work together.
+            <h2 className="text-subheading font-bold text-fg-base">Get in touch</h2>
+            <p className="mt-2 text-body leading-6 text-fg-muted">
+              Have a project in mind? Send a message and I&apos;ll get back to you.
             </p>
           </div>
 
-          <div className="space-y-3">
-            <div className="flex items-center gap-3 text-sm">
-              <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
-                <span className="text-accent text-xs">✉</span>
-              </div>
-              <span className="text-text/70 font-mono text-xs">ddev@dluksa.dev</span>
-            </div>
+          <ul className="space-y-3">
+            <li className="flex items-center gap-3">
+              <span className="icon-tile">
+                <HiOutlineMail size={18} className="text-accent" />
+              </span>
+              <a href={`mailto:${EMAIL}`} className="text-ui text-fg-muted hover:text-accent">
+                {EMAIL}
+              </a>
+            </li>
 
-            <div className="flex items-center gap-3 text-sm">
-              <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
-                <span className="text-accent text-xs">📍</span>
-              </div>
-              <span className="text-text/70 font-mono text-xs">London, England</span>
-            </div>
-
-          </div>
+            <li className="flex items-center gap-3">
+              <span className="icon-tile">
+                <HiOutlineLocationMarker size={18} className="text-accent" />
+              </span>
+              <span className="text-ui text-fg-muted">{LOCATION}</span>
+            </li>
+          </ul>
         </div>
 
-        {/* Form Side */}
-        <div className="md:col-span-3">
-          <form onSubmit={handleSubmit} className="space-y-3.5">
-            <div className="grid grid-cols-2 gap-3">
+        <form onSubmit={handleSubmit} className="space-y-3 lg:col-span-3">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label htmlFor="name" className="control-label">Name</label>
               <input
-                type="text"
-                name="name"
+                id="name"
+                className="field"
                 value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="Name"
+                onChange={update('name')}
                 required
-                className="px-3 py-2.5 bg-surface-base/40 border border-accent/15 rounded-lg text-text text-sm font-mono placeholder:text-text/40 focus:outline-none focus:border-accent/30 transition-colors"
-              />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                placeholder="Email"
-                required
-                className="px-3 py-2.5 bg-surface-base/40 border border-accent/15 rounded-lg text-text text-sm font-mono placeholder:text-text/40 focus:outline-none focus:border-accent/30 transition-colors"
               />
             </div>
 
+            <div>
+              <label htmlFor="email" className="control-label">Email</label>
+              <input
+                id="email"
+                type="email"
+                className="field"
+                value={formData.email}
+                onChange={update('email')}
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="subject" className="control-label">Subject</label>
             <input
-              type="text"
-              name="subject"
+              id="subject"
+              className="field"
               value={formData.subject}
-              onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
-              placeholder="Subject"
+              onChange={update('subject')}
               required
-              className="w-full px-3 py-2.5 bg-surface-base/40 border border-accent/15 rounded-lg text-text text-sm font-mono placeholder:text-text/40 focus:outline-none focus:border-accent/30 transition-colors"
             />
+          </div>
 
+          <div>
+            <label htmlFor="message" className="control-label">Message</label>
             <textarea
-              name="message"
-              value={formData.message}
-              onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-              placeholder="Your message..."
-              required
+              id="message"
               rows={4}
-              className="w-full px-3 py-2.5 bg-surface-base/40 border border-accent/15 rounded-lg text-text text-sm font-mono placeholder:text-text/40 focus:outline-none focus:border-accent/30 transition-colors resize-none"
+              className="field resize-none"
+              value={formData.message}
+              onChange={update('message')}
+              required
             />
+          </div>
 
-            {status === 'success' && (
-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-400/10 border border-green-400/30">
-                <span className="text-green-400 text-sm">✓</span>
-                <span className="text-xs font-mono text-green-400">Message sent successfully!</span>
-              </div>
-            )}
+          {status === 'success' && (
+            <p className="rounded-card border border-success/30 bg-success/10 px-3 py-2 text-ui text-success">
+              Message sent — thanks for reaching out.
+            </p>
+          )}
 
-            <button
-              type="submit"
-              disabled={status === 'sending'}
-              className="w-full px-5 py-2.5 bg-gradient-to-r from-accent/80 to-accent/60 hover:from-accent/90 hover:to-accent/70 border border-accent/40 rounded-lg text-text font-mono text-sm font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 transition-all"
-            >
-              {status === 'sending' ? 'Sending...' : 'Send Message'}
-            </button>
-          </form>
-        </div>
+          {status === 'error' && (
+            <p className="rounded-card border border-danger/30 bg-danger/10 px-3 py-2 text-ui text-danger">
+              Something went wrong. Email me directly at {EMAIL}.
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={status === 'sending'}
+            className="w-full cursor-pointer rounded-card border border-accent/40 bg-accent/15 px-5 py-2.5 font-display text-body font-bold uppercase tracking-wide text-accent transition-colors hover:bg-accent/25 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {status === 'sending' ? 'Sending…' : 'Send message'}
+          </button>
+        </form>
       </div>
     </div>
   );
 };
 
-export default EmailFormSideBySide;
+export default EmailForm;

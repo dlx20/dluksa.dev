@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
-
-
-/* Root colors */
+/* ---------------------------------------------------------------------------
+   Accent palettes
+   --------------------------------------------------------------------------- */
 @layer base {
   :root {
-    /* Accent palettes dark theme*/
+    /* Dark themes */
     --accent-coral-dark: #F07178;
     --accent-sage-dark: #C3E88D;
     --accent-amber-dark: #F6C177;
@@ -13,7 +13,8 @@
     --accent-orchid-dark: #C792EA;
     --accent-sky-dark: #60ADEC;
     --accent-steel-dark: #ABB2BF;
-    /* Accent palettes light theme */
+
+    /* Light theme */
     --accent-coral-light: #b3484d;
     --accent-sage-light: #6b9946;
     --accent-amber-light: #c18f3f;
@@ -21,16 +22,15 @@
     --accent-orchid-light: #A06CD5;
     --accent-sky-light: #3F8FD6;
     --accent-steel-light: #6B7280;
-
   }
-
 }
 
-
-/* Themes */
+/* ---------------------------------------------------------------------------
+   Themes
+   --------------------------------------------------------------------------- */
 @layer base {
-  .palenight, .void {
-    /* Dark accents */
+  .palenight,
+  .void {
     --color-coral-rose: var(--accent-coral-dark);
     --color-sage-green: var(--accent-sage-dark);
     --color-amber-glow: var(--accent-amber-dark);
@@ -38,10 +38,14 @@
     --color-orchid-purple: var(--accent-orchid-dark);
     --color-sky-blue: var(--accent-sky-dark);
     --color-steel-grey: var(--accent-steel-dark);
+
+    /* Status colours, shared by both dark themes */
+    --success: 142 60% 55%;
+    --warning: 38 90% 62%;
+    --danger: 0 70% 62%;
   }
 
   .ashlight {
-    /* Light accents */
     --color-coral-rose: var(--accent-coral-light);
     --color-sage-green: var(--accent-sage-light);
     --color-amber-glow: var(--accent-amber-light);
@@ -49,15 +53,18 @@
     --color-orchid-purple: var(--accent-orchid-light);
     --color-sky-blue: var(--accent-sky-light);
     --color-steel-grey: var(--accent-steel-light);
+
+    --success: 142 55% 38%;
+    --warning: 32 80% 42%;
+    --danger: 0 65% 48%;
   }
 
-  /* Theme-base colors */
   .palenight {
     --surface-base: 229 20% 20%;
     --surface-elevated: 229 20% 24%;
-    --surface-hovered: 229 20% 20%;
+    --surface-hovered: 229 20% 28%;
     --primary: 260 100% 78%;
-    --accent: 84, 66%, 73%;
+    --accent: 84 66% 73%;
     --border: 0 1% 34%;
     --fg-base: 229 7% 86%;
     --fg-muted: 230 6% 68%;
@@ -68,45 +75,45 @@
     --surface-elevated: 0 0% 15%;
     --surface-hovered: 24 12% 21%;
     --primary: 32 90% 50%;
-    --accent: 84, 66%, 73%;
+    --accent: 84 66% 73%;
     --border: 0 1% 44%;
     --fg-base: 229 7% 86%;
     --fg-muted: 28 10% 70%;
   }
-
-
 
   .ashlight {
     --surface-base: 220 40% 96%;
     --surface-elevated: 220 32% 98%;
     --surface-hovered: 220 14% 92%;
     --primary: 32 90% 50%;
-    --accent: 208, 65%, 54%;
+    --accent: 208 65% 44%;
     --border: 220 8% 54%;
-    --fg-base: 0 0% 28%;
-    --fg-muted: 220 6% 52%;
+    --fg-base: 0 0% 22%;
+    --fg-muted: 220 6% 42%;
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Design tokens
+   --------------------------------------------------------------------------- */
 @theme {
-  /* Font Styles */
-  --font-display: "Ubuntu Mono", monospace;
+  --font-display: var(--font-ubuntu-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: var(--font-ubuntu-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: var(--font-ubuntu-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 
-
-  /* Font Sizes */
+  /* Type scale: ui for labels and metadata, body for prose. */
   --text-ui: 0.75rem;
+  --text-body: 0.875rem;
   --text-base: 1rem;
-  --text-subheading: 1.25rem;
+  --text-subheading: 1.125rem;
   --text-heading: 1.5rem;
 
-  /* Letter spacing  */
   --tracking-default: 0.06rem;
   --tracking-wide: 0.08rem;
 
-  /* Containers */
-  --container: 140px;
+  /* Single source of truth for corner rounding across the site. */
+  --radius-card: 0.5rem;
 
-  /* UI Colors */
   --color-surface-base: hsl(var(--surface-base));
   --color-surface-elevated: hsl(var(--surface-elevated));
   --color-surface-hovered: hsl(var(--surface-hovered));
@@ -115,167 +122,301 @@
   --color-border: hsl(var(--border));
   --color-fg-base: hsl(var(--fg-base));
   --color-fg-muted: hsl(var(--fg-muted));
+  --color-success: hsl(var(--success));
+  --color-warning: hsl(var(--warning));
+  --color-danger: hsl(var(--danger));
 
-
-  /* Animations */
   --animate-blink: blink 3s steps(1) infinite;
 
   @keyframes blink {
-    0%, 100% {
-      opacity: 1;
-    }
-    20% {
-      opacity: 0;
+    0%, 100% { opacity: 1; }
+    20% { opacity: 0; }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Element defaults
+   --------------------------------------------------------------------------- */
+@layer base {
+  html {
+    @apply bg-surface-base;
+    scroll-behavior: smooth;
+    /* Stop iOS from inflating text in landscape. */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  h1 {
+    @apply text-heading;
+  }
+
+  p {
+    @apply text-fg-base tracking-default;
+  }
+
+  /* Long repository names and URLs must not force a horizontal scrollbar. */
+  h1, h2, h3, p, li {
+    overflow-wrap: break-word;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent/70;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
     }
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Utilities
+   --------------------------------------------------------------------------- */
 @layer utilities {
-  h1 {
-    @apply text-heading 
-  }
-  p {
-    @apply text-ui text-fg-base tracking-default
-  }
-  html { 
-    @apply bg-surface-base
-  }
-
-
-  /* Shadows */
   .shadow-accent-sm {
     @apply shadow-[0_0_6px] shadow-accent;
   }
 
-  /* Texts */
   .text-capitalized {
-    @apply text-base uppercase tracking-wide text-fg-base font-bold;
+    @apply text-base font-bold uppercase tracking-wide text-fg-base;
   }
 
-  /* Backgrounds */
-  .gradient {
-    @apply bg-linear-to-br from-accent/15 to-accent/5 border border-accent/25;
-  }
-  
-
-
-  /* Contaner */
   .container-elevated {
-    @apply bg-surface-elevated/30 border border-accent/20 rounded-lg
+    @apply rounded-card border border-accent/20 bg-surface-elevated/30;
   }
-}
-
-
-@layer utilities {
 
   .scrollbar::-webkit-scrollbar {
     @apply w-1.5;
   }
-
   .scrollbar::-webkit-scrollbar-track {
     @apply bg-surface-base;
   }
   .scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-accent rounded-full;
+    @apply rounded-full bg-accent;
   }
   .scrollbar::-webkit-scrollbar-thumb:hover {
     @apply bg-accent/70;
   }
-  
 }
 
+/* ---------------------------------------------------------------------------
+   Components
+   --------------------------------------------------------------------------- */
+@layer components {
 
-
-
-@layer components {  
-
-
-  /* Button styles */
-  .site-btn__default {
-    @apply cursor-pointer bg-surface-base p-2 text-accent rounded-md;
-  }
-  .site-btn__primary {
-    @apply cursor-pointer bg-surface-base p-1 border border-accent/40 rounded-sm w-full text-fg-base;
-  }
-  .site-btn__secondary {
-    @apply cursor-pointer bg-surface-base p-1 border border-accent/40 rounded-sm w-full text-accent;
-  }
-  .site-btn__borderless {
-    @apply cursor-pointer bg-surface-elevated p-1 rounded-sm w-full text-accent;
-  }
-  .site-btn__active {
-    @apply cursor-pointer bg-accent/10 text-accent border border-accent/60;
-  }
-  .site_btn__hover {
-    @apply hover:border hover:border-accent/30 hover:bg-accent/5 hover:text-accent;
+  /* Buttons and links */
+  .btn-outline {
+    @apply inline-flex items-center gap-2 rounded-card border border-accent/25 bg-accent/5
+           px-3 py-2 font-display text-ui uppercase tracking-default text-accent/80
+           transition-colors hover:border-accent/50 hover:bg-accent/10 hover:text-accent;
   }
 
+  /* Form fields */
+  .field {
+    @apply w-full rounded-card border border-accent/20 bg-surface-base/50 px-3 py-2.5
+           font-display text-body text-fg-base transition-colors
+           placeholder:text-fg-muted/70 focus:border-accent/50 focus:outline-none;
+  }
+  /* Caption above any control: a form field or a settings switcher. */
+  .control-label {
+    @apply mb-1.5 block text-ui uppercase tracking-wide text-fg-muted;
+  }
 
+  .link-subtle {
+    @apply font-display text-ui uppercase tracking-wide text-fg-muted transition-colors hover:text-accent;
+  }
 
-  /* Site Header */
+  /* Rounded tile holding a section's leading icon. */
+  .icon-tile {
+    @apply flex size-9 shrink-0 items-center justify-center rounded-card bg-accent/10;
+  }
+
+  /* Header */
   .site-header {
-    @apply sticky top-0 z-20 w-full flex bg-surface-base/50 backdrop-blur-[10px] justify-center items-center text-accent font-display;
+    @apply sticky top-0 z-30 flex w-full items-center justify-center
+           bg-surface-base/80 font-display text-accent backdrop-blur-md;
   }
-  .site-header__inner {
-    @apply w-full flex items-center justify-between h-10 p-10;
-  }
-
   .site-header__title {
-    @apply flex items-center justify-center gap-2;
+    @apply flex min-w-0 items-center gap-2;
   }
   .site-header__cursor {
-    @apply flex items-center bg-fg-base justify-center w-2.5 h-5 animate-blink;
+    @apply flex h-4 w-2 shrink-0 animate-blink items-center justify-center bg-fg-base;
   }
   .site-header__nav {
-    @apply flex items-center h-full justify-center gap-10;
+    @apply flex items-center justify-center gap-6 lg:gap-10;
   }
   .site-header__link {
-    @apply hidden sm:flex uppercase;
+    @apply hidden text-ui uppercase tracking-wide transition-colors hover:text-accent sm:inline-flex;
+  }
+  .site-header__link--active {
+    @apply text-accent underline underline-offset-4;
   }
 
   /* Sidebar */
   .site-sidebar {
-    @apply fixed right-0 top-0 z-40 w-70 h-lvh border-fg-muted bg-surface-elevated backdrop-blur-3xl shadow-2xl;
+    @apply fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col
+           border-l border-accent/15 bg-surface-elevated shadow-2xl;
   }
-  .site-sidebar__inner {
-    @apply flex flex-col gap-2 h-full border-l border-accent/10;
+  .site-sidebar__backdrop {
+    @apply fixed inset-0 z-40 bg-black/50 backdrop-blur-sm;
   }
   .site-sidebar__section {
-    @apply flex flex-col p-4 gap-4;
+    @apply border-b border-accent/10 px-5 py-6 sm:px-6;
   }
-  .site-sidebar__header {
-    @apply  min-w-60 border-border p-4;
+  .site-sidebar__link {
+    @apply flex items-center justify-between rounded-card px-4 py-3 text-body
+           font-medium text-fg-muted transition-colors hover:bg-accent/10 hover:text-accent;
   }
-  .site-sidebar__footer {
-    @apply border;
-  }
-  .site-sidebar__buttons {
-    @apply grid grid-cols-2 gap-2 border-[0.25px] border-border p-1 rounded-md;
-  }
-  .site-sidebar__themes {
-    @apply flex flex-col justify-center gap-4;
-  }
-  .site-sidebar__buttons > :last-child {
-    @apply col-span-2;
-  }
-  .site-sidebar__accent-button {
-    @apply aspect-square w-auto h-3 p-4 min-h-0;
+  .site-sidebar__social {
+    @apply flex size-10 items-center justify-center rounded-card border border-accent/15
+           bg-accent/5 text-accent/70 transition-colors hover:bg-accent hover:text-surface-base;
   }
 
-
-
-
-  /* PAGES */
-  .site-page__home {
-    @apply min-h-screen w-full bg-surface-base text-fg-base font-display mb-20;
+  /* Page shell — every route uses the same gutters and max width. */
+  .site-page {
+    @apply w-full font-display text-fg-base;
+  }
+  .site-page__inner {
+    @apply mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-10 lg:py-12;
+  }
+  .site-page__inner--narrow {
+    @apply max-w-4xl;
   }
 
-  .site-page__home-inner {
-    @apply max-w-360 mx-auto sm:p-10;
+  /* Cards */
+  .card {
+    @apply rounded-card border border-accent/20 bg-surface-elevated/30 p-5 sm:p-6;
+  }
+
+  .project-card {
+    @apply flex h-full flex-col gap-4 rounded-card border border-accent/20 bg-surface-elevated/30
+           p-5 transition-colors hover:border-accent/50 hover:bg-surface-hovered/40;
+  }
+  .project-card__glyph {
+    @apply flex size-9 shrink-0 items-center justify-center rounded-card border border-accent/25
+           bg-linear-to-br from-accent/15 to-accent/5 text-accent/70;
+  }
+  .project-card__meta {
+    @apply mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-accent/10
+           pt-4 font-display text-ui text-fg-muted;
+  }
+
+  /* Badges */
+  .badge-live {
+    @apply inline-flex shrink-0 items-center gap-1.5 rounded-card border border-success/40
+           bg-success/10 px-2 py-0.5 font-display text-ui uppercase tracking-wide text-success;
+  }
+  .badge-live::before {
+    content: "";
+    @apply size-1.5 animate-pulse rounded-full bg-success;
+  }
+
+  /*
+   * Technology chip. `--tech` is set inline from the tech registry so each
+   * badge picks up its own brand colour without extra classes.
+   */
+  .tech-badge {
+    @apply inline-flex items-center gap-1.5 rounded-card border px-2 py-1
+           font-display text-ui leading-none tracking-default;
+    border-color: color-mix(in srgb, var(--tech) 35%, transparent);
+    background-color: color-mix(in srgb, var(--tech) 12%, transparent);
+    color: var(--color-fg-base);
+  }
+  .tech-badge--md {
+    @apply gap-2 px-2.5 py-1.5 text-body;
+  }
+  .tech-badge__icon {
+    color: var(--tech);
+    @apply size-3.5 shrink-0;
+  }
+  .tech-badge--md .tech-badge__icon {
+    @apply size-4;
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Rendered README
+   --------------------------------------------------------------------------- */
+@layer components {
+  .markdown {
+    @apply text-body leading-7 text-fg-base;
+  }
 
+  .markdown > * + * {
+    @apply mt-4;
+  }
 
+  .markdown h1,
+  .markdown h2,
+  .markdown h3,
+  .markdown h4 {
+    @apply font-display font-bold text-accent;
+  }
+  .markdown h1 { @apply mt-10 text-heading; }
+  .markdown h2 { @apply mt-10 border-b border-accent/15 pb-2 text-subheading; }
+  .markdown h3 { @apply mt-8 text-base; }
+  .markdown h4 { @apply mt-6 text-body uppercase tracking-wide; }
+  .markdown > h1:first-child,
+  .markdown > h2:first-child { @apply mt-0; }
 
+  .markdown a {
+    @apply text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent;
+  }
 
+  .markdown strong { @apply font-bold text-fg-base; }
+  .markdown em { @apply italic; }
+
+  .markdown ul,
+  .markdown ol {
+    @apply space-y-1.5 pl-5;
+  }
+  .markdown ul { @apply list-disc; }
+  .markdown ol { @apply list-decimal; }
+  .markdown li::marker { color: var(--color-accent); }
+  .markdown li > ul,
+  .markdown li > ol { @apply mt-1.5; }
+
+  .markdown blockquote {
+    @apply border-l-2 border-accent/40 pl-4 text-fg-muted italic;
+  }
+
+  /* Inline code */
+  .markdown code {
+    @apply rounded border border-accent/15 bg-accent/8 px-1.5 py-0.5 font-display text-ui text-accent;
+  }
+
+  /* Code blocks scroll rather than widen the page on small screens. */
+  .markdown pre {
+    @apply overflow-x-auto rounded-card border border-accent/15 bg-surface-base p-4;
+  }
+  .markdown pre code {
+    @apply border-none bg-transparent p-0 text-ui text-fg-base;
+  }
+
+  .markdown img {
+    @apply inline-block h-auto max-w-full rounded-card;
+  }
+
+  .markdown hr {
+    @apply border-accent/15;
+  }
+
+  .markdown table {
+    @apply w-full border-collapse text-ui;
+  }
+  .markdown th,
+  .markdown td {
+    @apply border border-accent/15 px-3 py-2 text-left;
+  }
+  .markdown th {
+    @apply bg-accent/10 font-bold text-accent;
+  }
+
+  /* GitHub READMEs often use wide tables; keep them inside the viewport. */
+  .markdown > table {
+    @apply block overflow-x-auto;
+  }
+}
