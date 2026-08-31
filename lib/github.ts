@@ -104,7 +104,7 @@ function toProject(repo: GitHubRepo): Project {
 }
 
 async function fetchRepos(): Promise<GitHubRepo[]> {
-  const username = process.env.GITHUB_USERNAME ?? 'dluksa20';
+  const username = process.env.GITHUB_USERNAME ?? 'dlx20';
   const token = process.env.GITHUB_TOKEN;
 
   const headers: HeadersInit = {
