@@ -9,12 +9,16 @@ import SocialTiles from '@/components/ui/SocialTiles';
 import MiniMap from '@/components/MiniMap';
 import { SKILLS } from '@/lib/constants';
 import { formatDate } from '@/lib/format';
-import { getProjects } from '@/lib/github';
+import ContributionGraph from '@/components/ContributionGraph';
+import { getContributions, getProjects } from '@/lib/github';
 
 const FEATURED_COUNT = 3;
 
 const Page = async () => {
-    const projects = await getProjects();
+    const [projects, contributions] = await Promise.all([
+        getProjects(),
+        getContributions(),
+    ]);
     const featured = projects.slice(0, FEATURED_COUNT);
 
     const stats = [
@@ -122,6 +126,10 @@ const Page = async () => {
                                 <MiniMap />
                             </div>
                         </div>
+                    </div>
+
+                    <div className="mt-4">
+                        <ContributionGraph calendar={contributions} />
                     </div>
                 </TerminalSection>
 

@@ -36,6 +36,8 @@ non-fork, non-archived repository it combines three endpoints:
 - `/repos/{user}/{repo}/languages` — technologies, with languages under 3% of the
   codebase dropped as noise
 - `/repos/{user}/{repo}/readme` — the description
+- GraphQL `contributionCalendar` — the home-page commit heatmap (falls back to
+  the public profile contributions page if no token is set)
 
 READMEs serve double duty. `lib/markdown.ts` flattens the markdown and picks the
 first substantial paragraph as the card excerpt, skipping titles, shield badges

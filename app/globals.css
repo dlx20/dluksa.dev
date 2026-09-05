@@ -430,6 +430,56 @@
   .filter-chip__count {
     @apply text-fg-muted/80;
   }
+
+  /*
+   * GitHub-style contribution calendar. Weeks stretch across the card; on
+   * phones the band scrolls sideways so the cells stay large enough to read.
+   */
+  .contrib-scroll {
+    @apply -mx-1 overflow-x-auto px-1;
+  }
+  .contrib-graph {
+    @apply grid min-w-[40rem] gap-x-2 gap-y-1;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .contrib-corner {
+    @apply col-start-1 row-start-1;
+  }
+  .contrib-months {
+    @apply col-start-2 row-start-1 grid text-ui text-fg-muted;
+    grid-template-columns: repeat(var(--weeks), minmax(0, 1fr));
+  }
+  .contrib-month {
+    @apply min-w-0 truncate;
+  }
+  .contrib-days {
+    @apply col-start-1 row-start-2 grid grid-rows-7 items-center gap-[3px] pr-1
+           text-ui leading-none text-fg-muted;
+  }
+  .contrib-day {
+    @apply h-[11px] text-right;
+  }
+  .contrib-weeks {
+    @apply col-start-2 row-start-2 grid gap-[3px];
+    grid-template-columns: repeat(var(--weeks), minmax(0, 1fr));
+  }
+  .contrib-week {
+    @apply grid grid-rows-7 gap-[3px];
+  }
+  .contrib-cell {
+    @apply aspect-square w-full rounded-[2px] bg-accent/8;
+  }
+  .contrib-cell[data-level='1'] { background-color: color-mix(in srgb, var(--color-accent) 28%, transparent); }
+  .contrib-cell[data-level='2'] { background-color: color-mix(in srgb, var(--color-accent) 48%, transparent); }
+  .contrib-cell[data-level='3'] { background-color: color-mix(in srgb, var(--color-accent) 72%, transparent); }
+  .contrib-cell[data-level='4'] { background-color: var(--color-accent); }
+  .contrib-cell--empty {
+    @apply invisible;
+  }
+  .contrib-cell--legend {
+    @apply size-[11px] shrink-0;
+  }
 }
 
 /* ---------------------------------------------------------------------------
