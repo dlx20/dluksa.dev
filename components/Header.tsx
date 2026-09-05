@@ -20,7 +20,7 @@ const Header = () => {
 
                     <div className="flex w-full items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-10">
                         <div className="site-header__title">
-                            <h2 className="truncate font-bold text-accent">
+                            <h2 className="truncate text-body font-bold text-accent sm:text-base">
                                 <span className="hidden sm:inline">ddev@dluksa.dev</span>
                                 <span className="sm:hidden">ddev</span>
                                 <span className="font-light text-fg-base">:</span>

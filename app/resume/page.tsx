@@ -18,7 +18,7 @@ const ResumePage = () => (
         <div className="site-page__inner">
 
             <TerminalSection label="usr" title="profile">
-                <p className="text-body leading-7 text-fg-base sm:text-base sm:leading-8">
+                <p className="text-body leading-7 text-fg-base">
                     {RESUME.summary}
                 </p>
 
@@ -112,7 +112,7 @@ const ResumePage = () => (
             </TerminalSection>
 
             <TerminalSection label="exe" title="selected work">
-                <p className="mb-5 max-w-2xl text-body text-fg-muted">
+                <p className="mb-6 text-body text-fg-muted">
                     Everything I have shipped publicly is pulled live from GitHub, including the
                     spacecraft pose-estimation work from my MSc.
                 </p>

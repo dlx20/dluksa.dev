@@ -47,7 +47,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
 
                 <header className="space-y-5">
                     <div className="flex flex-wrap items-center gap-3">
-                        <h1 className="font-display text-2xl font-bold break-words text-fg-base sm:text-3xl">
+                        <h1 className="font-display text-heading font-bold break-words text-fg-base">
                             {project.name}
                         </h1>
 

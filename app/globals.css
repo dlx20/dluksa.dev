@@ -213,12 +213,19 @@
            px-3 py-2 font-display text-ui uppercase tracking-default text-accent/80
            transition-colors hover:border-accent/50 hover:bg-accent/10 hover:text-accent;
   }
+  .btn-fill {
+    @apply w-full cursor-pointer rounded-card border border-accent/40 bg-accent/15
+           px-5 py-2.5 font-display text-base font-bold uppercase tracking-wide text-accent
+           transition-colors hover:bg-accent/25 disabled:cursor-not-allowed disabled:opacity-50
+           sm:text-body;
+  }
 
   /* Form fields */
   .field {
+    /* 16px on phones so iOS Safari does not zoom the page on focus. */
     @apply w-full rounded-card border border-accent/20 bg-surface-base/50 px-3 py-2.5
-           font-display text-body text-fg-base transition-colors
-           placeholder:text-fg-muted/70 focus:border-accent/50 focus:outline-none;
+           font-display text-base text-fg-base transition-colors
+           placeholder:text-fg-muted/70 focus:border-accent/50 focus:outline-none sm:text-body;
   }
   /* Caption above any control: a form field or a settings switcher. */
   .control-label {
@@ -281,7 +288,7 @@
     @apply w-full font-display text-fg-base;
   }
   .site-page__inner {
-    @apply mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-10 lg:py-12;
+    @apply mx-auto w-full max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-10 lg:pt-12;
   }
   .site-page__inner--narrow {
     @apply max-w-4xl;
@@ -337,12 +344,9 @@
   }
 
   /*
-   * Sliding two-option switch. The highlight is one element that translates,
-   * so the motion is a slide rather than two buttons swapping fill.
-   */
-  /*
-   * Height matches `.tech-badge--md` (14px type + 12px padding + 2px border)
-   * so the switch sits on the same line as the filter chips.
+   * Sliding two-option switch. Height matches `.tech-badge--md` so it sits on
+   * the same line as the filter chips. The highlight is one element that
+   * translates, so the motion is a slide rather than two buttons swapping fill.
    */
   .view-toggle {
     @apply relative isolate grid h-[1.75rem] shrink-0 grid-cols-2 rounded-card

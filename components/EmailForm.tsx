@@ -134,7 +134,7 @@ const EmailForm = () => {
           <button
             type="submit"
             disabled={status === 'sending'}
-            className="w-full cursor-pointer rounded-card border border-accent/40 bg-accent/15 px-5 py-2.5 font-display text-body font-bold uppercase tracking-wide text-accent transition-colors hover:bg-accent/25 disabled:cursor-not-allowed disabled:opacity-50"
+            className="btn-fill"
           >
             {status === 'sending' ? 'Sending…' : 'Send message'}
           </button>

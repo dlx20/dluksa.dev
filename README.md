@@ -84,6 +84,12 @@ Project data reaches the footer from the root layout, which passes a trimmed
 list (slug, technologies, stars, date) rather than full `Project` objects so
 READMEs never ship to the browser.
 
+## Deploy
+
+The production image is built by `cloudbuild.yaml` and served from Cloud Run.
+Pass `GITHUB_TOKEN` as a Cloud Run secret if the unauthenticated GitHub limit
+starts emptying the project list in production.
+
 ## Design system
 
 `app/globals.css` holds all shared styling. Three themes (`palenight`, `void`,

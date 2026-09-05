@@ -15,7 +15,7 @@ const ProjectsPage = async () => {
         <div className="site-page">
             <div className="site-page__inner">
                 <TerminalSection label="exe" title="all projects">
-                    <p className="mb-6 max-w-2xl text-body text-fg-muted">
+                    <p className="mb-6 text-body text-fg-muted">
                         {projects.length} public {projects.length === 1 ? 'repository' : 'repositories'},
                         newest first. Descriptions and technologies are read from GitHub.
                     </p>

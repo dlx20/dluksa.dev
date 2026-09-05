@@ -36,7 +36,7 @@ const Page = async () => {
     ];
 
     return (
-        <div className="site-page pb-16">
+        <div className="site-page">
             <div className="site-page__inner">
 
                 {/* 01 — Intro */}
