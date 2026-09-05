@@ -5,7 +5,7 @@ import AppearanceSettings from '@/components/AppearanceSettings';
 import ProjectGrid from '@/components/ProjectGrid';
 import SkillBadges from '@/components/SkillBadges';
 import EmailForm from '@/components/EmailForm';
-import Socials from '@/components/ui/Socials';
+import SocialTiles from '@/components/ui/SocialTiles';
 import MiniMap from '@/components/MiniMap';
 import { SKILLS } from '@/lib/constants';
 import { formatDate } from '@/lib/format';
@@ -53,7 +53,9 @@ const Page = async () => {
                         interfaces people can actually use. Always learning, always shipping.
                     </p>
 
-                    <Socials />
+                    <div className="mt-8">
+                        <SocialTiles />
+                    </div>
                 </TerminalSection>
 
                 {/* 02 — Stack */}

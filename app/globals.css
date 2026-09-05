@@ -234,6 +234,12 @@
     @apply flex size-9 shrink-0 items-center justify-center rounded-card bg-accent/10;
   }
 
+  /* Square social link, used in the sidebar footer and the home intro. */
+  .social-tile {
+    @apply flex size-10 items-center justify-center rounded-card border border-accent/15
+           bg-accent/5 text-accent/70 transition-colors hover:bg-accent hover:text-surface-base;
+  }
+
   /* Header */
   .site-header {
     @apply sticky top-0 z-30 flex w-full items-center justify-center
@@ -270,11 +276,6 @@
     @apply flex items-center justify-between rounded-card px-4 py-3 text-body
            font-medium text-fg-muted transition-colors hover:bg-accent/10 hover:text-accent;
   }
-  .site-sidebar__social {
-    @apply flex size-10 items-center justify-center rounded-card border border-accent/15
-           bg-accent/5 text-accent/70 transition-colors hover:bg-accent hover:text-surface-base;
-  }
-
   /* Page shell — every route uses the same gutters and max width. */
   .site-page {
     @apply w-full font-display text-fg-base;
@@ -295,6 +296,12 @@
     @apply flex h-full flex-col gap-4 rounded-card border border-accent/20 bg-surface-elevated/30
            p-5 transition-colors hover:border-accent/50 hover:bg-surface-hovered/40;
   }
+  .project-card__header {
+    @apply flex items-start justify-between gap-3;
+  }
+  .project-card__excerpt {
+    @apply line-clamp-3 text-body leading-6 text-fg-muted;
+  }
   .project-card__glyph {
     @apply flex size-9 shrink-0 items-center justify-center rounded-card border border-accent/25
            bg-linear-to-br from-accent/15 to-accent/5 text-accent/70;
@@ -302,6 +309,59 @@
   .project-card__meta {
     @apply mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-accent/10
            pt-4 font-display text-ui text-fg-muted;
+  }
+
+  /*
+   * Title-led list row. The name takes the first line; language, stars, date
+   * and View sit on its right. Excerpt and tech stack underneath, full width.
+   * Below `sm` it stays a slightly tighter stacked card.
+   */
+  .project-card--row {
+    @apply gap-3 p-4 sm:grid sm:h-auto sm:grid-cols-[minmax(0,1fr)_auto]
+           sm:grid-rows-[auto_auto_auto] sm:items-center sm:gap-x-6 sm:gap-y-2;
+  }
+  .project-card--row .project-card__header {
+    @apply sm:col-start-1 sm:row-start-1 sm:items-center;
+  }
+  .project-card--row .project-card__meta {
+    @apply sm:col-start-2 sm:row-start-1 sm:mt-0 sm:flex-nowrap sm:border-t-0 sm:pt-0;
+  }
+  .project-card--row .project-card__meta > :last-child {
+    @apply sm:ml-0;
+  }
+  .project-card--row .project-card__excerpt {
+    @apply sm:col-span-2 sm:row-start-2 sm:line-clamp-2;
+  }
+  .project-card--row .project-card__tech {
+    @apply sm:col-span-2 sm:row-start-3;
+  }
+
+  /*
+   * Sliding two-option switch. The highlight is one element that translates,
+   * so the motion is a slide rather than two buttons swapping fill.
+   */
+  /*
+   * Height matches `.tech-badge--md` (14px type + 12px padding + 2px border)
+   * so the switch sits on the same line as the filter chips.
+   */
+  .view-toggle {
+    @apply relative isolate grid h-[1.75rem] shrink-0 grid-cols-2 rounded-card
+           border border-accent/15 bg-accent/5 p-0.5;
+  }
+  .view-toggle__slider {
+    @apply pointer-events-none absolute inset-y-0.5 left-0.5 w-[calc(50%-2px)]
+           rounded-[calc(var(--radius-card)-2px)] border border-accent/50 bg-accent/15
+           transition-transform duration-200 ease-out;
+  }
+  .view-toggle[data-view='rows'] .view-toggle__slider {
+    transform: translateX(100%);
+  }
+  .view-toggle__option {
+    @apply relative z-10 flex h-full w-7 cursor-pointer items-center justify-center
+           text-fg-muted transition-colors;
+  }
+  .view-toggle__option[aria-pressed='true'] {
+    @apply text-accent;
   }
 
   /* Badges */
@@ -317,23 +377,54 @@
   /*
    * Technology chip. `--tech` is set inline from the tech registry so each
    * badge picks up its own brand colour without extra classes.
+   *
+   * Brand colours are pulled most of the way toward the theme's own muted
+   * foreground, which keeps a hint of identity — TypeScript still reads blue —
+   * without a grid of badges shouting over the text around it. The blend runs
+   * in oklab so midpoints stay soft instead of going muddy, and it targets a
+   * theme token rather than a fixed grey so each theme lends its own warmth.
    */
   .tech-badge {
     @apply inline-flex items-center gap-1.5 rounded-card border px-2 py-1
            font-display text-ui leading-none tracking-default;
-    border-color: color-mix(in srgb, var(--tech) 35%, transparent);
-    background-color: color-mix(in srgb, var(--tech) 12%, transparent);
+    --tech-soft: color-mix(in oklab, var(--tech) 40%, var(--color-fg-muted));
+    border-color: color-mix(in srgb, var(--tech) 18%, transparent);
+    background-color: color-mix(in srgb, var(--tech) 6%, transparent);
     color: var(--color-fg-base);
   }
   .tech-badge--md {
     @apply gap-2 px-2.5 py-1.5 text-body;
   }
   .tech-badge__icon {
-    color: var(--tech);
+    color: var(--tech-soft);
     @apply size-3.5 shrink-0;
   }
   .tech-badge--md .tech-badge__icon {
     @apply size-4;
+  }
+
+  /*
+   * The technology filters are skill badges that toggle, so they inherit all of
+   * the above and only add interaction states. Hover is scoped away from the
+   * selected chip so the two cannot fight over specificity.
+   */
+  .filter-chip {
+    @apply cursor-pointer;
+  }
+  .filter-chip:not(.filter-chip--active):hover {
+    border-color: color-mix(in srgb, var(--tech) 34%, transparent);
+    background-color: color-mix(in srgb, var(--tech) 12%, transparent);
+  }
+  .filter-chip--active {
+    border-color: color-mix(in srgb, var(--tech) 55%, transparent);
+    background-color: color-mix(in srgb, var(--tech) 18%, transparent);
+  }
+  /* The selected chip is the one place a brand colour runs at full strength. */
+  .filter-chip--active .tech-badge__icon {
+    color: var(--tech);
+  }
+  .filter-chip__count {
+    @apply text-fg-muted/80;
   }
 }
 

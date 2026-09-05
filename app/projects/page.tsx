@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import TerminalSection from '@/components/TerminalSection';
-import ProjectGrid from '@/components/ProjectGrid';
-import { getProjects } from '@/lib/github';
+import ProjectFilter from '@/components/ProjectFilter';
+import { getProjects, toSummary } from '@/lib/github';
 
 export const metadata: Metadata = {
     title: 'Projects — ddev',
@@ -20,7 +20,7 @@ const ProjectsPage = async () => {
                         newest first. Descriptions and technologies are read from GitHub.
                     </p>
 
-                    <ProjectGrid projects={projects} />
+                    <ProjectFilter projects={projects.map(toSummary)} />
                 </TerminalSection>
             </div>
         </div>

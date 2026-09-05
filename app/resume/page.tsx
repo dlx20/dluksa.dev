@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { FaArrowRight } from 'react-icons/fa';
 import TerminalSection from '@/components/TerminalSection';
 import SkillBadges from '@/components/SkillBadges';
-import Socials from '@/components/ui/Socials';
+import SocialTiles from '@/components/ui/SocialTiles';
 import { EMAIL, LOCATION, RESUME, SKILLS } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ const ResumePage = () => (
         <div className="site-page__inner">
 
             <TerminalSection label="usr" title="profile">
-                <p className="max-w-3xl text-body leading-7 text-fg-base sm:text-base sm:leading-8">
+                <p className="text-body leading-7 text-fg-base sm:text-base sm:leading-8">
                     {RESUME.summary}
                 </p>
 
@@ -29,7 +29,9 @@ const ResumePage = () => (
                     </a>
                 </div>
 
-                <Socials />
+                <div className="mt-8">
+                    <SocialTiles />
+                </div>
             </TerminalSection>
 
             <TerminalSection label="log" title="experience">

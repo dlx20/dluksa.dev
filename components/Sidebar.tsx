@@ -4,8 +4,9 @@ import Link from 'next/link'
 import { useEffect } from 'react'
 import { FaChevronRight, FaTimes } from 'react-icons/fa'
 import { PiLinkSimpleLight } from 'react-icons/pi'
-import { links, SOCIALS } from '@/lib/constants'
+import { links } from '@/lib/constants'
 import AppearanceSettings from './AppearanceSettings'
+import SocialTiles from './ui/SocialTiles'
 
 const Sidebar = ({ onClose }: { onClose: () => void }) => {
     useEffect(() => {
@@ -84,20 +85,7 @@ const Sidebar = ({ onClose }: { onClose: () => void }) => {
                 <footer className="border-t border-accent/10 px-5 py-5 sm:px-6">
                     <p className="mb-4 text-ui uppercase tracking-wide text-accent/50">Connect</p>
 
-                    <div className="flex gap-2">
-                        {SOCIALS.map(({ title, icon: Icon, url }) => (
-                            <a
-                                key={title}
-                                href={url}
-                                aria-label={title}
-                                target={url.startsWith('http') ? '_blank' : undefined}
-                                rel="noopener noreferrer"
-                                className="site-sidebar__social"
-                            >
-                                <Icon size={18} />
-                            </a>
-                        ))}
-                    </div>
+                    <SocialTiles />
                 </footer>
             </aside>
         </>

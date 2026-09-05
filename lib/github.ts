@@ -18,6 +18,27 @@ export type Project = {
     liveUrl: string | null;
 };
 
+/** A project without its README, which is all a card ever renders. */
+export type ProjectSummary = Omit<Project, 'readme'>;
+
+/**
+ * Strip the README before handing projects to a client component. It is by far
+ * the largest field, and shipping it would bloat the page payload for nothing.
+ */
+export function toSummary(project: Project): ProjectSummary {
+    return {
+        slug: project.slug,
+        name: project.name,
+        excerpt: project.excerpt,
+        technologies: project.technologies,
+        language: project.language,
+        stars: project.stars,
+        updatedAt: project.updatedAt,
+        githubUrl: project.githubUrl,
+        liveUrl: project.liveUrl,
+    };
+}
+
 type GitHubRepo = {
     name: string;
     description: string | null;

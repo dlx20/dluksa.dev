@@ -146,3 +146,38 @@ export function getTech(name: string): Tech {
         }
     );
 }
+
+export type TechCount = Tech & { count: number };
+
+/**
+ * Every technology used across the given projects, most widely used first.
+ * Aliases collapse on the way through: one repo tagged `nextjs` and another
+ * tagged `next.js` both land on the single `Next.js` entry.
+ */
+export function countTechnologies(projects: { technologies: string[] }[]): TechCount[] {
+    const counts = new Map<string, TechCount>();
+
+    for (const { technologies } of projects) {
+        // Collapse per project first, so a repo listing an alias twice still
+        // only counts once toward that technology.
+        const used = new Map<string, Tech>();
+        for (const name of technologies) {
+            const tech = getTech(name);
+            used.set(tech.label, tech);
+        }
+
+        for (const tech of used.values()) {
+            const seen = counts.get(tech.label);
+            counts.set(tech.label, { ...tech, count: (seen?.count ?? 0) + 1 });
+        }
+    }
+
+    return [...counts.values()].sort(
+        (a, b) => b.count - a.count || a.label.localeCompare(b.label)
+    );
+}
+
+/** Whether any of these raw names resolves to the given display label. */
+export function usesTech(technologies: string[], label: string): boolean {
+    return technologies.some((name) => getTech(name).label === label);
+}
