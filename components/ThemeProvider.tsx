@@ -14,7 +14,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     return (
         <NextThemesProvider
             attribute="class"
-            themes={['palenight', 'void', 'ashlight']}
+            themes={['palenight', 'void', 'cyberpunk', 'ashlight', 'cream']}
             defaultTheme={DEFAULT_THEME}
             enableSystem={false}
             disableTransitionOnChange

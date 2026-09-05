@@ -30,7 +30,8 @@
    --------------------------------------------------------------------------- */
 @layer base {
   .palenight,
-  .void {
+  .void,
+  .cyberpunk {
     --color-coral-rose: var(--accent-coral-dark);
     --color-sage-green: var(--accent-sage-dark);
     --color-amber-glow: var(--accent-amber-dark);
@@ -39,13 +40,13 @@
     --color-sky-blue: var(--accent-sky-dark);
     --color-steel-grey: var(--accent-steel-dark);
 
-    /* Status colours, shared by both dark themes */
     --success: 142 60% 55%;
     --warning: 38 90% 62%;
     --danger: 0 70% 62%;
   }
 
-  .ashlight {
+  .ashlight,
+  .cream {
     --color-coral-rose: var(--accent-coral-light);
     --color-sage-green: var(--accent-sage-light);
     --color-amber-glow: var(--accent-amber-light);
@@ -92,6 +93,42 @@
     --border: 214 12% 48%;
     --fg-base: 220 16% 16%;
     --fg-muted: 220 10% 34%;
+  }
+
+  /* Night City: deep violet-black, cyan body type, magenta signal. */
+  .cyberpunk {
+    --color-coral-rose: #ff4d6d;
+    --color-sage-green: #c8ff4a;
+    --color-amber-glow: #ffd166;
+    --color-glacier-blue: #00e5ff;
+    --color-orchid-purple: #ff2bd6;
+    --color-sky-blue: #4d8bff;
+    --color-steel-grey: #9aa4b5;
+
+    --surface-base: 270 42% 6%;
+    --surface-elevated: 272 32% 11%;
+    --surface-hovered: 280 28% 16%;
+    --primary: 190 100% 55%;
+    --accent: 320 92% 60%;
+    --border: 320 45% 42%;
+    --fg-base: 185 35% 90%;
+    --fg-muted: 270 18% 68%;
+
+    --success: 130 90% 52%;
+    --warning: 48 100% 56%;
+    --danger: 340 90% 58%;
+  }
+
+  /* Warm terminal paper — manila page, brown ink, amber rust. */
+  .cream {
+    --surface-base: 42 48% 92%;
+    --surface-elevated: 40 38% 87%;
+    --surface-hovered: 38 32% 82%;
+    --primary: 28 80% 40%;
+    --accent: 28 68% 36%;
+    --border: 32 22% 48%;
+    --fg-base: 25 32% 16%;
+    --fg-muted: 28 16% 34%;
   }
 }
 
@@ -221,24 +258,32 @@
            transition-colors hover:bg-accent/25 disabled:cursor-not-allowed disabled:opacity-50
            sm:text-body;
   }
-  .ashlight .btn-outline {
+  .ashlight .btn-outline,
+  .cream .btn-outline {
     @apply border-accent/65 text-accent;
   }
-  .ashlight .btn-fill {
+  .ashlight .btn-fill,
+  .cream .btn-fill {
     @apply border-accent/70;
   }
-  .ashlight .field {
+  .ashlight .field,
+  .cream .field {
     @apply border-accent/55;
   }
-  .ashlight .social-tile {
+  .ashlight .social-tile,
+  .cream .social-tile {
     @apply border-accent/50 text-accent;
   }
   .ashlight .container-elevated,
   .ashlight .card,
-  .ashlight .project-card {
+  .ashlight .project-card,
+  .cream .container-elevated,
+  .cream .card,
+  .cream .project-card {
     @apply border-accent/45;
   }
-  .ashlight .view-toggle {
+  .ashlight .view-toggle,
+  .cream .view-toggle {
     @apply border-accent/50;
   }
 
@@ -446,7 +491,8 @@
   .tech-badge--md .tech-badge__icon {
     @apply size-4;
   }
-  .ashlight .tech-badge {
+  .ashlight .tech-badge,
+  .cream .tech-badge {
     border-color: color-mix(in srgb, var(--tech) 42%, transparent);
     background-color: color-mix(in srgb, var(--tech) 8%, transparent);
   }

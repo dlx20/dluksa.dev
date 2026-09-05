@@ -28,7 +28,9 @@ export const ACCENT_COLORS = [
 export const THEMES = [
     { id: 'palenight', label: 'Palenight' },
     { id: 'void', label: 'Void' },
+    { id: 'cyberpunk', label: 'Cyberpunk' },
     { id: 'ashlight', label: 'Ashlight' },
+    { id: 'cream', label: 'Cream' },
 ];
 
 /**
