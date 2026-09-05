@@ -267,7 +267,9 @@
     @apply border-accent/70;
   }
   .ashlight .field,
-  .cream .field {
+  .ashlight .contrib-year-select select,
+  .cream .field,
+  .cream .contrib-year-select select {
     @apply border-accent/55;
   }
   .ashlight .social-tile,
@@ -364,6 +366,18 @@
   /* Cards */
   .card {
     @apply rounded-card border border-accent/20 bg-surface-elevated/30 p-5 sm:p-6;
+  }
+  .card__kicker {
+    @apply text-ui uppercase tracking-wide text-fg-muted;
+  }
+  .home-timeline {
+    @apply relative space-y-0;
+  }
+  .home-timeline__row {
+    @apply grid grid-cols-[3.5rem_1fr] gap-x-4 border-l border-accent/20 py-3 pl-5 first:pt-0 last:pb-0 sm:grid-cols-[4.5rem_1fr];
+  }
+  .home-timeline__year {
+    @apply pt-0.5 font-display text-ui text-accent;
   }
 
   .project-card {
@@ -529,33 +543,33 @@
     @apply -mx-1 overflow-x-auto px-1;
   }
   .contrib-graph {
-    @apply grid min-w-[40rem] gap-x-2 gap-y-1;
-    grid-template-columns: auto minmax(0, 1fr);
+    @apply grid min-w-[32rem] grid-cols-1 gap-x-2 gap-y-1
+           sm:min-w-[40rem] sm:grid-cols-[auto_minmax(0,1fr)];
     grid-template-rows: auto minmax(0, 1fr);
   }
   .contrib-corner {
-    @apply col-start-1 row-start-1;
+    @apply hidden sm:col-start-1 sm:row-start-1 sm:block;
   }
   .contrib-months {
-    @apply col-start-2 row-start-1 grid text-ui text-fg-muted;
+    @apply col-start-1 row-start-1 grid text-ui text-fg-muted sm:col-start-2;
     grid-template-columns: repeat(var(--weeks), minmax(0, 1fr));
   }
   .contrib-month {
     @apply min-w-0 truncate;
   }
   .contrib-days {
-    @apply col-start-1 row-start-2 grid grid-rows-7 items-center gap-[3px] pr-1
-           text-ui leading-none text-fg-muted;
+    @apply hidden grid-rows-7 items-center gap-[3px] pr-1 text-ui leading-none
+           text-fg-muted sm:col-start-1 sm:row-start-2 sm:grid;
   }
   .contrib-day {
     @apply h-[11px] text-right;
   }
   .contrib-weeks {
-    @apply col-start-2 row-start-2 grid gap-[3px];
+    @apply col-start-1 row-start-2 grid gap-[2px] sm:col-start-2 sm:gap-[3px];
     grid-template-columns: repeat(var(--weeks), minmax(0, 1fr));
   }
   .contrib-week {
-    @apply grid grid-rows-7 gap-[3px];
+    @apply grid grid-rows-7 gap-[2px] sm:gap-[3px];
   }
   .contrib-cell {
     @apply aspect-square w-full rounded-[2px] bg-accent/8;
@@ -570,8 +584,25 @@
   .contrib-cell--legend {
     @apply size-[11px] shrink-0;
   }
+  .contrib-year-select {
+    @apply shrink-0 sm:hidden;
+  }
+  .contrib-year-select select {
+    @apply w-auto min-w-[6.5rem] cursor-pointer appearance-none rounded-card
+           border border-accent/20 bg-surface-base/50 bg-none px-2.5 py-2
+           font-display text-base text-fg-base focus:border-accent/50
+           focus:outline-none;
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+      linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position:
+      calc(100% - 14px) calc(50% - 2px),
+      calc(100% - 9px) calc(50% - 2px);
+    background-size: 5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 1.75rem;
+  }
   .contrib-years {
-    @apply flex w-[4.5rem] shrink-0 flex-col gap-1;
+    @apply hidden w-[4.5rem] shrink-0 flex-col gap-1 sm:flex;
   }
   .contrib-year {
     @apply cursor-pointer rounded-card px-2 py-2 text-center font-display text-body

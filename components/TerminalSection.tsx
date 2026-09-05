@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 type TerminalSectionProps = {
   label: string;
   title: string;
+  id?: string;
   children?: ReactNode;
 };
 
@@ -34,8 +35,11 @@ const renderTitle = (title: string) => {
   ));
 };
 
-const TerminalSection = ({ label, title, children }: TerminalSectionProps) => (
-  <section className="relative border-l border-fg-base/10 pb-12 pl-4 font-display last:pb-8 sm:pl-6 lg:pb-16 lg:last:pb-10 lg:pl-10">
+const TerminalSection = ({ label, title, id, children }: TerminalSectionProps) => (
+  <section
+    id={id}
+    className="relative scroll-mt-24 border-l border-fg-base/10 pb-12 pl-4 font-display last:pb-8 sm:pl-6 lg:pb-16 lg:last:pb-10 lg:pl-10"
+  >
     <span className="absolute -left-px top-0 h-4 w-0.5 bg-accent" />
 
     <div className="mb-6 lg:mb-8">

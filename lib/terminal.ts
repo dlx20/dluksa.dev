@@ -1,4 +1,5 @@
 import { EMAIL, LOCATION } from './constants';
+import { FAQ, NOW } from './home';
 import { formatDate } from './format';
 
 /**
@@ -66,7 +67,25 @@ const COMMANDS: Command[] = [
                 'web work in TypeScript, React and Next.js.',
                 'This site reads its project list live from the GitHub API.',
                 `Contact: ${EMAIL}`,
+                "Type 'now' or 'faq' for the home-page sections.",
             ],
+        }),
+    },
+    {
+        name: 'now',
+        usage: 'now',
+        description: 'What I am doing at the moment',
+        run: () => ({
+            lines: NOW.map(({ label, value }) => `${label.padEnd(12)}${value}`),
+        }),
+    },
+    {
+        name: 'faq',
+        aliases: ['ask'],
+        usage: 'faq',
+        description: 'Common questions',
+        run: () => ({
+            lines: FAQ.flatMap(({ question, answer }) => [question, `  ${answer}`, '']),
         }),
     },
     {

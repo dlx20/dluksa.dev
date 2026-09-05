@@ -70,22 +70,41 @@ const ContributionGraph = ({
 
     return (
         <div className="card">
-            <div className="mb-5 flex items-center gap-3">
-                <span className="icon-tile">
-                    <FaGithub size={18} className="text-accent" />
-                </span>
+            <div className="mb-5 flex items-start justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-3">
+                    <span className="icon-tile">
+                        <FaGithub size={18} className="text-accent" />
+                    </span>
 
-                <div>
-                    <h3 className="font-semibold text-accent">Commit history</h3>
-                    <p className="text-ui text-fg-muted">
-                        {calendar
-                            ? `${calendar.total.toLocaleString('en-GB')} contributions in ${year}`
-                            : `Contributions in ${year}`}
-                    </p>
+                    <div>
+                        <h3 className="font-semibold text-accent">Commit history</h3>
+                        <p className="text-ui text-fg-muted">
+                            {calendar
+                                ? `${calendar.total.toLocaleString('en-GB')} contributions in ${year}`
+                                : `Contributions in ${year}`}
+                        </p>
+                    </div>
                 </div>
+
+                {years.length > 0 && (
+                    <label className="contrib-year-select">
+                        <span className="sr-only">Contribution year</span>
+                        <select
+                            value={year}
+                            disabled={loading}
+                            onChange={(event) => selectYear(Number(event.target.value))}
+                        >
+                            {years.map((entry) => (
+                                <option key={entry} value={entry}>
+                                    {entry}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                )}
             </div>
 
-            <div className="flex items-start gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                 <div className={`min-w-0 flex-1 ${loading ? 'opacity-50' : ''}`}>
                     {calendar ? (
                         <div className="contrib-scroll">
@@ -145,7 +164,7 @@ const ContributionGraph = ({
                     )}
 
                     {calendar && (
-                        <div className="mt-4 flex items-center justify-end gap-1.5 text-ui text-fg-muted">
+                        <div className="mt-4 flex items-center justify-start gap-1.5 text-ui text-fg-muted sm:justify-end">
                             <span>Less</span>
                             {[0, 1, 2, 3, 4].map((level) => (
                                 <span
