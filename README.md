@@ -18,7 +18,7 @@ Create `.env.local`:
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `GITHUB_USERNAME` | yes | Account whose public repositories are listed. Defaults to `dluksa20`. |
+| `GITHUB_USERNAME` | yes | Account whose public repositories are listed. Defaults to `dlx20`. |
 | `GITHUB_TOKEN` | recommended | Classic PAT with **no scopes**. Raises the API rate limit from 60 to 5000 requests/hour. |
 | `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | no | Renders the location map. Falls back to a text label when absent. |
 | `EMAIL_USER`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN` | no | Gmail OAuth credentials for the contact form. |

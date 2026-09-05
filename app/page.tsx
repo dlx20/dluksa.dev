@@ -10,14 +10,16 @@ import MiniMap from '@/components/MiniMap';
 import { SKILLS } from '@/lib/constants';
 import { formatDate } from '@/lib/format';
 import ContributionGraph from '@/components/ContributionGraph';
-import { getContributions, getProjects } from '@/lib/github';
+import { getContributions, getContributionYears, getProjects } from '@/lib/github';
 
 const FEATURED_COUNT = 3;
 
 const Page = async () => {
-    const [projects, contributions] = await Promise.all([
+    const currentYear = new Date().getUTCFullYear();
+    const [projects, contributions, contributionYears] = await Promise.all([
         getProjects(),
-        getContributions(),
+        getContributions(currentYear),
+        getContributionYears(),
     ]);
     const featured = projects.slice(0, FEATURED_COUNT);
 
@@ -129,7 +131,11 @@ const Page = async () => {
                     </div>
 
                     <div className="mt-4">
-                        <ContributionGraph calendar={contributions} />
+                        <ContributionGraph
+                            calendar={contributions}
+                            years={contributionYears}
+                            initialYear={currentYear}
+                        />
                     </div>
                 </TerminalSection>
 

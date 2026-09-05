@@ -18,7 +18,7 @@ steps:
         docker build \
           --build-arg NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="$$MAPS_KEY" \
           --build-arg NEXT_PUBLIC_APP_URL="$$APP_URL" \
-          --build-arg GITHUB_USERNAME="dluksa20" \
+          --build-arg GITHUB_USERNAME="dlx20" \
           -t europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:$COMMIT_SHA \
           -t europe-west1-docker.pkg.dev/ddev-499313/cloud-run-source-deploy/dluksa.dev/dluksa-dev:latest \
           .
@@ -44,7 +44,7 @@ steps:
       - '--region=europe-west1'
       - '--platform=managed'
       - '--port=3000'
-      - '--set-env-vars=GITHUB_USERNAME=dluksa20'
+      - '--set-env-vars=GITHUB_USERNAME=dlx20'
       - '--set-secrets=EMAIL_USER=EMAIL_USER:latest,GOOGLE_CLIENT_ID=GOOGLE_CLIENT_ID:latest,GOOGLE_CLIENT_SECRET=GOOGLE_CLIENT_SECRET:latest,GOOGLE_REFRESH_TOKEN=GOOGLE_REFRESH_TOKEN:latest,NEXT_PUBLIC_APP_URL=NEXT_PUBLIC_APP_URL:latest,NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:latest'
 
 images:

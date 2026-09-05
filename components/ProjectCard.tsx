@@ -4,6 +4,7 @@ import type { ProjectSummary } from '@/lib/github';
 import { formatDate } from '@/lib/format';
 import { getTech } from '@/lib/tech';
 import TechBadgeList from './TechBadgeList';
+import CommitPulse from './CommitPulse';
 
 const CARD_TECH_LIMIT = 4;
 
@@ -44,6 +45,8 @@ const ProjectCard = ({
             <div className="project-card__tech">
                 <TechBadgeList technologies={project.technologies} limit={CARD_TECH_LIMIT} />
             </div>
+
+            <CommitPulse values={project.pulse} />
 
             <div className="project-card__meta">
                 {language && (

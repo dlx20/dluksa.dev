@@ -64,7 +64,7 @@ export const SOCIALS: { title: string; icon: IconType; url: string }[] = [
     {
         title: 'GitHub',
         icon: FiGithub,
-        url: 'https://github.com/dluksa20',
+        url: 'https://github.com/dlx20',
     },
     {
         title: 'Email',

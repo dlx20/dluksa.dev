@@ -81,15 +81,17 @@
     --fg-muted: 28 10% 70%;
   }
 
+  /* Paper white + ink. Low-sat page so it stays white without the icy glare;
+     cards a step greyer; type dark enough to hold on that white. */
   .ashlight {
-    --surface-base: 220 40% 96%;
-    --surface-elevated: 220 32% 98%;
-    --surface-hovered: 220 14% 92%;
+    --surface-base: 210 18% 98%;
+    --surface-elevated: 214 12% 94%;
+    --surface-hovered: 214 12% 91%;
     --primary: 32 90% 50%;
-    --accent: 208 65% 44%;
-    --border: 220 8% 54%;
-    --fg-base: 0 0% 22%;
-    --fg-muted: 220 6% 42%;
+    --accent: 208 65% 38%;
+    --border: 214 12% 48%;
+    --fg-base: 220 16% 16%;
+    --fg-muted: 220 10% 34%;
   }
 }
 
@@ -219,6 +221,26 @@
            transition-colors hover:bg-accent/25 disabled:cursor-not-allowed disabled:opacity-50
            sm:text-body;
   }
+  .ashlight .btn-outline {
+    @apply border-accent/65 text-accent;
+  }
+  .ashlight .btn-fill {
+    @apply border-accent/70;
+  }
+  .ashlight .field {
+    @apply border-accent/55;
+  }
+  .ashlight .social-tile {
+    @apply border-accent/50 text-accent;
+  }
+  .ashlight .container-elevated,
+  .ashlight .card,
+  .ashlight .project-card {
+    @apply border-accent/45;
+  }
+  .ashlight .view-toggle {
+    @apply border-accent/50;
+  }
 
   /* Form fields */
   .field {
@@ -313,8 +335,23 @@
     @apply flex size-9 shrink-0 items-center justify-center rounded-card border border-accent/25
            bg-linear-to-br from-accent/15 to-accent/5 text-accent/70;
   }
+  .project-card__pulse {
+    @apply mt-auto h-8 w-full text-accent;
+  }
+  .project-card__pulse-fill {
+    fill: currentColor;
+    fill-opacity: 0.18;
+  }
+  .project-card__pulse-line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
   .project-card__meta {
-    @apply mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-accent/10
+    @apply flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-accent/10
            pt-4 font-display text-ui text-fg-muted;
   }
 
@@ -324,23 +361,26 @@
    * Below `sm` it stays a slightly tighter stacked card.
    */
   .project-card--row {
-    @apply gap-3 p-4 sm:grid sm:h-auto sm:grid-cols-[minmax(0,1fr)_auto]
+    @apply gap-3 p-4 sm:grid sm:h-auto sm:grid-cols-[minmax(0,1fr)_minmax(7rem,10rem)_auto]
            sm:grid-rows-[auto_auto_auto] sm:items-center sm:gap-x-6 sm:gap-y-2;
   }
   .project-card--row .project-card__header {
     @apply sm:col-start-1 sm:row-start-1 sm:items-center;
   }
+  .project-card--row .project-card__pulse {
+    @apply mt-0 h-7 sm:col-start-2 sm:row-start-1;
+  }
   .project-card--row .project-card__meta {
-    @apply sm:col-start-2 sm:row-start-1 sm:mt-0 sm:flex-nowrap sm:border-t-0 sm:pt-0;
+    @apply sm:col-start-3 sm:row-start-1 sm:mt-0 sm:flex-nowrap sm:border-t-0 sm:pt-0;
   }
   .project-card--row .project-card__meta > :last-child {
     @apply sm:ml-0;
   }
   .project-card--row .project-card__excerpt {
-    @apply sm:col-span-2 sm:row-start-2 sm:line-clamp-2;
+    @apply sm:col-span-3 sm:row-start-2 sm:line-clamp-2;
   }
   .project-card--row .project-card__tech {
-    @apply sm:col-span-2 sm:row-start-3;
+    @apply sm:col-span-3 sm:row-start-3;
   }
 
   /*
@@ -405,6 +445,10 @@
   }
   .tech-badge--md .tech-badge__icon {
     @apply size-4;
+  }
+  .ashlight .tech-badge {
+    border-color: color-mix(in srgb, var(--tech) 42%, transparent);
+    background-color: color-mix(in srgb, var(--tech) 8%, transparent);
   }
 
   /*
@@ -479,6 +523,16 @@
   }
   .contrib-cell--legend {
     @apply size-[11px] shrink-0;
+  }
+  .contrib-years {
+    @apply flex w-[4.5rem] shrink-0 flex-col gap-1;
+  }
+  .contrib-year {
+    @apply cursor-pointer rounded-card px-2 py-2 text-center font-display text-body
+           text-fg-muted transition-colors hover:bg-accent/10 hover:text-accent;
+  }
+  .contrib-year[aria-pressed='true'] {
+    @apply bg-accent font-bold text-surface-base hover:bg-accent hover:text-surface-base;
   }
 }
 

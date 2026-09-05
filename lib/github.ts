@@ -16,6 +16,8 @@ export type Project = {
     updatedAt: string;
     githubUrl: string;
     liveUrl: string | null;
+    /** Weekly commit counts for the last year — GitHub's participation pulse. */
+    pulse: number[];
 };
 
 /** A project without its README, which is all a card ever renders. */
@@ -36,6 +38,7 @@ export function toSummary(project: Project): ProjectSummary {
         updatedAt: project.updatedAt,
         githubUrl: project.githubUrl,
         liveUrl: project.liveUrl,
+        pulse: project.pulse,
     };
 }
 
@@ -53,16 +56,13 @@ type GitHubRepo = {
     private: boolean;
 };
 
-export const GITHUB_USERNAME = process.env.GITHUB_USERNAME ?? 'dluksa20';
+export const GITHUB_USERNAME = process.env.GITHUB_USERNAME ?? 'dlx20';
 const USERNAME = GITHUB_USERNAME;
 const API = 'https://api.github.com';
 const GRAPHQL = `${API}/graphql`;
 
 /** Cache GitHub responses for an hour so page views don't burn rate limit. */
 const REVALIDATE_SECONDS = 3600;
-
-/** Ignore languages that make up less than this share of a repository. */
-const MIN_LANGUAGE_SHARE = 0.03;
 
 const MAX_TECHNOLOGIES = 8;
 
@@ -85,9 +85,9 @@ async function request(path: string, accept: string): Promise<Response | null> {
         });
 
         if (!response.ok) {
-            // Plenty of repositories have no README; only flag real problems
-            // such as rate limiting.
-            if (response.status !== 404) {
+            // 404: missing README, expected. 403: unauthenticated rate limit.
+            // Both are handled by callers; logging them trips the Next overlay.
+            if (response.status !== 404 && response.status !== 403) {
                 console.error(`GitHub ${path} responded ${response.status}`);
             }
             return null;
@@ -108,27 +108,26 @@ async function fetchJson<T>(path: string): Promise<T | null> {
 /** READMEs are requested raw so the markdown can be rendered as-is. */
 async function fetchReadme(repo: string): Promise<string> {
     const response = await request(`/repos/${USERNAME}/${repo}/readme`, 'application/vnd.github.raw');
-    return response ? response.text() : '';
+    if (response) return response.text();
+
+    // raw.githubusercontent.com is not rate-limited like the REST API.
+    try {
+        const raw = await fetch(`${readmeBaseUrl(repo)}/README.md`, {
+            headers: { 'User-Agent': 'ddev-portfolio' },
+            next: { revalidate: REVALIDATE_SECONDS },
+        });
+        return raw.ok ? raw.text() : '';
+    } catch {
+        return '';
+    }
 }
 
-/**
- * Repository topics are the intended source of technologies, but they are
- * optional. Byte counts from the languages endpoint fill the gap, with the
- * long tail of incidental languages dropped.
- */
-function toTechnologies(languageBytes: Record<string, number>, topics: string[]): string[] {
-    const totalBytes = Object.values(languageBytes).reduce((sum, bytes) => sum + bytes, 0);
-
-    const languages = Object.entries(languageBytes)
-        .filter(([, bytes]) => totalBytes > 0 && bytes / totalBytes >= MIN_LANGUAGE_SHARE)
-        .sort(([, a], [, b]) => b - a)
-        .map(([language]) => language);
-
+function toTechnologies(language: string | null, topics: string[]): string[] {
     const unique = new Map<string, string>();
-    for (const entry of [...languages, ...topics]) {
+    for (const entry of [language, ...topics]) {
+        if (!entry) continue;
         unique.set(entry.toLowerCase(), entry);
     }
-
     return [...unique.values()].slice(0, MAX_TECHNOLOGIES);
 }
 
@@ -138,53 +137,142 @@ function toLiveUrl(homepage: string | null): string | null {
     return /^https?:\/\//.test(trimmed) ? trimmed : `https://${trimmed}`;
 }
 
-async function toProject(repo: GitHubRepo): Promise<Project> {
-    const [languageBytes, readme] = await Promise.all([
-        fetchJson<Record<string, number>>(`/repos/${USERNAME}/${repo.name}/languages`),
-        fetchReadme(repo.name),
-    ]);
-
+function toProject(repo: GitHubRepo, readme = ''): Project {
     return {
         slug: repo.name,
         name: repo.name,
         excerpt: toExcerpt(readme) || repo.description || 'No description available yet.',
         readme,
-        technologies: toTechnologies(languageBytes ?? {}, repo.topics ?? []),
+        technologies: toTechnologies(repo.language, repo.topics ?? []),
         language: repo.language,
         stars: repo.stargazers_count,
         updatedAt: repo.pushed_at,
         githubUrl: repo.html_url,
         liveUrl: toLiveUrl(repo.homepage),
+        pulse: [],
     };
 }
 
 /**
+ * GitHub's public participation graph — 52 weekly commit counts. This URL is
+ * not the REST API, so it still works when the API is rate-limited.
+ */
+async function fetchPulse(repo: string): Promise<number[]> {
+    try {
+        const response = await fetch(`https://github.com/${USERNAME}/${repo}/graphs/participation`, {
+            headers: {
+                Accept: 'application/json',
+                'User-Agent': 'ddev-portfolio',
+            },
+            next: { revalidate: REVALIDATE_SECONDS },
+        });
+        if (!response.ok) return [];
+
+        const payload: unknown = await response.json();
+        const weeks = Array.isArray(payload)
+            ? payload
+            : payload && typeof payload === 'object' && 'all' in payload && Array.isArray(payload.all)
+              ? payload.all
+              : null;
+        if (!weeks) return [];
+        return weeks.map((value) => Number(value) || 0);
+    } catch {
+        return [];
+    }
+}
+
+function isVisible(repo: GitHubRepo): boolean {
+    return (
+        !repo.fork &&
+        !repo.archived &&
+        !repo.private &&
+        repo.name.toLowerCase() !== USERNAME.toLowerCase()
+    );
+}
+
+/**
+ * Public repositories page — used when the REST API is rate-limited (403).
+ */
+async function fetchHtmlRepos(): Promise<GitHubRepo[] | null> {
+    try {
+        const response = await fetch(
+            `https://github.com/${USERNAME}?tab=repositories&type=source`,
+            {
+                headers: { 'User-Agent': 'ddev-portfolio' },
+                next: { revalidate: REVALIDATE_SECONDS },
+            }
+        );
+        if (!response.ok) return null;
+
+        const html = await response.text();
+        const blocks = html.split('itemtype="http://schema.org/Code"').slice(1);
+        const repos: GitHubRepo[] = [];
+
+        for (const block of blocks) {
+            const name = block.match(/itemprop="name codeRepository"[^>]*>\s*([^<]+)/)?.[1]?.trim();
+            if (!name) continue;
+
+            const stars = Number(
+                block.match(/stargazers">[\s\S]*?<\/svg>\s*([\d,]+)/)?.[1]?.replace(/,/g, '') ?? 0
+            );
+
+            repos.push({
+                name,
+                description:
+                    block.match(/itemprop="description">\s*([^<]+)/)?.[1]?.trim() ?? null,
+                html_url: `https://github.com/${USERNAME}/${name}`,
+                homepage: null,
+                language:
+                    block.match(/itemprop="programmingLanguage">([^<]+)/)?.[1]?.trim() ?? null,
+                topics: [],
+                stargazers_count: stars,
+                pushed_at:
+                    block.match(/datetime="([^"]+)"/)?.[1] ?? new Date().toISOString(),
+                archived: false,
+                fork: false,
+                private: false,
+            });
+        }
+
+        return repos.length > 0 ? repos : null;
+    } catch (error) {
+        console.error('GitHub repositories page failed', error);
+        return null;
+    }
+}
+
+/**
  * Public, owned, non-fork repositories, most recently pushed first.
- * Wrapped in `cache` so the several pages that need the list during one render
- * share a single set of GitHub requests.
+ * One REST call when the API is available; the public profile page otherwise.
+ * READMEs are loaded only on the dedicated project page.
  */
 export const getProjects = cache(async (): Promise<Project[]> => {
-    const repos = await fetchJson<GitHubRepo[]>(
-        `/users/${USERNAME}/repos?sort=pushed&per_page=100&type=owner`
-    );
+    const repos =
+        (await fetchJson<GitHubRepo[]>(
+            `/users/${USERNAME}/repos?sort=pushed&per_page=100&type=owner`
+        )) ?? (await fetchHtmlRepos());
 
     if (!repos) return [];
 
-    const visible = repos.filter(
-        (repo) =>
-            !repo.fork &&
-            !repo.archived &&
-            !repo.private &&
-            // The repository named after the account only holds the profile README.
-            repo.name.toLowerCase() !== USERNAME.toLowerCase()
+    return Promise.all(
+        repos.filter(isVisible).map(async (repo) => ({
+            ...toProject(repo),
+            pulse: await fetchPulse(repo.name),
+        }))
     );
-
-    return Promise.all(visible.map(toProject));
 });
 
 export async function getProject(slug: string): Promise<Project | undefined> {
     const projects = await getProjects();
-    return projects.find((project) => project.slug === slug);
+    const project = projects.find((entry) => entry.slug === slug);
+    if (!project) return undefined;
+
+    const readme = await fetchReadme(project.slug);
+    return {
+        ...project,
+        readme,
+        excerpt: toExcerpt(readme) || project.excerpt,
+    };
 }
 
 export function readmeBaseUrl(slug: string): string {
@@ -263,7 +351,14 @@ function toWeeks(days: ContributionDay[]): ContributionWeek[] {
     return weeks;
 }
 
-async function fetchGraphqlCalendar(): Promise<ContributionCalendar | null> {
+function yearRange(year: number): { from: string; to: string } {
+    return {
+        from: `${year}-01-01T00:00:00Z`,
+        to: `${year}-12-31T23:59:59Z`,
+    };
+}
+
+async function fetchGraphqlCalendar(year: number): Promise<ContributionCalendar | null> {
     // GraphQL requires a token. Without one, skip straight to the public page.
     if (!process.env.GITHUB_TOKEN) return null;
 
@@ -275,15 +370,17 @@ async function fetchGraphqlCalendar(): Promise<ContributionCalendar | null> {
         Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
     };
 
+    const { from, to } = yearRange(year);
+
     try {
         const response = await fetch(GRAPHQL, {
             method: 'POST',
             headers,
             body: JSON.stringify({
                 query: `
-                    query ($login: String!) {
+                    query ($login: String!, $from: DateTime!, $to: DateTime!) {
                         user(login: $login) {
-                            contributionsCollection {
+                            contributionsCollection(from: $from, to: $to) {
                                 contributionCalendar {
                                     totalContributions
                                     weeks {
@@ -298,7 +395,7 @@ async function fetchGraphqlCalendar(): Promise<ContributionCalendar | null> {
                         }
                     }
                 `,
-                variables: { login: USERNAME },
+                variables: { login: USERNAME, from, to },
             }),
             next: { revalidate: REVALIDATE_SECONDS },
         });
@@ -335,9 +432,11 @@ async function fetchGraphqlCalendar(): Promise<ContributionCalendar | null> {
  * unavailable (usually a missing token). The markup is not a contract, so a
  * failed parse just yields an empty calendar.
  */
-async function fetchHtmlCalendar(): Promise<ContributionCalendar | null> {
+async function fetchHtmlCalendar(year: number): Promise<ContributionCalendar | null> {
     try {
-        const response = await fetch(`https://github.com/users/${USERNAME}/contributions?tab=contributions`, {
+        const response = await fetch(
+            `https://github.com/users/${USERNAME}/contributions?from=${year}-01-01&to=${year}-12-31`,
+            {
             headers: { 'User-Agent': 'ddev-portfolio' },
             next: { revalidate: REVALIDATE_SECONDS },
         });
@@ -370,6 +469,9 @@ async function fetchHtmlCalendar(): Promise<ContributionCalendar | null> {
 
         if (parsed.length === 0) return null;
 
+        // GitHub's table is row-major (all Sundays, then all Mondays, …).
+        parsed.sort((a, b) => a.date.localeCompare(b.date));
+
         const headingTotal = html.match(
             /id="js-contribution-activity-description"[^>]*>\s*([\d,]+)/i
         )?.[1];
@@ -385,9 +487,39 @@ async function fetchHtmlCalendar(): Promise<ContributionCalendar | null> {
 }
 
 /**
- * Last twelve months of contribution counts, the same calendar GitHub shows
- * on a profile. GraphQL is preferred; the public HTML page is the fallback.
+ * One calendar year of contribution counts. GraphQL is preferred; the public
+ * HTML page is the fallback when no token is set.
  */
-export const getContributions = cache(async (): Promise<ContributionCalendar | null> => {
-    return (await fetchGraphqlCalendar()) ?? (await fetchHtmlCalendar());
+export const getContributions = cache(async (year: number): Promise<ContributionCalendar | null> => {
+    return (await fetchGraphqlCalendar(year)) ?? (await fetchHtmlCalendar(year));
+});
+
+/**
+ * Years shown on the public contributions page, newest first. Avoids the
+ * `/users/{login}` REST call, which 403s once the unauthenticated budget is gone.
+ */
+export const getContributionYears = cache(async (): Promise<number[]> => {
+    const current = new Date().getUTCFullYear();
+
+    try {
+        const response = await fetch(`https://github.com/users/${USERNAME}/contributions`, {
+            headers: { 'User-Agent': 'ddev-portfolio' },
+            next: { revalidate: REVALIDATE_SECONDS },
+        });
+
+        if (response.ok) {
+            const html = await response.text();
+            const found = [...html.matchAll(/id="year-link-(\d{4})"/g)].map((match) =>
+                Number(match[1])
+            );
+            const unique = [...new Set(found)].sort((a, b) => b - a);
+            if (unique.length > 0) return unique;
+        }
+    } catch {
+        // Fall through to a short recent window.
+    }
+
+    const years: number[] = [];
+    for (let year = current; year >= current - 4; year -= 1) years.push(year);
+    return years;
 });
