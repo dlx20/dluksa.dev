@@ -84,7 +84,7 @@ export async function sendEmail({
         from: `"ddev" <${process.env.EMAIL_USER}>`,
         to: process.env.EMAIL_USER,
         replyTo: `${name} <${email}>`,
-        subject: `[ddev] ${subject}`,
+        subject: `Enquiry: ${subject}`,
         text: contactEmailText({
             name,
             email,
