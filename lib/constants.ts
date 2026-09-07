@@ -11,6 +11,7 @@ export const links = [
     { title: 'Home', url: '/' },
     { title: 'Projects', url: '/projects' },
     { title: 'Resume', url: '/resume' },
+    { title: 'Contact', url: '/contact' },
 ];
 
 // Theme specific accents
@@ -71,7 +72,7 @@ export const SOCIALS: { title: string; icon: IconType; url: string }[] = [
     {
         title: 'Email',
         icon: HiOutlineMail,
-        url: `mailto:${EMAIL}`,
+        url: '/contact',
     },
 ];
 

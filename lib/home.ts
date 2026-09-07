@@ -5,11 +5,11 @@ import { LOCATION } from './constants';
 export const NOW = [
     {
         label: 'Status',
-        value: 'Open to web and ML-adjacent roles.',
+        value: 'Open to Next.js full-stack and machine learning roles.',
     },
     {
         label: 'Focus',
-        value: 'Shipping interfaces around models, not only the models.',
+        value: 'Full-stack Next.js and machine learning.',
     },
     {
         label: 'Base',
@@ -17,7 +17,7 @@ export const NOW = [
     },
     {
         label: 'Learning',
-        value: 'Next.js in production, after the Meta front-end certificate.',
+        value: 'Full-stack Next.js.',
     },
 ] as const;
 

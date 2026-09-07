@@ -1,22 +1,21 @@
+'use client';
+
 import { SOCIALS } from '@/lib/constants';
+import SocialLink from './SocialLink';
 
 /**
  * Icon-only social links as square tiles. Shared by the sidebar footer and the
  * intro on the home page so both clusters stay identical.
  */
-const SocialTiles = () => (
+const SocialTiles = ({ onNavigate }: { onNavigate?: () => void }) => (
     <div className="flex gap-2">
-        {SOCIALS.map(({ title, icon: Icon, url }) => (
-            <a
-                key={title}
-                href={url}
-                aria-label={title}
-                target={url.startsWith('http') ? '_blank' : undefined}
-                rel="noopener noreferrer"
+        {SOCIALS.map((social) => (
+            <SocialLink
+                key={social.title}
+                {...social}
                 className="social-tile"
-            >
-                <Icon size={18} />
-            </a>
+                onNavigate={onNavigate}
+            />
         ))}
     </div>
 );

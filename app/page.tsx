@@ -4,7 +4,6 @@ import TerminalSection from '@/components/TerminalSection';
 import AppearanceSettings from '@/components/AppearanceSettings';
 import ProjectGrid from '@/components/ProjectGrid';
 import SkillBadges from '@/components/SkillBadges';
-import EmailForm from '@/components/EmailForm';
 import SocialTiles from '@/components/ui/SocialTiles';
 import MiniMap from '@/components/MiniMap';
 import { SKILLS } from '@/lib/constants';
@@ -51,7 +50,7 @@ const Page = async () => {
         <div className="site-page">
             <div className="site-page__inner">
 
-                {/* 01 — Intro */}
+                {/* 01 — Who */}
                 <TerminalSection label="usr" title="who am i">
                     <p className="text-subheading leading-8 tracking-wide sm:leading-9">
                         MSc graduate in{' '}
@@ -70,7 +69,7 @@ const Page = async () => {
                     </div>
                 </TerminalSection>
 
-                {/* 02 — Now */}
+                {/* 02 — Fit: available, where, what they want */}
                 <TerminalSection id="now" label="now" title="now status">
                     <dl className="grid gap-4 sm:grid-cols-2">
                         {NOW.map(({ label, value }) => (
@@ -82,29 +81,7 @@ const Page = async () => {
                     </dl>
                 </TerminalSection>
 
-                {/* 03 — How I work */}
-                <TerminalSection id="log" label="log" title="how i work">
-                    <ol className="grid gap-4 md:grid-cols-3">
-                        {PROCESS.map(({ step, title, body }) => (
-                            <li key={step} className="card">
-                                <p className="card__kicker">{step}</p>
-                                <h3 className="mt-2 text-base font-bold text-accent">{title}</h3>
-                                <p className="mt-3 text-body leading-6 text-fg-muted">{body}</p>
-                            </li>
-                        ))}
-                    </ol>
-                </TerminalSection>
-
-                {/* 04 — Stack */}
-                <TerminalSection label="sys" title="core stack">
-                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                        {SKILLS.map(({ section, technologies }) => (
-                            <SkillBadges key={section} title={section} technologies={technologies} />
-                        ))}
-                    </div>
-                </TerminalSection>
-
-                {/* 05 — Lab */}
+                {/* 03 — Strongest proof */}
                 <TerminalSection id="lab" label="lab" title="lab notes">
                     <article className="card">
                         <p className="card__kicker">{LAB.kicker}</p>
@@ -136,7 +113,7 @@ const Page = async () => {
                     </article>
                 </TerminalSection>
 
-                {/* 06 — Projects */}
+                {/* 04 — More proof */}
                 <TerminalSection label="exe" title="active projects">
                     <ProjectGrid projects={featured} />
 
@@ -151,7 +128,29 @@ const Page = async () => {
                     )}
                 </TerminalSection>
 
-                {/* 07 — Timeline */}
+                {/* 05 — Can they do the job */}
+                <TerminalSection label="sys" title="core stack">
+                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                        {SKILLS.map(({ section, technologies }) => (
+                            <SkillBadges key={section} title={section} technologies={technologies} />
+                        ))}
+                    </div>
+                </TerminalSection>
+
+                {/* 06 — How they would contribute */}
+                <TerminalSection id="log" label="log" title="how i work">
+                    <ol className="grid gap-4 md:grid-cols-3">
+                        {PROCESS.map(({ step, title, body }) => (
+                            <li key={step} className="card">
+                                <p className="card__kicker">{step}</p>
+                                <h3 className="mt-2 text-base font-bold text-accent">{title}</h3>
+                                <p className="mt-3 text-body leading-6 text-fg-muted">{body}</p>
+                            </li>
+                        ))}
+                    </ol>
+                </TerminalSection>
+
+                {/* 07 — Career arc */}
                 <TerminalSection id="hist" label="hist" title="brief history">
                     <ol className="home-timeline card">
                         {TIMELINE.map(({ year, title, place }) => (
@@ -171,16 +170,36 @@ const Page = async () => {
                     </Link>
                 </TerminalSection>
 
-                {/* 08 — Settings */}
+                {/* 08 — Objections before the form */}
+                <TerminalSection id="ask" label="ask" title="common questions">
+                    <dl className="grid gap-4 lg:grid-cols-2">
+                        {FAQ.map(({ question, answer }) => (
+                            <div key={question} className="card">
+                                <dt className="text-body font-bold text-fg-base">{question}</dt>
+                                <dd className="mt-3 text-body leading-6 text-fg-muted">{answer}</dd>
+                            </div>
+                        ))}
+                    </dl>
+                </TerminalSection>
+
+                {/* 09 — Call to action */}
+                <TerminalSection label="etc" title="say hello">
+                    <div className="card flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <p className="text-body leading-6 text-fg-muted">
+                            Open to Next.js full-stack and machine learning roles. Send a note —
+                            a CV or project files are welcome.
+                        </p>
+                        <Link href="/contact" className="btn-outline group shrink-0">
+                            Contact me
+                            <FaArrowRight className="transition-transform group-hover:translate-x-0.5" />
+                        </Link>
+                    </div>
+                </TerminalSection>
+
+                {/* 10 — Activity signal, then site chrome */}
                 <TerminalSection label="bin" title="system settings">
                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
 
-                        {/* Appearance */}
-                        <div className="card">
-                            <AppearanceSettings shape="square" />
-                        </div>
-
-                        {/* GitHub activity */}
                         <div className="card flex flex-col gap-4">
                             <div className="flex items-center gap-3">
                                 <span className="icon-tile">
@@ -205,11 +224,14 @@ const Page = async () => {
                             </dl>
                         </div>
 
-                        {/* Location */}
                         <div className="card overflow-hidden p-0 md:col-span-2 xl:col-span-1">
                             <div className="h-48 w-full xl:h-full xl:min-h-56">
                                 <MiniMap />
                             </div>
+                        </div>
+
+                        <div className="card md:col-span-2 xl:col-span-1">
+                            <AppearanceSettings shape="square" />
                         </div>
                     </div>
 
@@ -222,7 +244,7 @@ const Page = async () => {
                     </div>
                 </TerminalSection>
 
-                {/* 09 — Colophon */}
+                {/* 11 — How the site is built */}
                 <TerminalSection id="man" label="man" title="site manual">
                     <ul className="grid gap-4 sm:grid-cols-2">
                         {COLOPHON.map(({ title, body }) => (
@@ -232,23 +254,6 @@ const Page = async () => {
                             </li>
                         ))}
                     </ul>
-                </TerminalSection>
-
-                {/* 10 — FAQ */}
-                <TerminalSection id="ask" label="ask" title="common questions">
-                    <dl className="grid gap-4 lg:grid-cols-2">
-                        {FAQ.map(({ question, answer }) => (
-                            <div key={question} className="card">
-                                <dt className="text-body font-bold text-fg-base">{question}</dt>
-                                <dd className="mt-3 text-body leading-6 text-fg-muted">{answer}</dd>
-                            </div>
-                        ))}
-                    </dl>
-                </TerminalSection>
-
-                {/* 11 — Contact */}
-                <TerminalSection label="etc" title="say hello">
-                    <EmailForm />
                 </TerminalSection>
             </div>
         </div>

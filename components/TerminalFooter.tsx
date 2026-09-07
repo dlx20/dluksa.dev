@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { SOCIALS } from '@/lib/constants';
 import { runCommand, type CommandProject } from '@/lib/terminal';
+import SocialLink from './ui/SocialLink';
 
 type Entry = { input: string; lines: string[] };
 
@@ -187,17 +188,13 @@ const TerminalFooter = ({ projects }: { projects: CommandProject[] }) => {
                     )}
 
                     <div className="hidden items-center gap-2 sm:flex">
-                        {SOCIALS.map(({ title, icon: Icon, url }) => (
-                            <a
-                                key={title}
-                                href={url}
-                                aria-label={title}
-                                target={url.startsWith('http') ? '_blank' : undefined}
-                                rel="noopener noreferrer"
+                        {SOCIALS.map((social) => (
+                            <SocialLink
+                                key={social.title}
+                                {...social}
+                                size={15}
                                 className="text-accent/50 transition-colors hover:text-accent"
-                            >
-                                <Icon size={15} />
-                            </a>
+                            />
                         ))}
                     </div>
                 </div>

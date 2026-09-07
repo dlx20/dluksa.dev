@@ -34,6 +34,7 @@ const PAGES: Record<string, string> = {
     home: '/',
     projects: '/projects',
     resume: '/resume',
+    contact: '/contact',
 };
 
 /** Case-insensitive match on slug, then on any part of the slug. */

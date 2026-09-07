@@ -85,7 +85,7 @@ const Sidebar = ({ onClose }: { onClose: () => void }) => {
                 <footer className="border-t border-accent/10 px-5 py-5 sm:px-6">
                     <p className="mb-4 text-ui uppercase tracking-wide text-accent/50">Connect</p>
 
-                    <SocialTiles />
+                    <SocialTiles onNavigate={onClose} />
                 </footer>
             </aside>
         </>

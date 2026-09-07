@@ -300,6 +300,12 @@
   .control-label {
     @apply mb-1.5 block text-ui uppercase tracking-wide text-fg-muted;
   }
+  .progress-bar {
+    @apply h-1 w-full overflow-hidden rounded-full bg-accent/15;
+  }
+  .progress-bar__fill {
+    @apply h-full rounded-full bg-accent transition-[width] duration-150 ease-out;
+  }
 
   .link-subtle {
     @apply font-display text-ui uppercase tracking-wide text-fg-muted transition-colors hover:text-accent;
