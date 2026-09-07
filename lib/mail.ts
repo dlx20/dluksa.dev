@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { contactEmailHtml, contactEmailText } from './mail-template';
 
 const OAuth2 = google.auth.OAuth2;
@@ -19,6 +21,29 @@ export type MailAttachment = {
     content: Buffer;
     contentType?: string;
 };
+
+function logoAttachment() {
+    const paths = [
+        join(process.cwd(), 'public', 'email-logo.png'),
+        join(process.cwd(), 'email-logo.png'),
+    ];
+
+    for (const file of paths) {
+        try {
+            return {
+                filename: 'email-logo.png',
+                content: readFileSync(file),
+                contentType: 'image/png',
+                cid: 'ddev-logo',
+                contentDisposition: 'inline' as const,
+            };
+        } catch {
+            // Standalone vs local cwd.
+        }
+    }
+
+    return null;
+}
 
 export async function sendEmail({
     name,
@@ -53,6 +78,7 @@ export async function sendEmail({
         timeZone: 'Europe/London',
     }).format(new Date());
     const files = attachments.map((file) => file.filename);
+    const logo = logoAttachment();
 
     await transporter.sendMail({
         from: `"ddev" <${process.env.EMAIL_USER}>`,
@@ -75,10 +101,13 @@ export async function sendEmail({
             files,
             receivedAt,
         }),
-        attachments: attachments.map(({ filename, content, contentType }) => ({
-            filename,
-            content,
-            contentType,
-        })),
+        attachments: [
+            ...(logo ? [logo] : []),
+            ...attachments.map(({ filename, content, contentType }) => ({
+                filename,
+                content,
+                contentType,
+            })),
+        ],
     });
 }

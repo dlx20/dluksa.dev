@@ -58,7 +58,7 @@ export function contactEmailHtml({
               <table role="presentation" cellpadding="0" cellspacing="0">
                 <tr>
                   <td width="40" height="40" valign="middle" align="center" style="width:40px;height:40px;background-color:#1c1c1c;border-radius:8px;">
-                    <img src="${SITE_URL}/email-logo.svg" width="40" height="40" alt="ddev" style="display:block;border:0;border-radius:8px;" />
+                    <img src="cid:ddev-logo" width="40" height="40" alt="ddev" style="display:block;border:0;border-radius:8px;" />
                   </td>
                   <td style="padding-left:12px;vertical-align:middle;">
                     <div style="font-family:${MONO};font-size:18px;font-weight:700;color:#111827;letter-spacing:0.04em;">ddev</div>
