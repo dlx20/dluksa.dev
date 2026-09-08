@@ -10,17 +10,18 @@ import { SKILLS } from '@/lib/constants';
 import { COLOPHON, FAQ, LAB, NOW, PROCESS, TIMELINE, WHO } from '@/lib/home';
 import { formatDate } from '@/lib/format';
 import ContributionGraph from '@/components/ContributionGraph';
-import { getContributions, getContributionYears, getProjects } from '@/lib/github';
+import { getContributions, getContributionYears, getProjects, getRecentCommits } from '@/lib/github';
 import TechBadgeList from '@/components/TechBadgeList';
 
 const FEATURED_COUNT = 3;
 
 const Page = async () => {
     const currentYear = new Date().getUTCFullYear();
-    const [projects, contributions, contributionYears] = await Promise.all([
+    const [projects, contributions, contributionYears, commits] = await Promise.all([
         getProjects(),
         getContributions(currentYear),
         getContributionYears(),
+        getRecentCommits(),
     ]);
     const featured = projects.slice(0, FEATURED_COUNT);
     const labProject = projects.find((project) =>
@@ -201,9 +202,9 @@ const Page = async () => {
 
                 {/* 10 — Activity signal, then site chrome */}
                 <TerminalSection label="bin" title="system settings">
-                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    <div className="grid gap-4 md:grid-cols-2">
 
-                        <div className="card flex flex-col gap-4">
+                        <div className="card flex flex-col gap-3 md:col-span-2">
                             <div className="flex items-center gap-3">
                                 <span className="icon-tile">
                                     <FaGithub size={18} className="text-accent" />
@@ -211,29 +212,59 @@ const Page = async () => {
                                 <h3 className="font-semibold text-accent">GitHub activity</h3>
                             </div>
 
-                            <dl className="space-y-3">
+                            <dl className="flex flex-wrap items-center gap-x-4 gap-y-1 text-ui">
                                 {stats.map(({ label, value, icon: Icon }) => (
-                                    <div
-                                        key={label}
-                                        className="flex items-center justify-between gap-4 text-ui"
-                                    >
-                                        <dt className="flex items-center gap-2 text-fg-muted">
+                                    <div key={label} className="flex items-center gap-1.5">
+                                        <dt className="flex items-center gap-1.5 text-fg-muted">
                                             <Icon className="shrink-0 text-accent/60" />
-                                            {label}
+                                            <span className="sr-only">{label}</span>
                                         </dt>
                                         <dd className="font-bold text-accent/80">{value}</dd>
                                     </div>
                                 ))}
                             </dl>
+
+                            {commits.length > 0 ? (
+                                <ul className="commit-feed">
+                                    {commits.map((commit) => (
+                                        <li key={commit.url}>
+                                            <a
+                                                href={commit.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="commit-feed__item"
+                                            >
+                                                <span className="commit-feed__repo">{commit.repo}</span>
+                                                <p className="commit-feed__title">{commit.title}</p>
+                                                {commit.additions != null &&
+                                                    commit.deletions != null && (
+                                                        <span className="commit-feed__diff">
+                                                            <span className="text-success">
+                                                                +{commit.additions}
+                                                            </span>
+                                                            <span className="text-danger">
+                                                                −{commit.deletions}
+                                                            </span>
+                                                        </span>
+                                                    )}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p className="border-t border-accent/10 pt-3 text-ui text-fg-muted">
+                                    No recent commits to show.
+                                </p>
+                            )}
                         </div>
 
-                        <div className="card overflow-hidden p-0 md:col-span-2 xl:col-span-1">
-                            <div className="h-48 w-full xl:h-full xl:min-h-56">
+                        <div className="card overflow-hidden p-0">
+                            <div className="h-48 w-full md:h-full md:min-h-56">
                                 <MiniMap />
                             </div>
                         </div>
 
-                        <div className="card md:col-span-2 xl:col-span-1">
+                        <div className="card">
                             <AppearanceSettings shape="square" />
                         </div>
                     </div>

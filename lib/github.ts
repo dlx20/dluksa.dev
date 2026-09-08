@@ -535,3 +535,154 @@ export const getContributionYears = cache(async (): Promise<number[]> => {
     for (let year = current; year >= current - 4; year -= 1) years.push(year);
     return years;
 });
+
+export type RecentCommit = {
+    repo: string;
+    title: string;
+    date: string;
+    additions: number | null;
+    deletions: number | null;
+    url: string;
+};
+
+const RECENT_COMMIT_LIMIT = 4;
+
+function commitTitle(message: string): string {
+    return message.split('\n')[0]?.replace(/\s+/g, ' ').trim() || 'Commit';
+}
+
+function isMergeCommit(title: string): boolean {
+    return /^merge\b/i.test(title);
+}
+
+async function fetchPublicText(url: string, accept?: string): Promise<string | null> {
+    try {
+        const headers: Record<string, string> = { 'User-Agent': 'ddev-portfolio' };
+        if (accept) headers.Accept = accept;
+        const response = await fetch(url, {
+            headers,
+            next: { revalidate: REVALIDATE_SECONDS },
+        });
+        return response.ok ? response.text() : null;
+    } catch {
+        return null;
+    }
+}
+
+type ListedCommit = {
+    sha: string;
+    title: string;
+    date: string;
+    url: string;
+};
+
+async function fetchRestCommitList(repo: string, limit: number): Promise<ListedCommit[] | null> {
+    const commits = await fetchJson<{
+        sha: string;
+        html_url: string;
+        commit: { message: string; author?: { date?: string } };
+    }[]>(`/repos/${USERNAME}/${repo}/commits?per_page=${limit}`);
+
+    if (!commits) return null;
+
+    return commits.flatMap((commit) => {
+        const title = commitTitle(commit.commit.message);
+        if (isMergeCommit(title)) return [];
+        return [
+            {
+                sha: commit.sha,
+                title,
+                date: commit.commit.author?.date ?? new Date().toISOString(),
+                url: commit.html_url,
+            },
+        ];
+    });
+}
+
+async function fetchAtomCommitList(repo: string): Promise<ListedCommit[]> {
+    const xml = await fetchPublicText(`https://github.com/${USERNAME}/${repo}/commits.atom`);
+    if (!xml) return [];
+
+    return xml
+        .split('<entry>')
+        .slice(1)
+        .flatMap((entry) => {
+            const title = commitTitle(entry.match(/<title>\s*([^<]+)/)?.[1] ?? '');
+            if (!title || isMergeCommit(title)) return [];
+
+            const url =
+                entry.match(/<link[^>]*href="([^"]+)"/)?.[1] ??
+                '';
+            const sha =
+                entry.match(/Grit::Commit\/([a-f0-9]+)/)?.[1] ??
+                url.split('/').pop() ??
+                '';
+            if (!url || !sha) return [];
+
+            return [
+                {
+                    sha,
+                    title,
+                    date: entry.match(/<updated>([^<]+)/)?.[1]?.trim() ?? new Date().toISOString(),
+                    url,
+                },
+            ];
+        });
+}
+
+async function fetchCommitDiff(repo: string, sha: string): Promise<{
+    additions: number | null;
+    deletions: number | null;
+}> {
+    const detail = await fetchJson<{ stats?: { additions: number; deletions: number } }>(
+        `/repos/${USERNAME}/${repo}/commits/${sha}`
+    );
+    if (detail?.stats) {
+        return { additions: detail.stats.additions, deletions: detail.stats.deletions };
+    }
+
+    const html = await fetchPublicText(`https://github.com/${USERNAME}/${repo}/commit/${sha}`);
+    const match = html?.match(/(\d+)\s+additions?(?:[\s\S]{0,40}?)(\d+)\s+deletions?/i);
+    if (!match) return { additions: null, deletions: null };
+
+    return { additions: Number(match[1]), deletions: Number(match[2]) };
+}
+
+async function listRepoCommits(repo: string, limit: number): Promise<(ListedCommit & { repo: string })[]> {
+    const rest = await fetchRestCommitList(repo, limit);
+    const listed = rest && rest.length > 0 ? rest : await fetchAtomCommitList(repo);
+    return listed.slice(0, limit).map((commit) => ({ ...commit, repo }));
+}
+
+/** Latest commits on the most recently pushed public repos. */
+export const getRecentCommits = cache(async (): Promise<RecentCommit[]> => {
+    const projects = await getProjects();
+    const repos = projects.slice(0, 3).map((project) => project.slug);
+    if (repos.length === 0) return [];
+
+    const listed = (await Promise.all(repos.map((repo) => listRepoCommits(repo, RECENT_COMMIT_LIMIT)))).flat();
+
+    const seen = new Set<string>();
+    const newest = listed
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .filter((commit) => {
+            if (seen.has(commit.url)) return false;
+            seen.add(commit.url);
+            return true;
+        })
+        .slice(0, RECENT_COMMIT_LIMIT);
+
+    return Promise.all(
+        newest.map(async (commit) => {
+            const diff = await fetchCommitDiff(commit.repo, commit.sha);
+            return {
+                repo: commit.repo,
+                title: commit.title,
+                date: commit.date,
+                additions: diff.additions,
+                deletions: diff.deletions,
+                url: commit.url,
+            };
+        })
+    );
+});

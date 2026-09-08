@@ -77,7 +77,7 @@ const ContributionGraph = ({
                     </span>
 
                     <div>
-                        <h3 className="font-semibold text-accent">Commit history</h3>
+                        <h3 className="font-semibold text-accent">Contributions</h3>
                         <p className="text-ui text-fg-muted">
                             {calendar
                                 ? `${calendar.total.toLocaleString('en-GB')} contributions in ${year}`

@@ -316,6 +316,33 @@
     @apply flex size-9 shrink-0 items-center justify-center rounded-card bg-accent/10;
   }
 
+  .mini-map {
+    @apply relative h-full w-full overflow-hidden bg-surface-base;
+  }
+  .mini-map--fallback {
+    @apply flex items-center justify-center p-4 text-center font-display text-ui
+           uppercase tracking-wide text-fg-muted;
+  }
+  .mini-map__pin {
+    pointer-events: none;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    transform: translate(-50%, -100%);
+    background:
+      radial-gradient(circle at center, var(--color-accent) 0 5.5px, transparent 5.6px),
+      radial-gradient(
+        circle at center,
+        color-mix(in srgb, var(--color-accent) 20%, transparent) 0 11px,
+        transparent 11.1px
+      );
+  }
+  .mini-map__label {
+    @apply pointer-events-none absolute bottom-3 left-3 rounded-card border border-accent/25
+           bg-surface-base/85 px-2 py-1 font-display text-ui font-normal tracking-default
+           text-accent backdrop-blur-sm;
+  }
+
   /* Square social link, used in the sidebar footer and the home intro. */
   .social-tile {
     @apply flex size-10 items-center justify-center rounded-card border border-accent/15
@@ -375,6 +402,25 @@
   }
   .card__kicker {
     @apply text-ui uppercase tracking-wide text-fg-muted;
+  }
+  .commit-feed {
+    @apply mt-auto border-t border-accent/10;
+  }
+  .commit-feed__item {
+    @apply grid grid-cols-[auto_minmax(0,1fr)_auto] items-baseline gap-2
+           border-b border-accent/10 py-1.5 last:border-b-0;
+  }
+  .commit-feed__repo {
+    @apply max-w-[12rem] truncate font-display text-ui text-fg-muted;
+  }
+  .commit-feed__title {
+    @apply min-w-0 truncate text-ui text-fg-base;
+  }
+  .commit-feed__item:hover .commit-feed__title {
+    @apply text-accent;
+  }
+  .commit-feed__diff {
+    @apply inline-flex shrink-0 items-center gap-1 font-display text-ui tabular-nums;
   }
   .home-timeline {
     @apply relative space-y-0;
