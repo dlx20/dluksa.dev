@@ -1,7 +1,27 @@
-# ddev — dluksa.dev
+# ddev
 
-Personal portfolio built with Next.js 16 (App Router), React 19 and Tailwind CSS 4.
-Projects are not hardcoded: the site reads them live from the GitHub REST API.
+Personal site of **Dovydas Luksa** — [dluksa.dev](https://dluksa.dev).
+
+A terminal-styled portfolio for an MSc graduate in Robotics, AI and Autonomous Systems who now builds for the web. Machine learning work lives in Python (PyTorch, TensorFlow); product work lives in TypeScript, React and Next.js. The site is the handover in public: live GitHub data, a real contact form, and a command prompt at the bottom of every page.
+
+## What it does
+
+- **Home** — intro, current focus, featured lab work, live project cards with a GitHub-style commit pulse, stack, career timeline, FAQ, contribution heatmap, themes and accents.
+- **Projects** — public repositories from GitHub, filterable by technology, grid or row layout. Each card links to a page that renders the repository README.
+- **Resume** — education, experience and certifications.
+- **Contact** — message form with optional file attachments (PDF, images, Word, zip), delivered by Gmail OAuth.
+
+Projects are not hardcoded. The list, languages, topics, commit pulse and contribution calendar are fetched from GitHub and cached for an hour.
+
+## Stack
+
+| Layer | Choice |
+| --- | --- |
+| App | Next.js 16 (App Router), React 19, TypeScript |
+| Style | Tailwind CSS 4, CSS variables for five themes and seven accents |
+| Data | GitHub REST + public HTML fallbacks when the API is rate-limited |
+| Mail | Nodemailer + Google OAuth |
+| Hosting | Docker standalone output → Cloud Build → Cloud Run (`europe-west1`) |
 
 ## Getting started
 
@@ -10,108 +30,65 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Environment variables
+```bash
+npm run build    # production build
+npm run start    # serve the standalone build on :8080
+npm run lint
+```
+
+## Environment
 
 Create `.env.local`:
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `GITHUB_USERNAME` | yes | Account whose public repositories are listed. Defaults to `dlx20`. |
-| `GITHUB_TOKEN` | recommended | Classic PAT with **no scopes**. Raises the API rate limit from 60 to 5000 requests/hour. |
-| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | no | Renders the location map. Falls back to a text label when absent. |
-| `EMAIL_USER`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN` | no | Gmail OAuth credentials for the contact form. |
+| `GITHUB_USERNAME` | no | Public GitHub account to list. Defaults to `dlx20`. |
+| `GITHUB_TOKEN` | recommended | Classic PAT with **no scopes**. Raises the REST limit from 60 to 5,000 requests/hour. |
+| `NEXT_PUBLIC_APP_URL` | production | Canonical site URL (metadata and email links). Defaults to `https://dluksa.dev`. |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | no | Location map on the home page. Falls back to a text label. |
+| `EMAIL_USER` | contact form | Gmail address that sends and receives enquiries. |
+| `GOOGLE_CLIENT_ID` | contact form | OAuth client for Gmail. |
+| `GOOGLE_CLIENT_SECRET` | contact form | OAuth client secret. |
+| `GOOGLE_REFRESH_TOKEN` | contact form | OAuth refresh token. |
 
-Without `GITHUB_TOKEN` the site still works, but a full build plus a few page
-loads can exhaust the 60 requests/hour anonymous limit, and project lists render
-empty until the limit resets.
+Without `GITHUB_TOKEN` the site still runs. A production build plus a few page loads can burn the anonymous quota; the project grid then renders empty until the hour resets. Pass the token as a Cloud Run secret in production.
 
-## How projects are built
+## GitHub data
 
-`lib/github.ts` is the only place that talks to GitHub. For each public,
-non-fork, non-archived repository it combines three endpoints:
+`lib/github.ts` is the only module that talks to GitHub.
 
-- `/users/{user}/repos` — name, stars, homepage, last push
-- `/repos/{user}/{repo}/languages` — technologies, with languages under 3% of the
-  codebase dropped as noise
-- `/repos/{user}/{repo}/readme` — the description
-- GraphQL `contributionCalendar` — the home-page commit heatmap (falls back to
-  the public profile contributions page if no token is set)
+- **List** — `GET /users/{user}/repos`. If that 403s, the public repositories page is scraped instead.
+- **Cards** — name, description, language, topics, stars, last push, plus a 52-week commit pulse from `/{user}/{repo}/graphs/participation` (not the REST stats endpoint, which is often rate-limited).
+- **Project page** — README from the API, or `raw.githubusercontent.com` if the API is unavailable.
+- **Heatmap** — GraphQL contribution calendar when a token is set; otherwise the public contributions HTML.
 
-READMEs serve double duty. `lib/markdown.ts` flattens the markdown and picks the
-first substantial paragraph as the card excerpt, skipping titles, shield badges
-and tables of contents. The dedicated project page renders the whole README with
-`react-markdown`.
-
-Responses are cached for an hour (`revalidate: 3600`), so pages stay static
-between refreshes.
-
-### Improving how a project appears
-
-Everything on a card comes from the repository itself, so no code changes are
-needed:
-
-- **Description** — write a README with a real opening paragraph.
-- **Technologies** — add repository *topics*. They are appended to the detected
-  languages, so `nextjs`, `docker` or `supabase` show up as badges.
-- **Live badge and link** — set the repository *website* field.
+Forks, archived repos, private repos, and the profile repo named after the user are skipped. Card copy comes from the repository itself: a real opening paragraph in the README, topics for extra tech badges, and the website field for a live link.
 
 ## Footer terminal
 
-The prompt pinned to the bottom of every page accepts a small command set,
-defined in `lib/terminal.ts`:
+The prompt at the bottom of every page is defined in `lib/terminal.ts`. `help` is generated from the same command list.
 
-| Command | Does |
+| Command | Action |
 | --- | --- |
-| `help` | Lists everything below |
-| `info` | Who the site belongs to and how to get in touch |
-| `stats` (also `git stats`) | Repository count, total stars, last push, most-used technologies |
-| `ls` | Every project with its main technologies |
-| `find <text>` | Matches projects on name or technology |
-| `open <project>` | Navigates to a project page |
-| `cd <home\|projects\|resume>` | Navigates to a page |
-| `clear` | Empties the scrollback |
+| `help` | List commands |
+| `info` | About the author and the site |
+| `now` | Current focus and availability |
+| `faq` | Short answers hiring managers usually ask |
+| `stats` | Repo count, stars, last push, top technologies |
+| `ls` | Every project |
+| `find <text>` | Search by name or technology |
+| `open <project>` | Open a project page |
+| `cd <home\|projects\|resume\|contact>` | Go to a route |
+| `clear` | Empty the scrollback |
 
-Each command is a `{ name, usage, description, run }` object in one array, and
-`help` is generated from that array — adding a command means appending one entry.
-`run` returns lines to print plus an optional route to navigate to, so the
-command logic stays free of React.
+The footer lives in the root layout, so a session survives navigation. It receives a trimmed project list (slug, technologies, stars, date) so READMEs never ship to the browser.
 
-Output folds away when the page is scrolled or pressed, and unfolds again when
-the prompt is focused — the scrollback is kept either way, so a session survives
-being collapsed and survives navigation, since the footer lives in the layout.
+## Design
 
-Project data reaches the footer from the root layout, which passes a trimmed
-list (slug, technologies, stars, date) rather than full `Project` objects so
-READMEs never ship to the browser.
+Themes and accents are CSS variables in `app/globals.css`: Palenight, Void, Cyberpunk, Ashlight and Cream, plus coral, sage, amber, glacier, orchid, sky and steel. Technology icons and brand colours live in `lib/tech.ts` and are shared by the home stack, project badges and filters.
 
 ## Deploy
 
-The production image is built by `cloudbuild.yaml` and served from Cloud Run.
-Pass `GITHUB_TOKEN` as a Cloud Run secret if the unauthenticated GitHub limit
-starts emptying the project list in production.
-
-## Design system
-
-`app/globals.css` holds all shared styling. Three themes (`palenight`, `void`,
-`ashlight`) and seven accent colours are driven entirely by CSS variables:
-
-- Colours: `surface-base`, `surface-elevated`, `surface-hovered`, `accent`,
-  `fg-base`, `fg-muted`, plus `success` / `warning` / `danger`.
-- Type scale: `text-ui` for labels and metadata, `text-body` for prose,
-  `text-subheading` and `text-heading`.
-- Rounding: the single `rounded-card` token.
-
-Technology icons and brand colours live in one registry, `lib/tech.ts`. Both the
-skill list on the home page and the badges on project cards read from it, so a
-technology only has to be defined once.
-
-## Scripts
-
-```bash
-npm run dev     # development server
-npm run build   # production build
-npm run start   # serve the production build on :8080
-npm run lint    # eslint
-```
+`output: 'standalone'`. `cloudbuild.yaml` builds the image, pushes it to Artifact Registry, and deploys service `dluksa-dev` on Cloud Run. Mail OAuth secrets and the Maps key are injected at deploy time; `GITHUB_TOKEN` should be added the same way if the public API limit is not enough.
