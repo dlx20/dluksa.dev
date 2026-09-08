@@ -5,7 +5,7 @@ import { LOCATION } from './constants';
 export const NOW = [
     {
         label: 'Status',
-        value: 'Open to Next.js full-stack and machine learning roles.',
+        value: 'Open to full-stack and machine learning roles, particularly opportunities that combine Next.js, modern web technologies, and AI/ML.',
     },
     {
         label: 'Focus',
@@ -17,7 +17,7 @@ export const NOW = [
     },
     {
         label: 'Learning',
-        value: 'Full-stack Next.js.',
+        value: 'Advanced Next.js and full-stack engineering.',
     },
 ] as const;
 
