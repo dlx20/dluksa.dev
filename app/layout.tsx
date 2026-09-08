@@ -48,18 +48,16 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
     },
   },
-  alternates: { canonical: SITE_URL },
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/email-logo.png', type: 'image/png' },
+      { url: '/icon', type: 'image/png', sizes: '512x512' },
+      { url: '/favicon.ico', sizes: '48x48' },
     ],
     apple: '/email-logo.png',
   },
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    url: SITE_URL,
     siteName: SITE_NAME,
     locale: 'en_GB',
     type: 'website',

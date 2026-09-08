@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import TerminalSection from '@/components/TerminalSection';
+
+export const metadata: Metadata = {
+    title: 'Not found — ddev',
+    robots: { index: false, follow: false },
+};
 
 const NotFound = () => (
     <div className="site-page">

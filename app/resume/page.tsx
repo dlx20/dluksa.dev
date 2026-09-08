@@ -5,13 +5,13 @@ import TerminalSection from '@/components/TerminalSection';
 import SkillBadges from '@/components/SkillBadges';
 import SocialTiles from '@/components/ui/SocialTiles';
 import { EMAIL, LOCATION, RESUME, SKILLS } from '@/lib/constants';
+import { pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-    title: 'Resume — ddev',
-    description:
-        "Dovydas Luksa — MSc Robotics, AI & Autonomous Systems. Machine learning in Python, " +
-        'web applications in TypeScript, React and Next.js. Based in London.',
-};
+export const metadata: Metadata = pageMetadata(
+    '/resume',
+    'Resume — ddev',
+    'Dovydas Luksa — MSc Robotics, AI & Autonomous Systems. Machine learning in Python, web applications in TypeScript, React and Next.js. Based in London.'
+);
 
 const ResumePage = () => (
     <div className="site-page">

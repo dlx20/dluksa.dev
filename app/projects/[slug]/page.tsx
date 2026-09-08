@@ -7,6 +7,7 @@ import TechBadgeList from '@/components/TechBadgeList';
 import { getProject, getProjects, readmeBaseUrl } from '@/lib/github';
 import { formatDate } from '@/lib/format';
 import { getTech } from '@/lib/tech';
+import { pageMetadata } from '@/lib/seo';
 
 type ProjectPageProps = {
     params: Promise<{ slug: string }>;
@@ -21,12 +22,15 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     const { slug } = await params;
     const project = await getProject(slug);
 
-    if (!project) return { title: 'Project not found — ddev' };
+    if (!project) {
+        return { title: 'Project not found — ddev', robots: { index: false } };
+    }
 
-    return {
-        title: `${project.name} — ddev`,
-        description: project.excerpt,
-    };
+    return pageMetadata(
+        `/projects/${slug}`,
+        `${project.name} — ddev`,
+        project.excerpt || `${project.name} — a project by Dovydas Luksa on ddev.`
+    );
 }
 
 const ProjectPage = async ({ params }: ProjectPageProps) => {

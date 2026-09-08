@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FaArrowRight, FaGithub, FaRegClock, FaRegFolder, FaRegStar } from 'react-icons/fa';
 import TerminalSection from '@/components/TerminalSection';
@@ -12,6 +13,9 @@ import { formatDate } from '@/lib/format';
 import ContributionGraph from '@/components/ContributionGraph';
 import { getContributions, getContributionYears, getProjects, getRecentCommits } from '@/lib/github';
 import TechBadgeList from '@/components/TechBadgeList';
+import { pageMetadata, SITE_DESCRIPTION, SITE_TITLE } from '@/lib/seo';
+
+export const metadata: Metadata = pageMetadata('/', SITE_TITLE, SITE_DESCRIPTION);
 
 const FEATURED_COUNT = 3;
 
