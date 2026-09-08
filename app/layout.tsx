@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import { Ubuntu_Mono } from 'next/font/google'
 import Header from '@/components/Header'
 import ThemeProvider from '@/components/ThemeProvider'
@@ -36,7 +37,17 @@ export const metadata: Metadata = {
     'AI',
     'London',
   ],
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
   alternates: { canonical: SITE_URL },
   icons: {
     icon: [
@@ -64,6 +75,18 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}/#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/icon`,
+        width: 512,
+        height: 512,
+      },
+    },
+    {
       '@type': 'WebSite',
       '@id': `${SITE_URL}/#website`,
       url: SITE_URL,
@@ -71,7 +94,7 @@ const jsonLd = {
       alternateName: 'Dovydas Luksa',
       description: SITE_DESCRIPTION,
       inLanguage: 'en-GB',
-      publisher: { '@id': `${SITE_URL}/#person` },
+      publisher: { '@id': `${SITE_URL}/#organization` },
     },
     {
       '@type': 'Person',
@@ -125,11 +148,15 @@ export default async function RootLayout({
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
-      <body className="scrollbar min-h-screen bg-surface-base font-display text-fg-base antialiased selection:bg-accent/30">
-        <script
+      <head>
+        <Script
+          id="ld-json"
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+      </head>
+      <body className="scrollbar min-h-screen bg-surface-base font-display text-fg-base antialiased selection:bg-accent/30">
         <ThemeProvider>
           <div className="flex min-h-screen flex-col">
             <Header />
