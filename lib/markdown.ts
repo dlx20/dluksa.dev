@@ -15,27 +15,12 @@ const PLAIN_TEXT_RULES: [RegExp, string][] = [
     [/[*_`~]/g, ''], // emphasis and inline code markers
 ];
 
-const MIN_LENGTH = 40;
-
-/** Above this length a paragraph is taken to be prose whatever its punctuation. */
-const SUBSTANTIAL_LENGTH = 80;
-
 /**
- * Distinguishes a description from the tagline that often sits directly under a
- * README title. Taglines are short and unpunctuated; real prose either runs long
- * or ends in a full stop.
+ * Flatten the opening of a README into a short card summary. Headings, badges
+ * and images are stripped first so the first remaining paragraphs — the
+ * description at the top of the file — are what the card shows.
  */
-function isDescription(paragraph: string): boolean {
-    if (paragraph.length >= SUBSTANTIAL_LENGTH) return true;
-    return paragraph.length >= MIN_LENGTH && /[.!?]$/.test(paragraph);
-}
-
-/**
- * Flatten markdown into a single-line summary suitable for a project card.
- * Picks the first substantial paragraph so that a README opening with a title,
- * a row of badges or a table of contents still yields a useful sentence.
- */
-export function toExcerpt(markdown: string, maxLength = 180): string {
+export function toExcerpt(markdown: string, maxLength = 320): string {
     if (!markdown.trim()) return '';
 
     const plainText = PLAIN_TEXT_RULES.reduce(
@@ -43,12 +28,12 @@ export function toExcerpt(markdown: string, maxLength = 180): string {
         markdown
     );
 
-    const paragraphs = plainText
+    const summary = plainText
         .split(/\n\s*\n/)
         .map((paragraph) => paragraph.replace(/\s+/g, ' ').trim())
-        .filter(Boolean);
+        .filter(Boolean)
+        .join(' ');
 
-    const summary = paragraphs.find(isDescription) ?? paragraphs[0];
     if (!summary) return '';
     if (summary.length <= maxLength) return summary;
 

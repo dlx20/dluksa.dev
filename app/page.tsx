@@ -7,7 +7,7 @@ import SkillBadges from '@/components/SkillBadges';
 import SocialTiles from '@/components/ui/SocialTiles';
 import MiniMap from '@/components/MiniMap';
 import { SKILLS } from '@/lib/constants';
-import { COLOPHON, FAQ, LAB, NOW, PROCESS, TIMELINE } from '@/lib/home';
+import { COLOPHON, FAQ, LAB, NOW, PROCESS, TIMELINE, WHO } from '@/lib/home';
 import { formatDate } from '@/lib/format';
 import ContributionGraph from '@/components/ContributionGraph';
 import { getContributions, getContributionYears, getProjects } from '@/lib/github';
@@ -53,15 +53,18 @@ const Page = async () => {
                 {/* 01 — Who */}
                 <TerminalSection label="usr" title="who am i">
                     <p className="text-subheading leading-8 tracking-wide sm:leading-9">
-                        MSc graduate in{' '}
-                        <span className="text-accent underline underline-offset-4">
-                            Robotics &amp; AI
-                        </span>
-                        , now building for the web. I train and deploy models in{' '}
-                        <span className="text-accent underline underline-offset-4">Python</span> with
-                        PyTorch and TensorFlow, then wrap them in{' '}
+                        {WHO.greeting} I have an MSc in Robotics, AI and Autonomous Systems, and I
+                        am looking for{' '}
                         <span className="text-accent underline underline-offset-4">Next.js</span>{' '}
-                        interfaces people can actually use. Always learning, always shipping.
+                        full-stack or{' '}
+                        <span className="text-accent underline underline-offset-4">AI/ML</span>{' '}
+                        roles in London. I train models in{' '}
+                        <span className="text-accent underline underline-offset-4">Python</span> with{' '}
+                        <span className="text-accent underline underline-offset-4">PyTorch</span> and{' '}
+                        <span className="text-accent underline underline-offset-4">TensorFlow</span>,
+                        and I build web applications with{' '}
+                        <span className="text-accent underline underline-offset-4">TypeScript</span> and{' '}
+                        <span className="text-accent underline underline-offset-4">Next.js</span>.
                     </p>
 
                     <div className="mt-8">

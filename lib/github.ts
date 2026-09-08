@@ -5,7 +5,7 @@ export type Project = {
     slug: string;
     /** Repository name, shown verbatim to keep the terminal feel. */
     name: string;
-    /** One-line summary taken from the README, for project cards. */
+    /** Opening lines of the README, shown on project cards. */
     excerpt: string;
     /** Full README markdown, for the dedicated project page. */
     readme: string;
@@ -105,22 +105,25 @@ async function fetchJson<T>(path: string): Promise<T | null> {
     return response ? (response.json() as Promise<T>) : null;
 }
 
-/** READMEs are requested raw so the markdown can be rendered as-is. */
-async function fetchReadme(repo: string): Promise<string> {
-    const response = await request(`/repos/${USERNAME}/${repo}/readme`, 'application/vnd.github.raw');
-    if (response) return response.text();
-
-    // raw.githubusercontent.com is not rate-limited like the REST API.
+/**
+ * Prefer raw.githubusercontent.com so listing cards can load README openings
+ * without burning the REST rate limit. The API is the fallback: it finds
+ * README.* on the default branch when `/README.md` is the wrong path.
+ */
+const fetchReadme = cache(async (repo: string): Promise<string> => {
     try {
         const raw = await fetch(`${readmeBaseUrl(repo)}/README.md`, {
             headers: { 'User-Agent': 'ddev-portfolio' },
             next: { revalidate: REVALIDATE_SECONDS },
         });
-        return raw.ok ? raw.text() : '';
+        if (raw.ok) return raw.text();
     } catch {
-        return '';
+        // Fall through to the API.
     }
-}
+
+    const response = await request(`/repos/${USERNAME}/${repo}/readme`, 'application/vnd.github.raw');
+    return response ? response.text() : '';
+});
 
 function toTechnologies(language: string | null, topics: string[]): string[] {
     const unique = new Map<string, string>();
@@ -244,7 +247,8 @@ async function fetchHtmlRepos(): Promise<GitHubRepo[] | null> {
 /**
  * Public, owned, non-fork repositories, most recently pushed first.
  * One REST call when the API is available; the public profile page otherwise.
- * READMEs are loaded only on the dedicated project page.
+ * Card excerpts are the opening of each README; the full file is loaded only
+ * on the dedicated project page.
  */
 export const getProjects = cache(async (): Promise<Project[]> => {
     const repos =
@@ -255,10 +259,18 @@ export const getProjects = cache(async (): Promise<Project[]> => {
     if (!repos) return [];
 
     return Promise.all(
-        repos.filter(isVisible).map(async (repo) => ({
-            ...toProject(repo),
-            pulse: await fetchPulse(repo.name),
-        }))
+        repos.filter(isVisible).map(async (repo) => {
+            const [readme, pulse] = await Promise.all([
+                fetchReadme(repo.name),
+                fetchPulse(repo.name),
+            ]);
+
+            return {
+                ...toProject(repo, readme),
+                pulse,
+                readme: '',
+            };
+        })
     );
 });
 

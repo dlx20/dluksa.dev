@@ -2,6 +2,10 @@ import { LOCATION } from './constants';
 
 /** Home-only copy. Edit here rather than in the page markup. */
 
+export const WHO = {
+    greeting: "Hey — I'm Dovydas Luksa.",
+} as const;
+
 export const NOW = [
     {
         label: 'Status',

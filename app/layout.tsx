@@ -16,7 +16,7 @@ const ubuntuMono = Ubuntu_Mono({
 const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://dluksa.dev'
 
 const DESCRIPTION =
-  'MSc graduate in Robotics, AI & Autonomous Systems. Machine learning in Python, web applications in TypeScript and Next.js. Based in London.'
+  "I'm Dovydas Luksa — MSc in Robotics, AI and Autonomous Systems. Looking for Next.js full-stack and AI/ML roles in London."
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
