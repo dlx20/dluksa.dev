@@ -204,64 +204,9 @@ const Page = async () => {
                     </div>
                 </TerminalSection>
 
-                {/* 10 — Activity signal, then site chrome */}
+                {/* 10 — Site chrome first, then activity */}
                 <TerminalSection label="bin" title="system settings">
                     <div className="grid gap-4 md:grid-cols-2">
-
-                        <div className="card flex flex-col gap-3 md:col-span-2">
-                            <div className="flex items-center gap-3">
-                                <span className="icon-tile">
-                                    <FaGithub size={18} className="text-accent" />
-                                </span>
-                                <h3 className="font-semibold text-accent">GitHub activity</h3>
-                            </div>
-
-                            <dl className="flex flex-wrap items-center gap-x-4 gap-y-1 text-ui">
-                                {stats.map(({ label, value, icon: Icon }) => (
-                                    <div key={label} className="flex items-center gap-1.5">
-                                        <dt className="flex items-center gap-1.5 text-fg-muted">
-                                            <Icon className="shrink-0 text-accent/60" />
-                                            <span className="sr-only">{label}</span>
-                                        </dt>
-                                        <dd className="font-bold text-accent/80">{value}</dd>
-                                    </div>
-                                ))}
-                            </dl>
-
-                            {commits.length > 0 ? (
-                                <ul className="commit-feed">
-                                    {commits.map((commit) => (
-                                        <li key={commit.url}>
-                                            <a
-                                                href={commit.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="commit-feed__item"
-                                            >
-                                                <span className="commit-feed__repo">{commit.repo}</span>
-                                                <p className="commit-feed__title">{commit.title}</p>
-                                                {commit.additions != null &&
-                                                    commit.deletions != null && (
-                                                        <span className="commit-feed__diff">
-                                                            <span className="text-success">
-                                                                +{commit.additions}
-                                                            </span>
-                                                            <span className="text-danger">
-                                                                −{commit.deletions}
-                                                            </span>
-                                                        </span>
-                                                    )}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p className="border-t border-accent/10 pt-3 text-ui text-fg-muted">
-                                    No recent commits to show.
-                                </p>
-                            )}
-                        </div>
-
                         <div className="card overflow-hidden p-0">
                             <div className="h-48 w-full md:h-full md:min-h-56">
                                 <MiniMap />
@@ -271,6 +216,60 @@ const Page = async () => {
                         <div className="card">
                             <AppearanceSettings shape="square" />
                         </div>
+                    </div>
+
+                    <div className="card mt-4 flex flex-col gap-3">
+                        <div className="flex items-center gap-3">
+                            <span className="icon-tile">
+                                <FaGithub size={18} className="text-accent" />
+                            </span>
+                            <h3 className="font-semibold text-accent">GitHub activity</h3>
+                        </div>
+
+                        <dl className="flex flex-wrap items-center gap-x-4 gap-y-1 text-ui">
+                            {stats.map(({ label, value, icon: Icon }) => (
+                                <div key={label} className="flex items-center gap-1.5">
+                                    <dt className="flex items-center gap-1.5 text-fg-muted">
+                                        <Icon className="shrink-0 text-accent/60" />
+                                        <span className="sr-only">{label}</span>
+                                    </dt>
+                                    <dd className="font-bold text-accent/80">{value}</dd>
+                                </div>
+                            ))}
+                        </dl>
+
+                        {commits.length > 0 ? (
+                            <ul className="commit-feed">
+                                {commits.map((commit) => (
+                                    <li key={commit.url}>
+                                        <a
+                                            href={commit.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="commit-feed__item"
+                                        >
+                                            <span className="commit-feed__repo">{commit.repo}</span>
+                                            <p className="commit-feed__title">{commit.title}</p>
+                                            {commit.additions != null &&
+                                                commit.deletions != null && (
+                                                    <span className="commit-feed__diff">
+                                                        <span className="text-success">
+                                                            +{commit.additions}
+                                                        </span>
+                                                        <span className="text-danger">
+                                                            −{commit.deletions}
+                                                        </span>
+                                                    </span>
+                                                )}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="border-t border-accent/10 pt-3 text-ui text-fg-muted">
+                                No recent commits to show.
+                            </p>
+                        )}
                     </div>
 
                     <div className="mt-4">
