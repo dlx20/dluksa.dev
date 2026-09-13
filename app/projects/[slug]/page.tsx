@@ -7,7 +7,8 @@ import TechBadgeList from '@/components/TechBadgeList';
 import { getProject, getProjects, readmeBaseUrl } from '@/lib/github';
 import { formatDate } from '@/lib/format';
 import { getTech } from '@/lib/tech';
-import { pageMetadata } from '@/lib/seo';
+import JsonLd from '@/components/JsonLd';
+import { AUTHOR_NAME, pageMetadata, projectJsonLd } from '@/lib/seo';
 
 type ProjectPageProps = {
     params: Promise<{ slug: string }>;
@@ -29,7 +30,8 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     return pageMetadata(
         `/projects/${slug}`,
         `${project.name} — ddev`,
-        project.excerpt || `${project.name} — a project by Dovydas Luksa on ddev.`
+        project.excerpt || `${project.name} — a project by ${AUTHOR_NAME} on ddev.`,
+        { type: 'article', modifiedTime: project.updatedAt }
     );
 }
 
@@ -43,6 +45,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
 
     return (
         <div className="site-page">
+            <JsonLd id="ld-project" data={projectJsonLd(project)} />
             <div className="site-page__inner site-page__inner--narrow">
                 <Link href="/projects" className="link-subtle group mb-8 inline-flex items-center gap-2">
                     <FaArrowLeft className="text-[10px] transition-transform group-hover:-translate-x-1" />

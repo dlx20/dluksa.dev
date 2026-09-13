@@ -5,16 +5,27 @@ import TerminalSection from '@/components/TerminalSection';
 import SkillBadges from '@/components/SkillBadges';
 import SocialTiles from '@/components/ui/SocialTiles';
 import { EMAIL, LOCATION, RESUME, SKILLS } from '@/lib/constants';
-import { pageMetadata } from '@/lib/seo';
+import JsonLd from '@/components/JsonLd';
+import { PAGE_COPY, pageMetadata, webPageJsonLd } from '@/lib/seo';
 
 export const metadata: Metadata = pageMetadata(
     '/resume',
-    'Resume — ddev',
-    'Dovydas Luksa — MSc Robotics, AI & Autonomous Systems. Machine learning in Python, web applications in TypeScript, React and Next.js. Based in London.'
+    PAGE_COPY.resume.title,
+    PAGE_COPY.resume.description,
+    { type: 'profile' }
 );
 
 const ResumePage = () => (
     <div className="site-page">
+        <JsonLd
+            id="ld-resume"
+            data={webPageJsonLd(
+                '/resume',
+                PAGE_COPY.resume.title,
+                PAGE_COPY.resume.description,
+                'ProfilePage'
+            )}
+        />
         <div className="site-page__inner">
 
             <TerminalSection label="usr" title="profile">

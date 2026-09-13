@@ -1,16 +1,26 @@
 import type { Metadata } from 'next';
 import TerminalSection from '@/components/TerminalSection';
 import EmailForm from '@/components/EmailForm';
-import { pageMetadata } from '@/lib/seo';
+import JsonLd from '@/components/JsonLd';
+import { PAGE_COPY, pageMetadata, webPageJsonLd } from '@/lib/seo';
 
 export const metadata: Metadata = pageMetadata(
     '/contact',
-    'Contact — ddev',
-    'Get in touch with Dovydas Luksa — Next.js full-stack and machine learning, based in London. Attach a CV or project files.'
+    PAGE_COPY.contact.title,
+    PAGE_COPY.contact.description
 );
 
 const ContactPage = () => (
     <div className="site-page">
+        <JsonLd
+            id="ld-contact"
+            data={webPageJsonLd(
+                '/contact',
+                PAGE_COPY.contact.title,
+                PAGE_COPY.contact.description,
+                'ContactPage'
+            )}
+        />
         <div className="site-page__inner">
             <TerminalSection label="etc" title="contact me">
                 <EmailForm />

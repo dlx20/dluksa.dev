@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 import TerminalSection from '@/components/TerminalSection';
 import ProjectFilter from '@/components/ProjectFilter';
+import JsonLd from '@/components/JsonLd';
 import { getProjects, toSummary } from '@/lib/github';
-import { pageMetadata } from '@/lib/seo';
+import { PAGE_COPY, pageMetadata, projectsJsonLd } from '@/lib/seo';
 
 export const metadata: Metadata = pageMetadata(
     '/projects',
-    'Projects — ddev',
-    'Public GitHub projects by Dovydas Luksa — Next.js, TypeScript, Python, and machine learning work from ddev.'
+    PAGE_COPY.projects.title,
+    PAGE_COPY.projects.description
 );
 
 const ProjectsPage = async () => {
@@ -15,6 +16,7 @@ const ProjectsPage = async () => {
 
     return (
         <div className="site-page">
+            <JsonLd id="ld-projects" data={projectsJsonLd(projects.map(toSummary))} />
             <div className="site-page__inner">
                 <TerminalSection label="exe" title="all projects">
                     <p className="mb-6 text-body text-fg-muted">

@@ -13,9 +13,12 @@ import { formatDate } from '@/lib/format';
 import ContributionGraph from '@/components/ContributionGraph';
 import { getContributions, getContributionYears, getProjects, getRecentCommits } from '@/lib/github';
 import TechBadgeList from '@/components/TechBadgeList';
-import { pageMetadata, SITE_DESCRIPTION, SITE_TITLE } from '@/lib/seo';
+import JsonLd from '@/components/JsonLd';
+import { pageMetadata, SITE_DESCRIPTION, SITE_TITLE, webPageJsonLd } from '@/lib/seo';
 
-export const metadata: Metadata = pageMetadata('/', SITE_TITLE, SITE_DESCRIPTION);
+export const metadata: Metadata = pageMetadata('/', SITE_TITLE, SITE_DESCRIPTION, {
+    type: 'profile',
+});
 
 const FEATURED_COUNT = 3;
 
@@ -53,6 +56,10 @@ const Page = async () => {
 
     return (
         <div className="site-page">
+            <JsonLd
+                id="ld-home"
+                data={webPageJsonLd('/', SITE_TITLE, SITE_DESCRIPTION, 'ProfilePage')}
+            />
             <div className="site-page__inner">
 
                 {/* 01 — Who */}
