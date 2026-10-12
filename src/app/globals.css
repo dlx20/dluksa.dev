@@ -1,20 +1,161 @@
+@layer theme, base, components, utilities;
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-
-@media (prefers-color-scheme: dark) {
+/* ===========================================================================
+   Theme — palettes, schemes, Tailwind tokens
+   =========================================================================== */
+@layer theme {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --accent-coral-dark: #f07178;
+    --accent-sage-dark: #c3e88d;
+    --accent-amber-dark: #f6c177;
+    --accent-glacier-dark: #9ccfd8;
+    --accent-orchid-dark: #c792ea;
+    --accent-sky-dark: #60adec;
+    --accent-steel-dark: #abb2bf;
+
+    --accent-coral-light: #b3484d;
+    --accent-sage-light: #6b9946;
+    --accent-amber-light: #c18f3f;
+    --accent-glacier-light: #599cab;
+    --accent-orchid-light: #a06cd5;
+    --accent-sky-light: #3f8fd6;
+    --accent-steel-light: #6b7280;
+  }
+
+  .palenight,
+  .void,
+  .cyberpunk {
+    color-scheme: dark;
+    --color-coral-rose: var(--accent-coral-dark);
+    --color-sage-green: var(--accent-sage-dark);
+    --color-amber-glow: var(--accent-amber-dark);
+    --color-glacier-blue: var(--accent-glacier-dark);
+    --color-orchid-purple: var(--accent-orchid-dark);
+    --color-sky-blue: var(--accent-sky-dark);
+    --color-steel-grey: var(--accent-steel-dark);
+    --success: 142 60% 55%;
+    --warning: 38 90% 62%;
+    --danger: 0 70% 62%;
+  }
+
+  .ashlight,
+  .cream {
+    color-scheme: light;
+    --color-coral-rose: var(--accent-coral-light);
+    --color-sage-green: var(--accent-sage-light);
+    --color-amber-glow: var(--accent-amber-light);
+    --color-glacier-blue: var(--accent-glacier-light);
+    --color-orchid-purple: var(--accent-orchid-light);
+    --color-sky-blue: var(--accent-sky-light);
+    --color-steel-grey: var(--accent-steel-light);
+    --success: 142 55% 38%;
+    --warning: 32 80% 42%;
+    --danger: 0 65% 48%;
+  }
+
+  .palenight {
+    --surface-base: 229 20% 20%;
+    --surface-elevated: 229 20% 24%;
+    --surface-hovered: 229 20% 28%;
+    --primary: 260 100% 78%;
+    --accent: 84 66% 73%;
+    --border: 0 1% 34%;
+    --fg-base: 229 7% 86%;
+    --fg-muted: 230 6% 68%;
+  }
+
+  .void {
+    --surface-base: 0 0% 11%;
+    --surface-elevated: 0 0% 15%;
+    --surface-hovered: 24 12% 21%;
+    --primary: 32 90% 50%;
+    --accent: 84 66% 73%;
+    --border: 0 1% 44%;
+    --fg-base: 229 7% 86%;
+    --fg-muted: 28 10% 70%;
+  }
+
+  /* Paper white + ink. Low-sat page so it stays white without icy glare. */
+  .ashlight {
+    --surface-base: 210 18% 98%;
+    --surface-elevated: 214 12% 94%;
+    --surface-hovered: 214 12% 91%;
+    --primary: 32 90% 50%;
+    --accent: 208 65% 38%;
+    --border: 214 12% 48%;
+    --fg-base: 220 16% 16%;
+    --fg-muted: 220 10% 34%;
+  }
+
+  /* Night City: violet-black, cyan type, magenta signal. */
+  .cyberpunk {
+    --color-coral-rose: #ff4d6d;
+    --color-sage-green: #c8ff4a;
+    --color-amber-glow: #ffd166;
+    --color-glacier-blue: #00e5ff;
+    --color-orchid-purple: #ff2bd6;
+    --color-sky-blue: #4d8bff;
+    --color-steel-grey: #9aa4b5;
+    --surface-base: 270 42% 6%;
+    --surface-elevated: 272 32% 11%;
+    --surface-hovered: 280 28% 16%;
+    --primary: 190 100% 55%;
+    --accent: 320 92% 60%;
+    --border: 320 45% 42%;
+    --fg-base: 185 35% 90%;
+    --fg-muted: 270 18% 68%;
+    --success: 130 90% 52%;
+    --warning: 48 100% 56%;
+    --danger: 340 90% 58%;
+  }
+
+  /* Warm terminal paper — manila page, brown ink, amber rust. */
+  .cream {
+    --surface-base: 42 48% 92%;
+    --surface-elevated: 40 38% 87%;
+    --surface-hovered: 38 32% 82%;
+    --primary: 28 80% 40%;
+    --accent: 28 68% 36%;
+    --border: 32 22% 48%;
+    --fg-base: 25 32% 16%;
+    --fg-muted: 28 16% 34%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme {
+  --font-display: var(--font-ubuntu-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: var(--font-ubuntu-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: var(--font-ubuntu-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --text-ui: 0.75rem;
+  --text-body: 0.875rem;
+  --text-base: 1rem;
+  --text-subheading: 1.125rem;
+  --text-heading: 1.5rem;
+
+  --tracking-default: 0.06rem;
+  --tracking-wide: 0.08rem;
+  --radius-card: 0.5rem;
+
+  --color-surface-base: hsl(var(--surface-base));
+  --color-surface-elevated: hsl(var(--surface-elevated));
+  --color-surface-hovered: hsl(var(--surface-hovered));
+  --color-primary: hsl(var(--primary));
+  --color-accent: hsl(var(--accent));
+  --color-border: hsl(var(--border));
+  --color-fg-base: hsl(var(--fg-base));
+  --color-fg-muted: hsl(var(--fg-muted));
+  --color-success: hsl(var(--success));
+  --color-warning: hsl(var(--warning));
+  --color-danger: hsl(var(--danger));
+
+  --animate-blink: blink 3s steps(1) infinite;
+
+  @keyframes blink {
+    0%,
+    100% { opacity: 1; }
+    20% { opacity: 0; }
+  }
 }
