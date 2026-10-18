@@ -3,6 +3,52 @@
 @import "tailwindcss";
 
 /* ===========================================================================
+   Base — document defaults
+   =========================================================================== */
+@layer base {
+  html {
+    @apply bg-surface-base;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  h1 {
+    @apply text-heading;
+  }
+
+  p {
+    @apply text-fg-base tracking-default;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  li {
+    overflow-wrap: break-word;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent/70;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ===========================================================================
    Theme — color schemes
    =========================================================================== */
 @layer theme {
