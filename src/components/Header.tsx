@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { navLinks } from "@/lib/constants";
+import Link from "next/link";
 
 const Header = () => {
   const [time, setTime] = useState<string>("");
@@ -36,9 +38,9 @@ const Header = () => {
 
   return (
     <>
-      <header className="border-b border-accent/10 bg-surface-elevated">
+      <header className="sticky top-0 z-30 flex flex-col items-center justify-center bg-surface-elevated px-4 py-2 sm:px-6 lg:px-10 font-display backdrop-blur-md">
         {/* Upper header */}
-        <div className="flex justify-between items-center border-b border-accent/10 bg-surface-elevated px-4 py-2 sm:px-6 lg:px-10">
+        <div className="flex w-full justify-between items-center border-b border-accent/10 p-2">
           {/* Mac window dots */}
           <div className="flex shrin-0 gap-2">
             <span className="size-3 rounded-full bg-danger/80" />
@@ -55,7 +57,8 @@ const Header = () => {
           </div>
         </div>
         {/* Lower header */}
-        <div className="w-full">
+        <div className="flex w-full justify-between p-2">
+          {/* site title */}
           <div className="flex min-w-0 items-center gap-1">
             <h2 className="truncate text-body font-bold text-accent sm:text-base">
               <span className="hidden sm:inline">ddev@dluksa.dev</span>
@@ -66,6 +69,16 @@ const Header = () => {
 
             <div className="flex h-4 w-2 shrink-0 animate-blink items-center justify-center bg-fg-base"/>
           </div>
+          {/* site navigation */}
+          <nav className="flex items-center justify-center gap-6 lg:gap-10">
+            {
+              navLinks.map(({title, url}) =>(
+                <Link key={title} href={url} className="hidden text-ui uppercase tracking-wide transition-colors hover:text-accent sm:inline-flex">
+                  {title}
+                </Link>
+              ))
+            }
+          </nav>
         </div>
       </header>
     </>
