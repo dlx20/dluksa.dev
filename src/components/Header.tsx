@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { navLinks } from "@/lib/constants";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const [time, setTime] = useState<string>("");
   const [viewport, setViewport] = useState<string>("");
+  const pathName = usePathname()
 
   // get current time
   const currentTime = () => {
@@ -67,17 +69,21 @@ const Header = () => {
               <span className="font-light text-primary">~</span>
             </h2>
 
-            <div className="flex h-4 w-2 shrink-0 animate-blink items-center justify-center bg-fg-base"/>
+            <div className="flex h-4 w-2 shrink-0 animate-blink items-center justify-center bg-fg-base" />
           </div>
           {/* site navigation */}
           <nav className="flex items-center justify-center gap-6 lg:gap-10">
-            {
-              navLinks.map(({title, url}) =>(
-                <Link key={title} href={url} className="hidden text-ui uppercase tracking-wide transition-colors hover:text-accent sm:inline-flex">
-                  {title}
-                </Link>
-              ))
-            }
+            {navLinks.map(({ title, url }) => (
+              <Link
+                key={title}
+                href={url}
+                className={`hidden text-ui uppercase tracking-wide transition-colors hover:text-accent sm:inline-flex ${
+                  pathName === url || (url !== '/' && pathName.startsWith(url)) ? 'text-accent underline underline-offset-4' : ''
+                }`}
+              >
+                {title}
+              </Link>
+            ))}
           </nav>
         </div>
       </header>
