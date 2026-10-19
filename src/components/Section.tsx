@@ -10,14 +10,15 @@ interface sectionProps {
 }
 
 const Section = ({ label, title, id, children }: sectionProps) => {
-
-  const formatTitle = (title: string[]) => 
-        title.map((word, index) => (
-
-            <span key={index} className={index % 2 === 1 ? 'text-accent' : 'text-fg-base'}>
-                {word.charAt(0).toUpperCase() + word.slice(1)}
-            </span>)
-    )
+  const formatTitle = (title: string[]) =>
+    title.map((word, index) => (
+      <span
+        key={index}
+        className={index % 2 === 1 ? "text-accent" : "text-fg-base"}
+      >
+        {word.charAt(0).toUpperCase() + word.slice(1)}
+      </span>
+    ));
 
   return (
     <section
