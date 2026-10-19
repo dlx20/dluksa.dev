@@ -10,15 +10,14 @@ interface sectionProps {
 }
 
 const Section = ({ label, title, id, children }: sectionProps) => {
-  const formatTitle = (title: string[]) => {
-    return (
-        title.map((word, index) => {
+
+  const formatTitle = (title: string[]) => 
+        title.map((word, index) => (
+            
             <span key={index}>
-                
-            </span>
-        })
+                {word.charAt(0).toUpperCase() + word.slice(1)}
+            </span>)
     )
-  };
 
   return (
     <section
