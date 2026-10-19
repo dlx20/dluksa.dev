@@ -16,7 +16,7 @@ const Section = ({ label, title, id, children }: sectionProps) => {
         key={index}
         className={index % 2 === 1 ? "text-accent" : "text-fg-base"}
       >
-        {word.charAt(0).toUpperCase() + word.slice(1)}
+        {word.charAt(0).toUpperCase() + word.slice(1) + ' '}
       </span>
     ));
 
@@ -31,8 +31,11 @@ const Section = ({ label, title, id, children }: sectionProps) => {
           <span className="text-ui font-light text-fg-muted">{label}</span>
           <span className="h-px flex-1 bg-accent/20" />
         </div>
-        <h1>
-          <span>{formatTitle(title)}</span>
+        <h1 className="font-bold">
+          <span>
+            <span className="text-accent/60">$ </span>
+            {formatTitle(title)}
+            </span>
         </h1>
       </div>
       {children}

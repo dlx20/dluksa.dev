@@ -6,6 +6,10 @@ export default function Home() {
   return (
     <div className="w-full font-display text-fg-base">
       <main className="mx-auto max-w-7xl pt-8 pb-4 sm:px-6 lg:pt-12">
+
+
+
+
         {/* About Section */}
         <Section id="usr" label="usr" title={["who", "am", "i"]}>
           <p className="text-subheading leading-8 tracking-wide sm:leading-9">
@@ -14,6 +18,12 @@ export default function Home() {
             models in Python with PyTorch and TensorFlow , and I build web
             applications with TypeScript and Next.js .
           </p>
+        </Section>
+
+
+        {/* Now Status */}
+        <Section id="now" label="now" title={['now', 'status']}>
+
         </Section>
       </main>
     </div>
