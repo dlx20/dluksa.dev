@@ -14,7 +14,7 @@ const Section = ({ label, title, id, children }: sectionProps) => {
     title.map((word, index) => (
       <span
         key={index}
-        className={index % 2 === 1 ? "text-accent" : "text-fg-base"}
+        className={index % 2 === 1 && word.length < 3 ? "text-accent" : "text-fg-base"}
       >
         {word.charAt(0).toUpperCase() + word.slice(1) + ' '}
       </span>

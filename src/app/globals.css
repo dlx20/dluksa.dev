@@ -205,3 +205,11 @@
     20% { opacity: 0; }
   }
 }
+
+
+@layer utilities {
+
+  .emphasize {
+    @apply text-accent underline underline-offset-4
+  }
+}
