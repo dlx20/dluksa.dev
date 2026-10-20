@@ -67,7 +67,7 @@ const Header = () => {
               <span className="hidden sm:inline">ddev@dluksa.dev</span>
               <span className="sm:hidden">ddev</span>
               <span className="font-light text-fg-base">:</span>
-              <span className="font-light text-primary">~</span>
+              <span className="font-light text-primary">~$</span>
             </h2>
 
             <div className="flex h-4 w-2 shrink-0 animate-blink items-center justify-center bg-fg-base" />
@@ -81,7 +81,7 @@ const Header = () => {
                 className={`hidden text-ui uppercase tracking-wide transition-colors hover:text-accent sm:inline-flex ${
                   pathName === url || (url !== "/" && pathName.startsWith(url))
                     ? "text-accent underline underline-offset-4"
-                    : ""
+                    : "text-accent/60"
                 }`}
               >
                 {title}

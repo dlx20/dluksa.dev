@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Ubuntu, Ubuntu_Mono } from "next/font/google";
+import { Ubuntu_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import type { ThemeProviderProps } from "next-themes";
@@ -15,16 +15,11 @@ const THEME_PROPS = {
 } satisfies ThemeProviderProps;
 
 // Site fonts
-const ubuntu = Ubuntu({
-  variable: "--font-ubuntu",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
 const ubuntuMono = Ubuntu_Mono({
   variable: "--font-ubuntu-mono",
   subsets: ["latin"],
   weight: ["400", "700"],
+  display: 'swap'
 });
 
 // Metadata
@@ -42,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={ubuntuMono.variable}
       suppressHydrationWarning
     >
-      <body className="scrollbar min-h-screen bg-surface-base font-display text-fg-base antialiased selection:bg-accent/30">
+      <body className="scrollbar min-h-screen font-ubuntu-mono bg-surface-base text-fg-base antialiased selection:bg-accent/30">
         <ThemeProvider {...THEME_PROPS}>
           <Header />
           {children}

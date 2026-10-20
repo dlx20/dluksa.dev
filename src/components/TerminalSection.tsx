@@ -23,11 +23,11 @@ const TerminalSection = ({ label, title, id, children }: sectionProps) => {
   return (
     <section
       id={id}
-      className="relative scroll-mt-24 border-l border-fg-base/10 pb-12 pl-4 font-display last:pb-8 sm:pl-6 lg:pb-16 lg:last:pb-10 lg:pl-10"
+      className="relative border-l border-fg-base/10 pb-12 pl-4 sm:pl-6 lg:pl-10"
     >
-      <div className="absolute -left-px top-0 h-4 w-0.5 bg-accent"></div>
-      <div>
-        <div className="mb-2 flex items-center gap-4">
+      <div className="absolute -left-px top-0 h-4 w-0.5 bg-accent" />
+      <div className="flex flex-col gap-6">
+        <div className="flex items-center gap-4 mb-2">
           <span className="text-ui font-light text-fg-muted">{label}</span>
           <span className="h-px flex-1 bg-accent/20" />
         </div>
@@ -37,8 +37,8 @@ const TerminalSection = ({ label, title, id, children }: sectionProps) => {
             {formatTitle(title)}
             </span>
         </h1>
-      </div>
       {children}
+      </div>
     </section>
   );
 };

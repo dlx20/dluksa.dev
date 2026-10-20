@@ -171,9 +171,7 @@
 }
 
 @theme {
-  --font-display: var(--font-ubuntu-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-mono: var(--font-ubuntu-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-sans: var(--font-ubuntu-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-ubuntu-mono: var(--font-ubuntu-mono);
 
   --text-ui: 0.75rem;
   --text-body: 0.875rem;

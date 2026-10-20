@@ -1,10 +1,11 @@
+import Socials from "@/components/Socials";
 import TerminalSection from "@/components/TerminalSection";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="w-full font-display text-fg-base">
+    <div className="w-full text-fg-base">
       <main className="mx-auto w-full max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-10 lg:pt-12">
         {/* About Section */}
         <TerminalSection id="usr" label="usr" title={["who", "am", "i"]}>
@@ -14,10 +15,16 @@ export default function Home() {
             models in <span className="emphasize">Python</span> with <span className="emphasize">PyTorch</span> and <span className="emphasize">TensorFlow</span> , and I build web
             applications with <span className="emphasize">TypeScript</span> and <span className="emphasize">Next.js</span> .
           </p>
+
+          <div>
+            <Socials />
+          </div>
         </TerminalSection>
 
         {/* Now Status */}
-        <TerminalSection id="now" label="now" title={["now", "status"]}></TerminalSection>
+        <TerminalSection id="now" label="now" title={["now", "status"]}>
+          <ThemeSwitcher/>
+        </TerminalSection>
       </main>
     </div>
   );
