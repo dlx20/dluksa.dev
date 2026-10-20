@@ -31,3 +31,25 @@ export const SocialLinks: {title: string; icon: IconType; url: string}[] = [
         url: '/contact'
     }
 ]
+
+
+// Status
+
+export const NowStatus = [
+    {
+        title: 'Status',
+        description: 'Open to full-stack and machine learning roles, particularly opportunities that combine Next.js, modern web technologies, and AI/ML.',
+    },
+    {
+        title: 'Focus',
+        description: 'Full-stack Next.js and machine learning.',
+    },
+    {
+        title: 'Base',
+        description: 'London',
+    },
+    {
+        title: 'Learning',
+        description: 'Advanced Next.js and full-stack engineering.',
+    },
+] 

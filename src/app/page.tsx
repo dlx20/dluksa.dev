@@ -1,6 +1,8 @@
 import Socials from "@/components/Socials";
+import StatusCard from "@/components/StatusCard";
 import TerminalSection from "@/components/TerminalSection";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { NowStatus } from "@/lib/constants";
 import Image from "next/image";
 
 export default function Home() {
@@ -22,6 +24,18 @@ export default function Home() {
         </TerminalSection>
 
         {/* Now Status */}
+        <TerminalSection id="now" label="now" title={["now", "status"]}>
+          <StatusCard />
+        </TerminalSection>
+
+
+
+        <TerminalSection id="now" label="now" title={["now", "status"]}>
+          <ThemeSwitcher/>
+        </TerminalSection>
+        <TerminalSection id="now" label="now" title={["now", "status"]}>
+          <ThemeSwitcher/>
+        </TerminalSection>
         <TerminalSection id="now" label="now" title={["now", "status"]}>
           <ThemeSwitcher/>
         </TerminalSection>
