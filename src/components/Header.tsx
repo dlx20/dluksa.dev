@@ -40,11 +40,11 @@ const Header = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex flex-col items-center justify-center bg-surface-elevated px-4 py-2 sm:px-6 lg:px-10 font-display backdrop-blur-md">
+      <header className="sticky top-0 z-30 flex flex-col items-center justify-center bg-surface-elevated">
         {/* Upper header */}
-        <div className="flex w-full justify-between items-center border-b border-accent/10 p-2">
+        <div className="flex w-full justify-between items-center bg-surface-elevated border-b border-accent/10 px-4 py-2 sm:px-6 lg:px-10">
           {/* Mac window dots */}
-          <div className="flex shrin-0 gap-2">
+          <div className="flex shrink-0 gap-2">
             <span className="size-3 rounded-full bg-danger/80" />
             <span className="size-3 rounded-full bg-warning/80" />
             <span className="size-3 rounded-full bg-success/80" />
