@@ -31,6 +31,37 @@ export default function Home() {
         <TerminalSection id="now" label="now" title={["now", "status"]}>
           <StatusCard />
         </TerminalSection>
+
+        <TerminalSection id="lab" label="lab" title={['lab', 'notes']}>
+
+        </TerminalSection>
+
+        <TerminalSection id="exe" label="exe" title={['active', 'projects']}>
+
+        </TerminalSection>
+
+        <TerminalSection id="sys" label="sys" title={['core', 'stack']}>
+
+        </TerminalSection>
+
+        <TerminalSection id="log" label="log" title={['how', 'i', 'work']}>
+
+        </TerminalSection>
+        <TerminalSection id="hist" label="hist" title={['brief', 'history']}>
+
+        </TerminalSection>
+        <TerminalSection id="ask" label="ask" title={['common', 'questions']}>
+
+        </TerminalSection>
+        <TerminalSection id="etc" label="etc" title={['say', 'hello']}>
+
+        </TerminalSection>
+        <TerminalSection id="bin" label="bin" title={['system', 'settings']}>
+
+        </TerminalSection>
+        <TerminalSection id="man" label="man" title={['site', 'manual']}>
+
+        </TerminalSection>
       </main>
     </div>
   );
