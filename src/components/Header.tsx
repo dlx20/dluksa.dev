@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { navLinks } from "@/lib/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FaBars } from "react-icons/fa";
 
 const Header = () => {
   const [time, setTime] = useState<string>("");
@@ -40,7 +41,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex flex-col items-center justify-center bg-surface-elevated">
+      <header className="sticky top-0 z-30 flex flex-col items-center justify-center ">
         {/* Upper header */}
         <div className="flex w-full justify-between items-center bg-surface-elevated border-b border-accent/10 px-4 py-2 sm:px-6 lg:px-10">
           {/* Mac window dots */}
@@ -59,7 +60,7 @@ const Header = () => {
           </div>
         </div>
         {/* Lower header */}
-        <div className="flex w-full justify-between p-2">
+        <div className="flex w-full justify-between px-4 py-3 sm:px-6 lg:px-10">
           {/* site title */}
           <div className="flex min-w-0 items-center gap-1">
             <h2 className="truncate text-body font-bold text-accent sm:text-base">
@@ -84,6 +85,13 @@ const Header = () => {
                 {title}
               </Link>
             ))}
+
+            <button
+            aria-label="Open Menu"
+            className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-card border border-accent/25 bg-accent/5 text-accent transition-colors hover:bg-accent/15"
+            >
+              <FaBars size={14}/>
+            </button>
           </nav>
         </div>
       </header>
