@@ -4,7 +4,7 @@ import { FaJava } from 'react-icons/fa';
 import {
     SiC,
     SiCplusplus,
-    SiCss3,
+    SiCss,
     SiDjango,
     SiDocker,
     SiExpress,
@@ -65,7 +65,7 @@ const TECH: Record<string, Tech> = {
     javascript: { label: 'JavaScript', icon: SiJavascript, color: '#F7DF1E' },
     python: { label: 'Python', icon: SiPython, color: '#3776AB' },
     html: { label: 'HTML', icon: SiHtml5, color: '#E34F26' },
-    css: { label: 'CSS', icon: SiCss3, color: '#1572B6' },
+    css: { label: 'CSS', icon: SiCss, color: '#1572B6' },
     scss: { label: 'SCSS', icon: SiSass, color: '#CC6699' },
     go: { label: 'Go', icon: SiGo, color: '#00ADD8' },
     rust: { label: 'Rust', icon: SiRust, color: '#DEA584' },
