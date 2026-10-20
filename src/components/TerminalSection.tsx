@@ -26,7 +26,7 @@ const TerminalSection = ({ label, title, id, children }: sectionProps) => {
       className="relative border-l border-fg-base/10 pb-12 pl-6 sm:pl-6 lg:pl-10"
     >
       <div className="absolute -left-px top-0 h-4 w-0.5 bg-accent" />
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4 lg:gap-6">
         <div className="flex items-center gap-4 mb-2">
           <span className="text-ui font-light text-fg-muted">{label}</span>
           <span className="h-px flex-1 bg-accent/20" />
