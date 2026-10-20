@@ -57,7 +57,7 @@ export default function Home() {
 
         </TerminalSection>
         <TerminalSection id="bin" label="bin" title={['system', 'settings']}>
-
+          <ThemeSwitcher />
         </TerminalSection>
         <TerminalSection id="man" label="man" title={['site', 'manual']}>
 

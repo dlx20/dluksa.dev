@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useTheme } from "next-themes";
-import { themes } from "@/lib/theme";
+import { AccentColors, themes } from "@/lib/theme";
 
 const ThemeSwitcher = () => {
   const { setTheme } = useTheme();
@@ -17,6 +17,14 @@ const ThemeSwitcher = () => {
             onClick={() => setTheme(theme.class)}
           >
             {theme.name}
+          </button>
+        ))
+      }
+      {
+        
+        AccentColors.map((color) => (
+          <button className='size-10 border' style={{ backgroundColor: `var(${color})`}}>
+            {}
           </button>
         ))
       }
