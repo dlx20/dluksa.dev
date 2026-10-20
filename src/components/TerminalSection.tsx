@@ -9,7 +9,7 @@ interface sectionProps {
   children?: ReactNode;
 }
 
-const Section = ({ label, title, id, children }: sectionProps) => {
+const TerminalSection = ({ label, title, id, children }: sectionProps) => {
   const formatTitle = (title: string[]) =>
     title.map((word, index) => (
       <span
@@ -43,4 +43,4 @@ const Section = ({ label, title, id, children }: sectionProps) => {
   );
 };
 
-export default Section;
+export default TerminalSection;

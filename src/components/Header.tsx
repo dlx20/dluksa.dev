@@ -9,7 +9,7 @@ import { FaBars } from "react-icons/fa";
 const Header = () => {
   const [time, setTime] = useState<string>("");
   const [viewport, setViewport] = useState<string>("");
-  const pathName = usePathname()
+  const pathName = usePathname();
 
   // get current time
   const currentTime = () => {
@@ -79,7 +79,9 @@ const Header = () => {
                 key={title}
                 href={url}
                 className={`hidden text-ui uppercase tracking-wide transition-colors hover:text-accent sm:inline-flex ${
-                  pathName === url || (url !== '/' && pathName.startsWith(url)) ? 'text-accent underline underline-offset-4' : ''
+                  pathName === url || (url !== "/" && pathName.startsWith(url))
+                    ? "text-accent underline underline-offset-4"
+                    : ""
                 }`}
               >
                 {title}
@@ -87,10 +89,10 @@ const Header = () => {
             ))}
 
             <button
-            aria-label="Open Menu"
-            className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-card border border-accent/25 bg-accent/5 text-accent transition-colors hover:bg-accent/15"
+              aria-label="Open Menu"
+              className="flex items-center justify-center size-9 shrink-0 cursor-pointer rounded-card border border-accent/25 bg-accent/5 text-accent transition-colors hover:bg-accent/15"
             >
-              <FaBars size={14}/>
+              <FaBars size={14} />
             </button>
           </nav>
         </div>

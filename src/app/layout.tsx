@@ -42,7 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={ubuntuMono.variable}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-surface-base">
+      <body className="scrollbar min-h-screen bg-surface-base font-display text-fg-base antialiased selection:bg-accent/30">
         <ThemeProvider {...THEME_PROPS}>
           <Header />
           {children}
