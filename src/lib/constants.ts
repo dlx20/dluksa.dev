@@ -46,7 +46,7 @@ export const NowStatus = [
     },
     {
         title: 'Base',
-        description: 'London',
+        description: 'London, UK',
     },
     {
         title: 'Learning',
