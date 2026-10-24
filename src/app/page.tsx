@@ -50,7 +50,10 @@ export default function Home() {
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             {Skills.map(({ section, technologies }) => (
               <div key={section} className="flex flex-col gap-4">
-                <h3>{section}</h3>
+                <div className="flex items-center gap-2">
+                  <span className="size-1.5 shrink-0 rounded-full bg-accent/60 shadow-accent shadow-[0_0_6px]"/>
+                  <h3>{section}</h3>
+                </div>
                 <div className="flex flex-wrap gap-2">
                   {technologies.map((name) => (
                     <TechBadge name={name} size="md" />
