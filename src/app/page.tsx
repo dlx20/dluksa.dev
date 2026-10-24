@@ -47,10 +47,10 @@ export default function Home() {
 
         {/* Core Stack / Skills */}
         <TerminalSection id="sys" label="sys" title={["core", "stack"]}>
-          <div className="grid grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             {Skills.map(({ section, technologies }) => (
               <div key={section} className="flex flex-col gap-4">
-                <div>{section}</div>
+                <h3>{section}</h3>
                 <div className="flex flex-wrap gap-2">
                   {technologies.map((name) => (
                     <TechBadge name={name} size="md" />
