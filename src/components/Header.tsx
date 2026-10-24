@@ -41,7 +41,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex flex-col items-center justify-center ">
+      <header className="sticky top-0 z-30 flex flex-col items-center justify-center">
         {/* Upper header */}
         <div className="flex w-full justify-between items-center bg-surface-elevated border-b border-accent/10 px-4 py-2 sm:px-6 lg:px-10">
           {/* Mac window dots */}
@@ -60,7 +60,7 @@ const Header = () => {
           </div>
         </div>
         {/* Lower header */}
-        <div className="flex w-full justify-between px-4 py-3 sm:px-6 lg:px-10">
+        <div className="flex w-full justify-between px-4 py-3 sm:px-6 lg:px-10 bg-surface-base/80 backdrop-blur-md">
           {/* site title */}
           <div className="flex min-w-0 items-center gap-1">
             <h2 className="truncate text-body font-bold text-accent sm:text-base">
