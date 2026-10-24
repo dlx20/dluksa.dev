@@ -1,8 +1,9 @@
 import Socials from "@/components/Socials";
 import StatusCard from "@/components/StatusCard";
+import TechBadge from "@/components/TechBadge";
 import TerminalSection from "@/components/TerminalSection";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import { NowStatus } from "@/lib/constants";
+import { NowStatus, Skills } from "@/lib/constants";
 import Image from "next/image";
 
 export default function Home() {
@@ -32,36 +33,62 @@ export default function Home() {
           <StatusCard />
         </TerminalSection>
 
-        <TerminalSection id="lab" label="lab" title={['lab', 'notes']}>
+        <TerminalSection
+          id="lab"
+          label="lab"
+          title={["lab", "notes"]}
+        ></TerminalSection>
 
+        <TerminalSection
+          id="exe"
+          label="exe"
+          title={["active", "projects"]}
+        ></TerminalSection>
+
+        {/* Core Stack / Skills */}
+        <TerminalSection id="sys" label="sys" title={["core", "stack"]}>
+          <div className="grid grid-cols-2">
+            {Skills.map(({ section, technologies }) => (
+              <div key={section} className="flex flex-col gap-4">
+                <div>{section}</div>
+                <div className="flex flex-wrap gap-2">
+                  {technologies.map((name) => (
+                    <TechBadge name={name} size="md" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </TerminalSection>
 
-        <TerminalSection id="exe" label="exe" title={['active', 'projects']}>
-
-        </TerminalSection>
-
-        <TerminalSection id="sys" label="sys" title={['core', 'stack']}>
-
-        </TerminalSection>
-
-        <TerminalSection id="log" label="log" title={['how', 'i', 'work']}>
-
-        </TerminalSection>
-        <TerminalSection id="hist" label="hist" title={['brief', 'history']}>
-
-        </TerminalSection>
-        <TerminalSection id="ask" label="ask" title={['common', 'questions']}>
-
-        </TerminalSection>
-        <TerminalSection id="etc" label="etc" title={['say', 'hello']}>
-
-        </TerminalSection>
-        <TerminalSection id="bin" label="bin" title={['system', 'settings']}>
+        <TerminalSection
+          id="log"
+          label="log"
+          title={["how", "i", "work"]}
+        ></TerminalSection>
+        <TerminalSection
+          id="hist"
+          label="hist"
+          title={["brief", "history"]}
+        ></TerminalSection>
+        <TerminalSection
+          id="ask"
+          label="ask"
+          title={["common", "questions"]}
+        ></TerminalSection>
+        <TerminalSection
+          id="etc"
+          label="etc"
+          title={["say", "hello"]}
+        ></TerminalSection>
+        <TerminalSection id="bin" label="bin" title={["system", "settings"]}>
           <ThemeSwitcher />
         </TerminalSection>
-        <TerminalSection id="man" label="man" title={['site', 'manual']}>
-
-        </TerminalSection>
+        <TerminalSection
+          id="man"
+          label="man"
+          title={["site", "manual"]}
+        ></TerminalSection>
       </main>
     </div>
   );

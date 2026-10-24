@@ -50,15 +50,9 @@ import {
 export type Tech = {
     label: string;
     icon: IconType;
-    /** Brand colour, used to tint the badge icon, border and background. */
     color: string;
 };
 
-/**
- * Every technology the site knows how to render, keyed by a lowercase alias.
- * GitHub language names and repository topics are both looked up here, so a
- * single entry covers `TypeScript`, `typescript` and the `typescript` topic.
- */
 const TECH: Record<string, Tech> = {
     // Languages
     typescript: { label: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
@@ -126,17 +120,12 @@ const TECH: Record<string, Tech> = {
 
 const FALLBACK_COLOR = '#94A3B8';
 
-/** Turn a topic slug like `pose-estimation` into `Pose Estimation`. */
 function humanize(name: string): string {
     return name
         .replace(/[-_]/g, ' ')
         .replace(/\b\w/g, (character) => character.toUpperCase());
 }
 
-/**
- * Resolve any GitHub language name or topic into something renderable.
- * Unknown entries still get a badge, just with a generic icon.
- */
 export function getTech(name: string): Tech {
     return (
         TECH[name.toLowerCase()] ?? {
@@ -145,39 +134,4 @@ export function getTech(name: string): Tech {
             color: FALLBACK_COLOR,
         }
     );
-}
-
-export type TechCount = Tech & { count: number };
-
-/**
- * Every technology used across the given projects, most widely used first.
- * Aliases collapse on the way through: one repo tagged `nextjs` and another
- * tagged `next.js` both land on the single `Next.js` entry.
- */
-export function countTechnologies(projects: { technologies: string[] }[]): TechCount[] {
-    const counts = new Map<string, TechCount>();
-
-    for (const { technologies } of projects) {
-        // Collapse per project first, so a repo listing an alias twice still
-        // only counts once toward that technology.
-        const used = new Map<string, Tech>();
-        for (const name of technologies) {
-            const tech = getTech(name);
-            used.set(tech.label, tech);
-        }
-
-        for (const tech of used.values()) {
-            const seen = counts.get(tech.label);
-            counts.set(tech.label, { ...tech, count: (seen?.count ?? 0) + 1 });
-        }
-    }
-
-    return [...counts.values()].sort(
-        (a, b) => b.count - a.count || a.label.localeCompare(b.label)
-    );
-}
-
-/** Whether any of these raw names resolves to the given display label. */
-export function usesTech(technologies: string[], label: string): boolean {
-    return technologies.some((name) => getTech(name).label === label);
 }

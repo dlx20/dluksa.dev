@@ -9,7 +9,7 @@ interface sectionProps {
   children?: ReactNode;
 }
 
-const TerminalSection = ({ label, title, id, children }: sectionProps) => {
+const TerminalSection = ({ label, title, id, children}: sectionProps) => {
   const formatTitle = (title: string[]) =>
     title.map((word, index) => (
       <span
@@ -23,7 +23,8 @@ const TerminalSection = ({ label, title, id, children }: sectionProps) => {
   return (
     <section
       id={id}
-      className="relative border-l border-fg-base/10 pb-12 pl-6 lg:pl-10"
+      className={`relative border-l border-fg-base/10 pb-12 pl-6 lg:pl-10`}
+      
     >
       <div className="absolute -left-px top-0 h-4 w-0.5 bg-accent" />
       <div className="flex flex-col gap-4 lg:gap-6">

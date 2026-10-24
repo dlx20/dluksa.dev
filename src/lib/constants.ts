@@ -54,4 +54,24 @@ export const NowStatus = [
     },
 ] 
 
+// Core Stack / Skills
+export const Skills: { section: string; technologies: string[] }[] = [
+    {
+        section: 'Frontend',
+        technologies: ['TypeScript', 'React', 'Next.js', 'Tailwindcss', 'HTML', 'CSS'],
+    },
+    {
+        section: 'Backend',
+        technologies: ['Python', 'Django', 'Node.js', 'PostgreSQL', 'Supabase'],
+    },
+    {
+        section: 'Machine learning',
+        technologies: ['PyTorch', 'TensorFlow', 'OpenCV', 'scikit-learn', 'NumPy', 'C++'],
+    },
+    {
+        section: 'Infrastructure',
+        technologies: ['Docker', 'Vercel', 'GitHub', 'Google-Cloud'],
+    },
+];
+
 
