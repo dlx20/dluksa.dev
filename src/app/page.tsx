@@ -85,10 +85,16 @@ export default function Home() {
           label="etc"
           title={["say", "hello"]}
         ></TerminalSection>
+        
+        {/* Page settings Themes etc ....  */}
         <TerminalSection id="bin" label="bin" title={["system", "settings"]}>
           <div className="grid md:grid-cols-2 gap-2">
-            <MiniMap />
-            <ThemeSwitcher />
+            <div className="box">
+              <MiniMap />
+            </div>
+            <div className="box p-4">
+              <ThemeSwitcher />
+            </div>
           </div>
         </TerminalSection>
         <TerminalSection

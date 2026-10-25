@@ -11,7 +11,7 @@ import {
   subscribe,
 } from "@/lib/theme";
 
-import { useLayoutEffect } from "react";
+import { MdOutlinePalette } from "react-icons/md";
 
 const ThemeSwitcher = () => {
   const { setTheme } = useTheme();
@@ -22,11 +22,15 @@ const ThemeSwitcher = () => {
   );
 
   return (
-    <div className="p-3 border border-accent flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2">
+        <MdOutlinePalette size={40} className="fill-accent box p-1 bg-accent/10 border-none"/>
+        <h3 className="flex flex-col text-accent">Appearance <span className="text-fg-muted">Themes and accents</span></h3>
+      </div>
       <div className="grid grid-cols-2 gap-2">
         {themes.map((theme) => (
           <button
-            className="gap-3 p-2 border border-primary last:col-span-2"
+            className="btn last:col-span-2"
             key={theme.name}
             onClick={() => setTheme(theme.class)}
           >
@@ -39,7 +43,7 @@ const ThemeSwitcher = () => {
           <button
             key={color}
             onClick={() => setAccent(color)}
-            className="size-10 border"
+            className="size-10"
             style={{ backgroundColor: `var(${color}) ` }}
           >
             {}
