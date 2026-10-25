@@ -55,7 +55,7 @@ export const setAccent = (accent: string): void => {
   listeners.forEach((listener) => listener());
 };
 
-const restoreAccent = (): void => {
+export const restoreAccent = (): void => {
   applyAccent(getAccent());
 };
 

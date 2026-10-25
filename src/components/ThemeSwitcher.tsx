@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import {
   AccentColors,
@@ -10,6 +10,8 @@ import {
   setAccent,
   subscribe,
 } from "@/lib/theme";
+
+import { useLayoutEffect } from "react";
 
 const ThemeSwitcher = () => {
   const { setTheme } = useTheme();
