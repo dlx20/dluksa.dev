@@ -1,4 +1,5 @@
 import MiniMap from "@/components/MiniMap";
+import ProjectCard from "@/components/ProjectCard";
 import Socials from "@/components/Socials";
 import StatusCard from "@/components/StatusCard";
 import TechBadge from "@/components/TechBadge";
@@ -40,11 +41,14 @@ export default function Home() {
           title={["lab", "notes"]}
         ></TerminalSection>
 
-        <TerminalSection
-          id="exe"
-          label="exe"
-          title={["active", "projects"]}
-        ></TerminalSection>
+        <TerminalSection id="exe" label="exe" title={["active", "projects"]}>
+          <div className="grid grid-cols-2 gap-2">
+            <ProjectCard />
+            <ProjectCard />
+            <ProjectCard />
+            <ProjectCard />
+          </div>
+        </TerminalSection>
 
         {/* Core Stack / Skills */}
         <TerminalSection id="sys" label="sys" title={["core", "stack"]}>
@@ -85,7 +89,7 @@ export default function Home() {
           label="etc"
           title={["say", "hello"]}
         ></TerminalSection>
-        
+
         {/* Page settings Themes etc ....  */}
         <TerminalSection id="bin" label="bin" title={["system", "settings"]}>
           <div className="grid md:grid-cols-2 gap-2">
