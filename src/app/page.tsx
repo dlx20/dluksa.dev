@@ -6,9 +6,10 @@ import TechBadge from "@/components/TechBadge";
 import TerminalSection from "@/components/TerminalSection";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { NowStatus, Skills } from "@/lib/constants";
-import Image from "next/image";
+import { fetchGithubRepos } from "@/lib/github";
 
-export default function Home() {
+
+export default async function Home() {
   return (
     <div className="w-full text-fg-base">
       <main className="mx-auto w-full max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-10 lg:pt-12">

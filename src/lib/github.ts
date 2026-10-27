@@ -1,11 +1,14 @@
 
 
+// Fetch GitHub repositories
+export const fetchGithubRepos = async (username: string) => {
+  const res = await fetch(`https://api.github.com/users/${username}/repos`, {
+    next: { revalidate: 60 },
+  });
 
+  if (!res.ok) {
+    throw new Error(`Failed to fetch GitHub repositories: ${res.status}`);
+  }
 
-export const fetchGithubProfile = async () => {
-    const response = await fetch('https://api.github.com/users/dlx20/repos')
-    const data = await response.json()
-
-    return data
-
-}
+  return res.json();
+};
