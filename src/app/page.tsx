@@ -7,9 +7,13 @@ import TerminalSection from "@/components/TerminalSection";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { NowStatus, Skills } from "@/lib/constants";
 import { fetchGithubRepos } from "@/lib/github";
+import { log } from "console";
 
 
 export default async function Home() {
+
+  const repos = await fetchGithubRepos();
+  console.log(repos)
   return (
     <div className="w-full text-fg-base">
       <main className="mx-auto w-full max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-10 lg:pt-12">
