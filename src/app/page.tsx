@@ -7,7 +7,7 @@ import TerminalSection from "@/components/TerminalSection";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { NowStatus, Skills } from "@/lib/constants";
 import { fetchGithubRepos } from "@/lib/github";
-import { log } from "console";
+
 
 
 export default async function Home() {
