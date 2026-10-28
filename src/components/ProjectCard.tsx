@@ -12,10 +12,21 @@ const ProjectCard = async ({ reposData }: ProjectCardProps) => {
               <div className="box h-50">
             <h1>
                 {
-                    repo.id
+                    repo.name
                     
                 }
             </h1>
+            <p>
+                {
+                    repo.description
+                }
+            </p>
+            <p>
+                {
+                    repo.id
+                }
+            </p>
+
         </div>
         ))
     }
