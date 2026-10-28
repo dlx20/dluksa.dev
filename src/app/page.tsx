@@ -48,10 +48,8 @@ export default async function Home() {
 
         <TerminalSection id="exe" label="exe" title={["active", "projects"]}>
           <div className="grid grid-cols-2 gap-2">
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
+            <ProjectCard reposData={repos}/>
+
           </div>
         </TerminalSection>
 
