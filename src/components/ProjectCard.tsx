@@ -1,14 +1,7 @@
 import { Suspense } from "react";
-type Repository = {
-  id: number;
-  name: string;
-  full_name: string;
-  description: string | null;
-  html_url: string;
-};
 
 type ProjectCardProps = {
-  reposData: Repository[];
+  reposData: Record<string, any>[];
 };
 
 const ProjectCard = async ({ reposData }: ProjectCardProps) => {
@@ -19,7 +12,8 @@ const ProjectCard = async ({ reposData }: ProjectCardProps) => {
               <div className="box h-50">
             <h1>
                 {
-                    repo.name
+                    repo.id
+                    
                 }
             </h1>
         </div>
