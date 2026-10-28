@@ -8,12 +8,9 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { NowStatus, Skills } from "@/lib/constants";
 import { fetchGithubRepos } from "@/lib/github";
 
-
-
 export default async function Home() {
-
   const repos = await fetchGithubRepos();
-  console.log(repos)
+  console.log(repos);
   return (
     <div className="w-full text-fg-base">
       <main className="mx-auto w-full max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-10 lg:pt-12">
@@ -48,8 +45,7 @@ export default async function Home() {
 
         <TerminalSection id="exe" label="exe" title={["active", "projects"]}>
           <div className="grid grid-cols-2 gap-2">
-            <ProjectCard reposData={repos}/>
-
+            <ProjectCard reposData={repos} />
           </div>
         </TerminalSection>
 

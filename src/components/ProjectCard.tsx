@@ -13,17 +13,19 @@ type ProjectCardProps = {
 
 const ProjectCard = async ({ reposData }: ProjectCardProps) => {
   return (
-    <div className="box h-50">
+    <>
       {
-        reposData.map((repo)=> (
+          reposData.map((repo)=> (
+              <div className="box h-50">
             <h1>
                 {
                     repo.name
                 }
             </h1>
+        </div>
         ))
-      }
-    </div>
+    }
+    </>
   );
 };
 
