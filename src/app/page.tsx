@@ -10,7 +10,9 @@ import { fetchGithubRepos } from "@/lib/github";
 
 export default async function Home() {
   const repos = await fetchGithubRepos();
-  console.log(repos);
+  const readme = await fetchGithubRepos();
+  console.log(readme);
+
   return (
     <div className="w-full text-fg-base">
       <main className="mx-auto w-full max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-10 lg:pt-12">
@@ -45,7 +47,7 @@ export default async function Home() {
 
         <TerminalSection id="exe" label="exe" title={["active", "projects"]}>
           <div className="grid grid-cols-2 gap-2">
-            <ProjectCard reposData={repos} />
+            <ProjectCard key={repos.id} reposData={repos} />
           </div>
         </TerminalSection>
 
@@ -60,7 +62,7 @@ export default async function Home() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {technologies.map((name) => (
-                    <TechBadge name={name} size="md" />
+                    <TechBadge key={name} name={name} size="md" />
                   ))}
                 </div>
               </div>

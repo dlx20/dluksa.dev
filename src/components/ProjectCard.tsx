@@ -6,7 +6,7 @@ type ProjectCardProps = {
 
 const ProjectCard = async ({ reposData }: ProjectCardProps) => {
   return (
-    <>
+    <div>
       {reposData.map((repo) => (
         <div className="box h-50 p-4">
           <div className="flex gap-2 items-center">
@@ -18,7 +18,7 @@ const ProjectCard = async ({ reposData }: ProjectCardProps) => {
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
