@@ -1,7 +1,5 @@
 // Fetch GitHub repositories
 
-import { request } from "http";
-import { headers } from "next/headers";
 
 const TOKEN = process.env.GITHUB_ACCESS_TOKEN;
 const USERNAME = process.env.GITHUB_USERNAME;
@@ -31,7 +29,7 @@ export const fetchGithubRepos = async () => {
 export const fetchRepoReadme = async () => {
   'use cache'
   try {
-    const data = await fetch(`https://api.github.com/repos/${encodeURIComponent(USERNAME)}/dluksa.dev/readme`, {
+    const data = await fetch(`https://api.github.com/repos/${USERNAME}/dluksa.dev/readme`, {
       headers: {
         'Accept': 'application/vnd.github.raw',
         Authorization: `Bearer ${TOKEN}`,
