@@ -30,7 +30,7 @@ export const fetchGithubRepos = async () => {
 
 export const fetchRepoReadme = async () => {
   try {
-    const data = await fetch(`https://github.com/${USERNAME}/dluksa.dev#readme`, {
+    const data = await fetch(`https://github.com/${USERNAME}/dluksa.dev/readme`, {
       headers: {
         Authorization: `Bearer ${TOKEN}`,
       },

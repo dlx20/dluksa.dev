@@ -8,7 +8,7 @@ const ProjectCard = async ({ reposData }: ProjectCardProps) => {
   return (
     <div>
       {reposData.map((repo) => (
-        <div className="box h-50 p-4">
+        <div key={repo.id} className="box h-50 p-4">
           <div className="flex gap-2 items-center">
             <div className="rounded-card border border-accent/25 bg-linear-to-br from-accent/15 to-accent/5 text-accent/70 size-8 flex items-center justify-center ">
               <FaRegFolder size={16} />

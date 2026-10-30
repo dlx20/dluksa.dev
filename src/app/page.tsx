@@ -11,7 +11,7 @@ import { fetchGithubRepos } from "@/lib/github";
 export default async function Home() {
   const repos = await fetchGithubRepos();
   const readme = await fetchGithubRepos();
-  console.log(readme);
+  // console.log(readme);
 
   return (
     <div className="w-full text-fg-base">
