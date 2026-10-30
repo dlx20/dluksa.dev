@@ -6,12 +6,12 @@ import TechBadge from "@/components/TechBadge";
 import TerminalSection from "@/components/TerminalSection";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { NowStatus, Skills } from "@/lib/constants";
-import { fetchGithubRepos } from "@/lib/github";
+import { fetchGithubRepos, fetchRepoReadme } from "@/lib/github";
 
 export default async function Home() {
   const repos = await fetchGithubRepos();
-  const readme = await fetchGithubRepos();
-  // console.log(readme);
+  const readme = await fetchRepoReadme();
+  console.log(readme);
 
   return (
     <div className="w-full text-fg-base">

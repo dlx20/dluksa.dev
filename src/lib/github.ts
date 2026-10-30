@@ -29,16 +29,20 @@ export const fetchGithubRepos = async () => {
 };
 
 export const fetchRepoReadme = async () => {
+  'use cache'
   try {
-    const data = await fetch(`https://github.com/${USERNAME}/dluksa.dev/readme`, {
+    const data = await fetch(`https://api.github.com/repos/${encodeURIComponent(USERNAME)}/dluksa.dev/readme`, {
       headers: {
+        'Accept': 'application/vnd.github.raw',
         Authorization: `Bearer ${TOKEN}`,
+        'User-agent': 'NextJs-Readme-Fetcher'
       },
     });
     if(data.ok) return data.text();
-  } catch {
+  } catch (error) {
     // Fallback
+    console.log('Failed to fetch file', error)
   }
-  const res = await request(`/repos/${USERNAME}/dluksa.dev/readme`);
-  return res
+
+  return null
 };
