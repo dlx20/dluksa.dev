@@ -6,12 +6,12 @@ import TechBadge from "@/components/TechBadge";
 import TerminalSection from "@/components/TerminalSection";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { NowStatus, Skills } from "@/lib/constants";
-import { fetchGithubRepos, fetchRepoReadme } from "@/lib/github";
+import { getProjects, fetchRepoReadme } from "@/lib/github";
 
 export default async function Home() {
-  const repos = await fetchGithubRepos();
+  const repos = await getProjects();
   const readme = await fetchRepoReadme();
-  console.log(readme);
+  // console.log(readme);
 
   return (
     <div className="w-full text-fg-base">
@@ -47,7 +47,7 @@ export default async function Home() {
 
         <TerminalSection id="exe" label="exe" title={["active", "projects"]}>
           <div className="grid grid-cols-2 gap-2">
-            <ProjectCard key={repos.id} reposData={repos} />
+            <ProjectCard  reposData={repos} />
           </div>
         </TerminalSection>
 
