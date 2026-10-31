@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import type { ThemeProviderProps } from "next-themes";
 import Header from "@/components/Header";
+import { Suspense } from "react";
 
 // Themes properties
 const THEME_PROPS = {
@@ -31,7 +32,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={ubuntuMono.variable} suppressHydrationWarning>
       <body className="scrollbar min-h-screen font-ubuntu-mono bg-surface-base text-fg-base antialiased selection:bg-accent/30">
         <ThemeProvider {...THEME_PROPS}>
-          <Header />
+          <Suspense>
+            <Header />
+          </Suspense>
           {children}
         </ThemeProvider>
       </body>
