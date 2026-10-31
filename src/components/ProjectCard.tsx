@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaRegFolder } from "react-icons/fa";
 
 type ProjectCardProps = {
@@ -8,7 +9,7 @@ const ProjectCard = async ({ reposData }: ProjectCardProps) => {
   return (
     <>
       {reposData.map((repo) => (
-        <div key={repo.id} className="box h-50 p-4">
+        <Link href={`/projects/${repo.slug}`} key={repo.name} className="box h-50 p-4">
           <div className="flex gap-2 items-center">
             <div className="rounded-card border border-accent/25 bg-linear-to-br from-accent/15 to-accent/5 text-accent/70 size-8 flex items-center justify-center ">
               <FaRegFolder size={16} />
@@ -16,7 +17,7 @@ const ProjectCard = async ({ reposData }: ProjectCardProps) => {
 
             <h2 className="font-bold">{repo.name} </h2>
           </div>
-        </div>
+        </Link>
       ))}
     </>
   );
