@@ -14,7 +14,7 @@ const ProjectCard = async ({ reposData }: ProjectCardProps) => {
               <FaRegFolder size={16} />
             </div>
 
-            <h2 className="font-bold">{repo.name}</h2>
+            <h2 className="font-bold">{repo.name} </h2>
           </div>
         </div>
       ))}

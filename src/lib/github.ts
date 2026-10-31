@@ -49,14 +49,6 @@ const fetchGithubRepos = async (): Promise<githubRepo[] | null> => {
   }
 };
 
-export const getProjects = cache(async (): Promise<Project[]> => {
-  const repo = await fetchGithubRepos();
-
-  if (!repo) return [];
-
-  return repo.map(toProject)
-});
-
 // fetch readme
 export const fetchRepoReadme = async () => {
   "use cache";
@@ -79,3 +71,15 @@ export const fetchRepoReadme = async () => {
 
   return null;
 };
+
+
+
+
+export const getProjects = cache(async (): Promise<Project[]> => {
+  const repo = await fetchGithubRepos();
+
+  if (!repo) return [];
+
+  return repo.map(toProject)
+});
+
