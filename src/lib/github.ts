@@ -78,27 +78,27 @@ const fetchGithubRepos = async (): Promise<githubRepo[] | null> => {
 };
 
 // fetch readme
-export const fetchRepoReadme = cache(async (
-  repoName: string,
-): Promise<string | null> => {
-  if (!USERNAME) {
-    throw new Error("Username not found!");
-  }
-  try {
-    const readme = await request({
-      url: `https://api.github.com/repos/${encodeURIComponent(USERNAME)}/${encodeURIComponent(repoName)}/readme`,
-      headers: {
-        Accept: "application/vnd.github.raw+json",
-      },
-      responseType: "text",
-    });
+export const fetchRepoReadme = cache(
+  async (repoName: string): Promise<string | null> => {
+    if (!USERNAME) {
+      throw new Error("Username not found!");
+    }
+    try {
+      const readme = await request({
+        url: `https://api.github.com/repos/${encodeURIComponent(USERNAME)}/${encodeURIComponent(repoName)}/readme`,
+        headers: {
+          Accept: "application/vnd.github.raw+json",
+        },
+        responseType: "text",
+      });
 
-    return readme;
-  } catch (error) {
-    console.error(`Failed to fetch README for ${repoName}:`, error);
-    return null;
-  }
-});
+      return readme;
+    } catch (error) {
+      console.error(`Failed to fetch README for ${repoName}:`, error);
+      return null;
+    }
+  },
+);
 
 export const getProjects = cache(async (): Promise<Project[]> => {
   const repos = await fetchGithubRepos();
@@ -107,19 +107,20 @@ export const getProjects = cache(async (): Promise<Project[]> => {
   return Promise.all(
     repos.map(async (repo) => {
       const readme = await fetchRepoReadme(repo.name);
-      return toProject(repo, readme ?? '');
+      return toProject(repo, readme ?? "");
     }),
   );
 });
 
-export const getProject = async (name: string): Promise<Project | undefined> => {
-  const projects = await getProjects()
-  const project = projects.find((entry) => entry.name === name);
-  if (!project) return undefined;
+export const getProject = cache(
+  async (name: string): Promise<Project | undefined> => {
+    const projects = await getProjects();
+    const project = projects.find((entry) => entry.name === name);
+    if (!project) return undefined;
 
-  const readme = await fetchRepoReadme(project.name)
-  return {
-    ...project,
-  }
-
-}
+    const readme = await fetchRepoReadme(project.name);
+    return {
+      ...project,
+    };
+  },
+);
