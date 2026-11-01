@@ -1,5 +1,6 @@
 // Fetch GitHub repositories
 
+import { headers } from "next/headers";
 import { cache } from "react";
 
 const TOKEN = process.env.GITHUB_ACCESS_TOKEN;
@@ -14,8 +15,6 @@ type githubRepo = {
   name: string;
   description: string | null;
 };
-
-
 // project types
 const toProject = (repo: githubRepo) => {
   return {
@@ -24,7 +23,12 @@ const toProject = (repo: githubRepo) => {
   };
 };
 
-
+type readmeProps = {
+  name: string;
+  path: string;
+  content: string;
+  encoding: string;
+};
 
 // Request data
 const request = async ({
@@ -75,26 +79,25 @@ const fetchGithubRepos = async (): Promise<githubRepo[] | null> => {
 };
 
 // fetch readme
-export const fetchRepoReadme = async () => {
-  "use cache";
-  try {
-    const data = await fetch(
-      `https://api.github.com/repos/${USERNAME}/dluksa.dev/readme`,
-      {
-        headers: {
-          Accept: "application/vnd.github.raw",
-          Authorization: `Bearer ${TOKEN}`,
-          "User-agent": "NextJs-Readme-Fetcher",
-        },
-      },
-    );
-    if (data.ok) return data.text();
-  } catch (error) {
-    // Fallback
-    console.log("Failed to fetch file", error);
+export const fetchRepoReadme = async (
+  repoName: string,
+): Promise<string | null> => {
+  if (!USERNAME) {
+    throw new Error("Username not found!");
   }
+  try {
+    const readme = await request({
+      url: `https://api.github.com/repos/${encodeURIComponent(USERNAME)}/dluksa.dev/readme`,
+      headers: {
+        Accept: "application/vnd.github.raw+json",
+      },
+    });
 
-  return null;
+    return readme;
+  } catch (error) {
+    console.error(`Failed to fetch README for ${repoName}:`, error);
+    return null;
+  }
 };
 
 export const getProjects = cache(async (): Promise<Project[]> => {
