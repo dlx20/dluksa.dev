@@ -34,9 +34,11 @@ type readmeProps = {
 const request = async ({
   url,
   headers = {},
+  responseType = 'json'
 }: {
   url: string;
   headers?: Record<string, string>;
+  responseType?: 'json' | 'text'; 
 }) => {
   try {
     const res = await fetch(url, {
@@ -50,7 +52,10 @@ const request = async ({
     if (!res.ok) {
       throw new Error(`Request Failed ${res.status} ${res.statusText}`);
     }
-    return await res.json();
+    return (responseType === 'text'
+      ? await res.text()
+      : await res.json()
+    )
   } catch (error) {
     console.log("API request failed:", error);
     throw error;
@@ -69,6 +74,7 @@ const fetchGithubRepos = async (): Promise<githubRepo[] | null> => {
         Accept: "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
       },
+      responseType: 'json'
     });
 
     return repos as githubRepo[];
@@ -87,10 +93,11 @@ export const fetchRepoReadme = async (
   }
   try {
     const readme = await request({
-      url: `https://api.github.com/repos/${encodeURIComponent(USERNAME)}/dluksa.dev/readme`,
+      url: `https://api.github.com/repos/${encodeURIComponent(USERNAME)}/${repoName}/readme`,
       headers: {
         Accept: "application/vnd.github.raw+json",
       },
+      responseType: 'text'
     });
 
     return readme;

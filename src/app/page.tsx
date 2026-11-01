@@ -10,7 +10,7 @@ import { getProjects, fetchRepoReadme } from "@/lib/github";
 
 export default async function Home() {
   const repos = await getProjects();
-  const readme = await fetchRepoReadme();
+  const readme = await fetchRepoReadme('dluksa.dev');
   console.log(readme);
 
   return (
