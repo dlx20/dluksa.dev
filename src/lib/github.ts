@@ -111,3 +111,15 @@ export const getProjects = cache(async (): Promise<Project[]> => {
     }),
   );
 });
+
+export const getProject = async (name: string): Promise<Project | undefined> => {
+  const projects = await getProjects()
+  const project = projects.find((entry) => entry.name === name);
+  if (!project) return undefined;
+
+  const readme = await fetchRepoReadme(project.name)
+  return {
+    ...project,
+  }
+
+}
