@@ -1,6 +1,5 @@
 // Fetch GitHub repositories
 
-import { headers } from "next/headers";
 import { cache } from "react";
 
 const TOKEN = process.env.GITHUB_ACCESS_TOKEN;
