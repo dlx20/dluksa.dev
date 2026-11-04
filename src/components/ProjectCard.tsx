@@ -1,38 +1,34 @@
 import Link from "next/link";
 import { FaRegFolder } from "react-icons/fa";
 import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import type { Project } from "@/lib/github";
 
 type ProjectCardProps = {
-  reposData: Record<string, any>[];
+  reposData: Project[];
 };
 
-const ProjectCard = async ({ reposData }: ProjectCardProps) => {
+const ProjectCard = ({ reposData }: ProjectCardProps) => {
   return (
     <>
       {reposData.map((repo) => (
-        <Link
-          href={`/projects/${repo.slug}`}
-          key={repo.name}
-          className="box h-50 p-4"
-        >
-          <div className="flex-col gap-4">
+        <article key={repo.name} className="box h-50 p-4">
+          <div className="flex flex-col gap-4">
             <div className="flex gap-3 items-center">
               <div className="rounded-card border border-accent/25 bg-linear-to-br from-accent/15 to-accent/5 text-accent/70 size-8 flex items-center justify-center ">
                 <FaRegFolder size={16} />
               </div>
 
-              <h2 className="font-bold">{repo.name} </h2>
+              <h2 className="font-bold">
+                <Link href={`/projects/${repo.slug}`}>{repo.name}</Link>
+              </h2>
             </div>
-            <p className="line-clamp-3">
-              <Markdown  rehypePlugins={[remarkGfm]}>
-                {
-                  repo.readme
-                }
+            <div className="line-clamp-3">
+              <Markdown>
+                {repo.readme}
               </Markdown>
-            </p>
+            </div>
           </div>
-        </Link>
+        </article>
       ))}
     </>
   );

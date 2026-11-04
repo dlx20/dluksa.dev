@@ -12,23 +12,23 @@ const page = async ({
   const projectData = await getProject(slug)
   return (
     <div>
-        <TerminalSection id='pro' label='pro' title={['Project', 'info']}>
-          <Suspense>
+      <TerminalSection id='pro' label='pro' title={['Project', 'info']}>
+        <Suspense>
 
-            <div>
+          <div>
+            {
+              projectData?.name
+            }
+          </div>
+          <div>
+            <Markdown>
               {
-                projectData?.name
+                projectData?.readme
               }
-            </div>
-            <div>
-              <Markdown>
-                {
-                  projectData?.readme
-                }
-              </Markdown>
-            </div>
-                </Suspense>
-        </TerminalSection>
+            </Markdown>
+          </div>
+        </Suspense>
+      </TerminalSection>
     </div>
   )
 }
