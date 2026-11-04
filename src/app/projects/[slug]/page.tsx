@@ -3,34 +3,32 @@ import { getProject } from '@/lib/github'
 import { Suspense } from 'react'
 import Markdown from 'react-markdown'
 
-const page = async ({
-  params,
-}: {
+type ProjectPageProps = {
   params: Promise<{ slug: string }>;
-}) => {
+};
+
+const ProjectContent = async ({ params }: ProjectPageProps) => {
   const { slug } = await params;
-  const projectData = await getProject(slug)
+  const projectData = await getProject(slug);
+
   return (
-    <div>
-      <TerminalSection id='pro' label='pro' title={['Project', 'info']}>
-        <Suspense>
+    <>
+      <div>{projectData?.name}</div>
+      <div>
+        <Markdown>{projectData?.readme}</Markdown>
+      </div>
+    </>
+  );
+};
 
-          <div>
-            {
-              projectData?.name
-            }
-          </div>
-          <div>
-            <Markdown>
-              {
-                projectData?.readme
-              }
-            </Markdown>
-          </div>
-        </Suspense>
-      </TerminalSection>
-    </div>
-  )
-}
+const Page = ({ params }: ProjectPageProps) => {
+  return (
+    <TerminalSection id="pro" label="pro" title={["Project", "info"]}>
+      <Suspense fallback={<p>Loading project...</p>}>
+        <ProjectContent params={params} />
+      </Suspense>
+    </TerminalSection>
+  );
+};
 
-export default page
+export default Page;
