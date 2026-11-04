@@ -10,6 +10,7 @@ import { getProjects, fetchRepoReadme } from "@/lib/github";
 
 export default async function Home() {
   const repos = await getProjects();
+  console.log(repos);
 
   return (
     <div className="w-full text-fg-base">
