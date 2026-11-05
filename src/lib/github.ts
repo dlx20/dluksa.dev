@@ -11,7 +11,6 @@ export type Project = {
   slug: string;
   readme: string;
   languages: string;
-  lang: string;
 };
 
 // repo types
@@ -27,8 +26,7 @@ const toProject = (repo: githubRepo, readme = ""): Project => {
     slug: repo.name,
     name: repo.name,
     readme,
-    languages: repo.language,
-    lang: repo.languages_url
+    languages: repo.languages_url
   };
 };
 
