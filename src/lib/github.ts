@@ -1,5 +1,6 @@
 // Fetch GitHub repositories
 
+import { headers } from "next/headers";
 import { cache } from "react";
 
 const TOKEN = process.env.GITHUB_ACCESS_TOKEN;
@@ -9,12 +10,14 @@ export type Project = {
   name: string;
   slug: string;
   readme: string;
+  languages: string;
 };
 
 // repo types
 type githubRepo = {
   name: string;
   description: string | null;
+  language: string;
 };
 // project types
 const toProject = (repo: githubRepo, readme = ""): Project => {
@@ -22,8 +25,10 @@ const toProject = (repo: githubRepo, readme = ""): Project => {
     slug: repo.name,
     name: repo.name,
     readme,
+    languages: repo.language
   };
 };
+
 
 // Request data
 const request = async ({
@@ -54,6 +59,14 @@ const request = async ({
   }
 };
 
+
+// Fetch Json data from url
+const fetchJson = async (url: string): Promise<JSON> => {
+  const res = await request({url})
+  return await res.json();
+}
+
+
 // fetch repos
 const fetchGithubRepos = async (): Promise<githubRepo[] | null> => {
   if (!USERNAME) {
@@ -66,7 +79,6 @@ const fetchGithubRepos = async (): Promise<githubRepo[] | null> => {
         Accept: "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
       },
-      responseType: "json",
     });
 
     return repos as githubRepo[];
@@ -98,6 +110,13 @@ export const fetchRepoReadme = cache(
     }
   },
 );
+
+
+export const getLanguages = async (url: string): Promise<JSON> => {
+  const languages = fetchJson(url)
+  return languages
+
+}
 
 export const getProjects = cache(async (): Promise<Project[]> => {
   const repos = await fetchGithubRepos();

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FaRegFolder } from "react-icons/fa";
 import Markdown from "react-markdown";
 import type { Project } from "@/lib/github";
+import TechBadge from "./TechBadge";
 
 type ProjectCardProps = {
   reposData: Project[];
@@ -11,7 +12,7 @@ const ProjectCard = ({ reposData }: ProjectCardProps) => {
   return (
     <>
       {reposData.map((repo) => (
-        <article key={repo.name} className="box relative h-50 p-4">
+        <article key={repo.name} className="box flex flex-col justify-between h-full p-5">
           <Link
             href={`/projects/${repo.slug}`}
             aria-label={`View ${repo.name} project`}
@@ -40,6 +41,13 @@ const ProjectCard = ({ reposData }: ProjectCardProps) => {
                 {repo.readme}
               </Markdown>
             </div>
+            <div>
+              <TechBadge name={repo.languages} size='sm' />
+            </div>
+          </div>
+
+          <div className="border-t border-accent/10">
+
           </div>
         </article>
       ))}
