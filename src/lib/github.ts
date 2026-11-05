@@ -11,6 +11,7 @@ export type Project = {
   slug: string;
   readme: string;
   languages: string;
+  lang: string;
 };
 
 // repo types
@@ -18,6 +19,7 @@ type githubRepo = {
   name: string;
   description: string | null;
   language: string;
+  languages_url: string;
 };
 // project types
 const toProject = (repo: githubRepo, readme = ""): Project => {
@@ -25,7 +27,8 @@ const toProject = (repo: githubRepo, readme = ""): Project => {
     slug: repo.name,
     name: repo.name,
     readme,
-    languages: repo.language
+    languages: repo.language,
+    lang: repo.languages_url
   };
 };
 
@@ -74,7 +77,7 @@ const fetchGithubRepos = async (): Promise<githubRepo[] | null> => {
   }
   try {
     const repos = await request({
-      url: `https://api.github.com/users/${encodeURIComponent(USERNAME)}/repos?sort=updated&per_page=100`,
+      url: `https://api.github.com/users/${encodeURIComponent(USERNAME)}/repos`,
       headers: {
         Accept: "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
