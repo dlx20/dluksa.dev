@@ -44,6 +44,7 @@ const request = async ({
   try {
     const res = await fetch(url, {
       headers: {
+        revalidate: "3600",
         Authorization: `Bearer ${TOKEN}`,
         "User-Agent": "ddev-portfolio",
         ...headers,
