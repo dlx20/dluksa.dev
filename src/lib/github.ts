@@ -67,7 +67,7 @@ const request = async ({
   } catch (error) {
     console.log("API request failed:", error);
     throw error;
-  } 
+  }
 };
 
 
@@ -135,9 +135,10 @@ export const getProjects = cache(async (): Promise<Project[]> => {
   );
 });
 
-export const getProject = cache(
-  async (name: string): Promise<Project | undefined> => {
+export const getProject =
+  async (slug: string): Promise<Project | undefined> => {
     const projects = await getProjects();
-    return projects.find((entry) => entry.name === name);
-  },
-);
+    const project = projects.find((entry) => entry.slug === slug);
+    if (!project) return undefined;
+    return { ...project };
+  }

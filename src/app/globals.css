@@ -221,7 +221,7 @@
   }
 
   .box {
-    @apply rounded-card border border-accent/20 bg-surface-elevated/30   
+    @apply relative rounded-card border border-accent/20 bg-surface-elevated/30   
   }
 
 }

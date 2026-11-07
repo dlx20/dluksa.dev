@@ -6,7 +6,7 @@ import TechBadge from "@/components/TechBadge";
 import TerminalSection from "@/components/TerminalSection";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { NowStatus, Skills } from "@/lib/constants";
-import { getProjects, fetchRepoReadme} from "@/lib/github";
+import { getProjects, fetchRepoReadme, getProject } from "@/lib/github";
 
 export default async function Home() {
   // A GitHub failure shouldn't take down the rest of the home page.
@@ -14,8 +14,13 @@ export default async function Home() {
     console.error("Failed to load projects:", error);
     return [];
   });
-  // console.log(repos);
-  
+
+  const singleRepo = await getProject("dluksa.dev").catch((error) => {
+    console.error("Failed to load single project:", error);
+    return null;
+  });
+
+
 
   return (
     <div className="w-full text-fg-base">
@@ -51,7 +56,11 @@ export default async function Home() {
 
         <TerminalSection id="exe" label="exe" title={["active", "projects"]}>
           <div className="grid grid-cols-3 gap-2">
-            <ProjectCard  reposData={repos} />
+              {
+                repos.map((repo) => (
+                  <ProjectCard key={repo.name} data = {repo}/>
+                ))
+              }
           </div>
         </TerminalSection>
 

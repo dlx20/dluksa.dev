@@ -1,46 +1,27 @@
-import TerminalSection from '@/components/TerminalSection'
-import { getProject, getProjects } from '@/lib/github'
-import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
-import Markdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 
+import { getProjects, getProject } from '@/lib/github';
+
+
+export const instant = false
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-const ProjectContent = async ({ params }: ProjectPageProps) => {
+export async function generateStaticParams() {
+  const projects = await getProjects();
+  console.log('static params:', projects.map((p) => p.slug));
+  return projects.map((project) => ({ slug: project.slug }));
+}
+
+export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  console.log(slug); // Debugging line
-  const projectData = await getProject(slug);
-  // console.log('Project data:', projectData); 
+  const project = await getProject(slug);
 
-  if (!projectData) {
-    notFound();
-  }
 
   return (
-    <>
-      {projectData.description && (
-        <p className="text-fg-muted">{projectData.description}</p>
-      )}
-      <div className="prose max-w-none">
-        <Markdown remarkPlugins={[remarkGfm]}>{projectData.readme}</Markdown>
-      </div>
-    </>
-  );
-};
+    <div>
+      {slug}
 
-const Page = ({ params }: ProjectPageProps) => {
-  return (
-    <main className="mx-auto w-full max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-10 lg:pt-12">
-      <TerminalSection id="pro" label="pro" title={["Project", "info"]}>
-        <Suspense fallback={<p>Loading project...</p>}>
-          <ProjectContent params={params} />
-        </Suspense>
-      </TerminalSection>
-    </main>
+    </div>
   );
-};
-
-export default Page;
+}
