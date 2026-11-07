@@ -1,43 +1,43 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { navLinks } from "@/lib/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars } from "react-icons/fa";
 
+// Current time, updated every second
+const subscribeToClock = (onChange: () => void) => {
+  const interval = setInterval(onChange, 1000);
+  return () => clearInterval(interval);
+};
+
+const getTime = () =>
+  new Date().toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+
+// Viewport size, updated on resize
+const subscribeToResize = (onChange: () => void) => {
+  window.addEventListener("resize", onChange);
+  return () => window.removeEventListener("resize", onChange);
+};
+
+const getViewport = () => `${window.innerWidth}x${window.innerHeight}`;
+
+// Both are empty on the server and fill in once hydrated
+const getEmptySnapshot = () => "";
+
 const Header = () => {
-  const [time, setTime] = useState<string>("");
-  const [viewport, setViewport] = useState<string>("");
+  const time = useSyncExternalStore(subscribeToClock, getTime, getEmptySnapshot);
+  const viewport = useSyncExternalStore(
+    subscribeToResize,
+    getViewport,
+    getEmptySnapshot,
+  );
   const pathName = usePathname();
-
-  // get current time
-  const currentTime = () => {
-    setTime(
-      new Date().toLocaleTimeString("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      }),
-    );
-  };
-
-  // Get vieport width
-  const windowDimmensions = () => {
-    setViewport(`${window.innerWidth}x${window.innerHeight}`);
-  };
-
-  useEffect(() => {
-    currentTime();
-    const interval = setInterval(currentTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    windowDimmensions();
-    window.addEventListener("resize", windowDimmensions);
-    return () => window.removeEventListener("resize", windowDimmensions);
-  }, []);
 
   return (
     <>

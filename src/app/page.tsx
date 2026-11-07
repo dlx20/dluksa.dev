@@ -9,8 +9,12 @@ import { NowStatus, Skills } from "@/lib/constants";
 import { getProjects, fetchRepoReadme} from "@/lib/github";
 
 export default async function Home() {
-  const repos = await getProjects();
-  console.log(repos);
+  // A GitHub failure shouldn't take down the rest of the home page.
+  const repos = await getProjects().catch((error) => {
+    console.error("Failed to load projects:", error);
+    return [];
+  });
+  // console.log(repos);
   
 
   return (

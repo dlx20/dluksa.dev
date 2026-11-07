@@ -38,12 +38,14 @@ const ProjectCard = ({ reposData }: ProjectCardProps) => {
                   ),
                 }}
               >
-                {repo.readme}
+                {repo.summary}
               </Markdown>
             </div>
-            <div>
-              <TechBadge name={repo.languages} size='sm' />
-            </div>
+            {repo.language && (
+              <div>
+                <TechBadge name={repo.language} size='sm' />
+              </div>
+            )}
           </div>
 
           <div className="border-t border-accent/10">

@@ -22,7 +22,7 @@ export const AccentColors = [
 
 // accent caching ///////////////////////////////////////////////////////////////////////////////
 const STORAGE_KEY = "accent-color";
-export let DEFAULT_ACCENT = "";
+export const DEFAULT_ACCENT = "";
 const listeners = new Set<() => void>();
 
 export const subscribe = (listener: () => void) => {
