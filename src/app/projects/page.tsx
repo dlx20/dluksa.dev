@@ -9,7 +9,9 @@ import ProjectCard from '@/components/ProjectCard';
 
       <TerminalSection label='bin' id='bin' title={['projects']} >
         <div className="grid grid-cols-2 gap-2">
-            <ProjectCard  reposData={repos} />
+            {repos.map((repo) => (
+              <ProjectCard key={repo.name} data={repo} />
+            ))}
           </div>
       </TerminalSection>
      </div>
