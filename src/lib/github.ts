@@ -10,16 +10,21 @@ const USERNAME = process.env.GITHUB_USERNAME;
 export type Project = {
   name: string;
   slug: string;
+  url: string;
   readme: string;
   summary: string;
   description: string | null;
   language: string | null;
 };
 
+// Card-sized project data, without the full README (safe to send to the client)
+export type ProjectSummary = Omit<Project, "readme">;
+
 // repo types
 type githubRepo = {
   name: string;
   full_name: string;
+  html_url: string;
   default_branch: string;
   description: string | null;
   language: string | null;
@@ -32,6 +37,7 @@ const toProject = (repo: githubRepo, rawReadme = ""): Project => {
   return {
     slug: repo.name,
     name: repo.name,
+    url: repo.html_url,
     readme,
     summary: getReadmeSummary(readme),
     description: repo.description,
