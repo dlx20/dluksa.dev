@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "corepack": "^0.36.0",
     "next": "^16.4.4",
     "next-themes": "^0.4.6",
     "react": "19.3.0",
