@@ -58,7 +58,7 @@ export default async function Home() {
           <div className="grid grid-cols-3 gap-2">
               {
                 repos.map((repo) => (
-                  <ProjectCard key={repo.name} data = {repo}/>
+                  <ProjectCard key={repo.name} project = {repo}/>
                 ))
               }
           </div>

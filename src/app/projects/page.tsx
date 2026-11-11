@@ -3,6 +3,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import TerminalSection from "@/components/TerminalSection";
 import ProjectFilter from "@/components/ProjectFilter";
 import { getProjects, type ProjectSummary } from "@/lib/github";
+import ProjectGrid from "@/components/ProjectGrid";
 
 const Page = async () => {
   const repos = await getProjects();
@@ -11,20 +12,16 @@ const Page = async () => {
   const projects: ProjectSummary[] = repos.map(({ readme: _readme, ...project }) => project);
 
   return (
-    <div className="w-full text-fg-base">
-      <main className="mx-auto w-full max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-10 lg:pt-12">
-        <TerminalSection id="exe" label="exe" title={["all", "projects"]}>
-          <div>
-            <Link href="/" className="btn inline-flex items-center gap-2">
-              <FiArrowLeft className="size-4" />
-              cd ~
-            </Link>
-          </div>
+    <section className="w-full">
+      <div className="mx-auto w-full max-w-7xl">
+        <TerminalSection label="exe" title={['All', 'Projects']} id="projects">
 
-          <ProjectFilter projects={projects} />
+          <ProjectGrid defaultLayout="grid" project={projects}>
+
+          </ProjectGrid>
         </TerminalSection>
-      </main>
-    </div>
+      </div>
+    </section>
   );
 };
 
