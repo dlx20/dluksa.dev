@@ -12,7 +12,7 @@ const Page = async () => {
   const projects: ProjectSummary[] = repos.map(({ readme: _readme, ...project }) => project);
 
   return (
-    <section className="w-full">
+    <section className="w-full p-6">
       <div className="mx-auto w-full max-w-7xl">
         <TerminalSection label="exe" title={['All', 'Projects']} id="projects">
 
