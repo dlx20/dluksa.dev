@@ -16,9 +16,12 @@ const Page = async () => {
       <div className="mx-auto w-full max-w-7xl">
         <TerminalSection label="exe" title={['All', 'Projects']} id="projects">
 
-          <ProjectGrid defaultLayout="grid" project={projects}>
+            <ProjectGrid defaultLayout="grid" project={projects}>
+              <ProjectFilter/>
 
-          </ProjectGrid>
+            </ProjectGrid>
+
+
         </TerminalSection>
       </div>
     </section>

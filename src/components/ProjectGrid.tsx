@@ -1,72 +1,68 @@
-'use client'
+"use client";
 
-import { ProjectSummary } from '@/lib/github'
-import React, { useState } from 'react'
-import ProjectCard from './ProjectCard'
-import { CiGrid41, CiBoxList } from 'react-icons/ci'
+import { ProjectSummary } from "@/lib/github";
+import React, { useState } from "react";
+import ProjectCard from "./ProjectCard";
+import { CiGrid41, CiBoxList } from "react-icons/ci";
 
-type Layout = 'grid' | 'row'
+type Layout = "grid" | "row";
 
 type ProjectGridProps = {
-    project: ProjectSummary[],
-    defaultLayout?: Layout
-}
+  project: ProjectSummary[];
+  defaultLayout?: Layout;
+  children?: ReactNode;
+};
 
+function ProjectGrid({
+  defaultLayout = "grid",
+  project,
+  children,
+}: ProjectGridProps) {
+  const [cardLayout, setCardLayout] = useState<Layout>(defaultLayout);
 
-function ProjectGrid({ defaultLayout = "grid", project }: ProjectGridProps) {
+  const toggleLayout = () => {
+    setCardLayout((prev) => (prev == "grid" ? "row" : "grid"));
+  };
 
-    const [cardLayout, setCardLayout] = useState<Layout>(defaultLayout)
-
-
-    const toggleLayout = () => {
-        setCardLayout((prev) => (prev == 'grid' ? 'row' : 'grid'))
-    }
-
-    console.log(cardLayout)
-
-
-    if (project.length === 0) {
-        return (
-            <div>
-                <p>
-                    There is no projects to display
-                </p>
-            </div>
-        )
-    }
-
+  if (project.length === 0) {
     return (
-        <div >
+      <div>
+        <p>There is no projects to display</p>
+      </div>
+    );
+  }
 
-            <div className='flex justify-end'>
+  return (
+    <div className='flex flex-col gap-3'>
+      <div className="flex items-center justify-between">
+        {children}
 
+        <button
+          onClick={toggleLayout}
+          className="relative cursor-pointer box flex items-center p-2 gap-2"
+        >
+          <span
+            className={`absolute box rounded-md  left-1 inset-y-1 w-[calc(50%-4px)] transition-transform bg-accent/20 ${cardLayout == "grid" ? "translate-x-0" : "translate-x-full"}`}
+          />
 
-                <button onClick={toggleLayout} className='relative cursor-pointer box flex items-center p-2 gap-2 mb-2'>
-
-
-                    <span className={`absolute box rounded-md  left-1 inset-y-1 w-[calc(50%-4px)] transition-transform bg-accent/20 ${cardLayout == 'grid' ? 'translate-x-0' : 'translate-x-full'}`} />
-
-                    <span className='z-10 relative '>
-                        <CiGrid41 size={24} />
-
-                    </span>
-                    <span className='z-10 relative'>
-                        <CiBoxList size={24} />
-                    </span>
-
-
-                </button>
-            </div>
-            <div className={`grid grid-cols-1 gap-4 ${cardLayout === 'grid' ? '' : 'sm:grid-cols-2 md:grid-cols-3'}`}>
-
-                {
-                    project.map((_project) => (
-                        <ProjectCard key={_project.slug} project={_project} />
-                    ))
-                }
-            </div>
-        </div>
-    )
+          <span className="z-10 relative ">
+            {" "}
+            <CiGrid41 size={24} />
+          </span>
+          <span className="z-10 relative">
+            <CiBoxList size={24} />
+          </span>
+        </button>
+      </div>
+      <div
+        className={`grid grid-cols-1 gap-4 ${cardLayout === "grid" ? "" : "sm:grid-cols-2 md:grid-cols-3"}`}
+      >
+        {project.map((_project) => (
+          <ProjectCard key={_project.slug} project={_project} />
+        ))}
+      </div>
+    </div>
+  );
 }
 
-export default ProjectGrid
+export default ProjectGrid;
