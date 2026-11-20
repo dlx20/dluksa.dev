@@ -33,8 +33,8 @@ function ProjectGrid({
   }
 
   return (
-    <div className='flex flex-col gap-3'>
-      <div className="flex items-center justify-between">
+    <div className='flex flex-col gap-12'>
+      <div className="flex items-center gap-4">
         {children}
 
         <button
