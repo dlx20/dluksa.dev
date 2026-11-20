@@ -41,10 +41,10 @@ function ProjectGrid({ defaultLayout = "grid", project }: ProjectGridProps) {
             <div className='flex justify-end'>
 
 
-                <button onClick={toggleLayout} className='relative box flex items-center p-2 gap-2 mb-2'>
+                <button onClick={toggleLayout} className='relative cursor-pointer box flex items-center p-2 gap-2 mb-2'>
 
 
-                    <span className={`absolute box left-1 inset-y-1 w-[calc(50%-4px)] transition-transform ${cardLayout == 'grid' ? 'translate-x-0' : 'translate-x-full'}`} />
+                    <span className={`absolute box rounded-md  left-1 inset-y-1 w-[calc(50%-4px)] transition-transform bg-accent/20 ${cardLayout == 'grid' ? 'translate-x-0' : 'translate-x-full'}`} />
 
                     <span className='z-10 relative '>
                         <CiGrid41 size={24} />
