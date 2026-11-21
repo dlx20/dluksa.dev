@@ -1,7 +1,6 @@
 "use client";
 
 import { ProjectSummary } from "@/lib/github";
-import { ReactNode, useState } from "react";
 import ProjectCard from "./ProjectCard";
 import type { View } from "./ViewToggle";
 
@@ -16,8 +15,11 @@ export default function ProjectGrid({
   project,
   query = "",
 }: ProjectGridProps) {
-  const filteredProjects = project.filter((data) =>
-    data.name.toLowerCase().includes(query.toLowerCase()),
+  const filteredProjects = project.filter(
+    (data) =>
+      data.name.toLowerCase().includes(query.toLowerCase()) ||
+      data.summary.toLowerCase().includes(query.toLowerCase()) ||
+      (data.language ?? "").toLowerCase().includes(query.toLowerCase()),
   );
 
   if (project.length === 0) {
