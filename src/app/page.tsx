@@ -6,7 +6,7 @@ import TechBadge from "@/components/TechBadge";
 import TerminalSection from "@/components/TerminalSection";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { NowStatus, Skills } from "@/lib/constants";
-import { getProjects, fetchRepoReadme, getProject } from "@/lib/github";
+import { getProjects } from "@/lib/github";
 
 export default async function Home() {
   // A GitHub failure shouldn't take down the rest of the home page.
@@ -14,8 +14,6 @@ export default async function Home() {
     console.error("Failed to load projects:", error);
     return [];
   });
-
-
 
   return (
     <div className="w-full text-fg-base">
@@ -43,19 +41,17 @@ export default async function Home() {
           <StatusCard />
         </TerminalSection>
 
-        <TerminalSection
+        {/* <TerminalSection
           id="lab"
           label="lab"
           title={["lab", "notes"]}
-        ></TerminalSection>
+        ></TerminalSection> */}
 
         <TerminalSection id="exe" label="exe" title={["active", "projects"]}>
-          <div className="grid grid-cols-3 gap-2">
-              {
-                repos.map((repo) => (
-                  <ProjectCard key={repo.name} project = {repo}/>
-                ))
-              }
+          <div className="grid grid-cols-2 gap-2">
+            {repos.map((repo) => (
+              <ProjectCard key={repo.name} project={repo} />
+            ))}
           </div>
         </TerminalSection>
 
@@ -77,7 +73,7 @@ export default async function Home() {
             ))}
           </div>
         </TerminalSection>
-
+        {/* 
         <TerminalSection
           id="log"
           label="log"
@@ -97,7 +93,7 @@ export default async function Home() {
           id="etc"
           label="etc"
           title={["say", "hello"]}
-        ></TerminalSection>
+        ></TerminalSection> */}
 
         {/* Page settings Themes etc ....  */}
         <TerminalSection id="bin" label="bin" title={["system", "settings"]}>
@@ -110,11 +106,11 @@ export default async function Home() {
             </div>
           </div>
         </TerminalSection>
-        <TerminalSection
+        {/* <TerminalSection
           id="man"
           label="man"
           title={["site", "manual"]}
-        ></TerminalSection>
+        ></TerminalSection> */}
       </main>
     </div>
   );

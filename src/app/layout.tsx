@@ -23,7 +23,10 @@ const ubuntuMono = Ubuntu_Mono({
 
 // Metadata
 export const metadata: Metadata = {
-  title: "DDEV",
+  title: {
+    default: "ddev -zsh",  
+    template: "~/%s — dluksa.dev",       
+  },
   description: "Personal Website",
 };
 
