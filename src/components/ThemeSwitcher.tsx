@@ -24,8 +24,13 @@ const ThemeSwitcher = () => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2">
-        <MdOutlinePalette size={40} className="fill-accent box p-1 bg-accent/10 border-none"/>
-        <h3 className="flex flex-col text-accent">Appearance <span className="text-fg-muted">Themes and accents</span></h3>
+        <MdOutlinePalette
+          size={40}
+          className="fill-accent box p-1 bg-accent/10 border-none"
+        />
+        <h3 className="flex flex-col text-accent">
+          Appearance <span className="text-fg-muted">Themes and accents</span>
+        </h3>
       </div>
       <div className="grid grid-cols-2 gap-2">
         {themes.map((theme) => (
@@ -38,17 +43,21 @@ const ThemeSwitcher = () => {
           </button>
         ))}
       </div>
-      <div className="flex gap-2 flex-wrap">
-        {AccentColors.map((color) => (
-          <button
-            key={color}
-            onClick={() => setAccent(color)}
-            className="size-10"
-            style={{ backgroundColor: `var(${color}) ` }}
-          >
-            {}
-          </button>
-        ))}
+      <div className="flex gap-2 flex-wrap justify-center">
+        {AccentColors.map((color) => {
+          const isActive = activeAccent === color;
+          return (
+            <button
+              key={color}
+              onClick={() => setAccent(color)}
+              aria-pressed={isActive}
+              className={`size-10 rounded-md cursor-pointer ${isActive ? `outline-2 outline-offset-2` : ""}`}
+              style={{ backgroundColor: `var(${color}) `, outlineColor: `var(${color})` }}
+            >
+              {}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
