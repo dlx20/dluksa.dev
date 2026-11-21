@@ -1,7 +1,7 @@
 "use client";
 
 import { ProjectSummary } from "@/lib/github";
-import React, { useState } from "react";
+import { ReactNode, useState } from "react";
 import ProjectCard from "./ProjectCard";
 import { CiGrid41, CiBoxList } from "react-icons/ci";
 
@@ -11,18 +11,26 @@ type ProjectGridProps = {
   project: ProjectSummary[];
   defaultLayout?: Layout;
   children?: ReactNode;
+  query?: string;
 };
 
 function ProjectGrid({
   defaultLayout = "grid",
   project,
   children,
+  query,
 }: ProjectGridProps) {
   const [cardLayout, setCardLayout] = useState<Layout>(defaultLayout);
 
   const toggleLayout = () => {
     setCardLayout((prev) => (prev == "grid" ? "row" : "grid"));
   };
+
+  const filteredProjects = project.filter((data) => 
+    data.name.toLowerCase().includes(query.toLowerCase())
+  )
+  console.log(filteredProjects);
+  
 
   if (project.length === 0) {
     return (
@@ -33,7 +41,7 @@ function ProjectGrid({
   }
 
   return (
-    <div className='flex flex-col gap-12'>
+    <div className="flex flex-col gap-12">
       <div className="flex items-center gap-4">
         {children}
 
@@ -57,7 +65,7 @@ function ProjectGrid({
       <div
         className={`grid grid-cols-1 gap-4 ${cardLayout === "grid" ? "" : "sm:grid-cols-2 md:grid-cols-3"}`}
       >
-        {project.map((_project) => (
+        {filteredProjects.map((_project) => (
           <ProjectCard key={_project.slug} project={_project} />
         ))}
       </div>
