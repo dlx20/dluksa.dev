@@ -15,7 +15,7 @@ const Page = (props: { searchParams: SearchParams }) => {
     <section className="w-full p-6">
       <div className="mx-auto w-full max-w-7xl">
         <TerminalSection label="exe" title={["All", "Projects"]} id="projects">
-          <section>
+          <section className="flex items-center gap-4">
             {/* Search bar */}
             <Suspense>
               <Search />
@@ -25,12 +25,12 @@ const Page = (props: { searchParams: SearchParams }) => {
             <Suspense>
               <ViewToggle searchParams={props.searchParams} />
             </Suspense>
-
-            {/* Load the projects */}
-            <Suspense>
-              <Projects searchParams={props.searchParams} />
-            </Suspense>
           </section>
+
+          {/* Load the projects */}
+          <Suspense>
+            <Projects searchParams={props.searchParams} />
+          </Suspense>
         </TerminalSection>
       </div>
     </section>
