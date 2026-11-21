@@ -1,12 +1,13 @@
 import TerminalSection from "@/components/TerminalSection";
-import Search from "@/components/Search";
 import { getProjects, type ProjectSummary } from "@/lib/github";
 import ProjectGrid from "@/components/ProjectGrid";
 import { Suspense } from "react";
+import Search from "@/components/Search";
+import ViewToggle, { toView } from "@/components/ViewToggle";
 
 type SearchParams = Promise<{
   query?: string;
-  page?: string;
+  view?: string;
 }>;
 
 const Page = (props: { searchParams: SearchParams }) => {
@@ -14,10 +15,22 @@ const Page = (props: { searchParams: SearchParams }) => {
     <section className="w-full p-6">
       <div className="mx-auto w-full max-w-7xl">
         <TerminalSection label="exe" title={["All", "Projects"]} id="projects">
-          <Suspense>
-            <Search />
-            <Projects searchParams={props.searchParams} />
-          </Suspense>
+          <section>
+            {/* Search bar */}
+            <Suspense>
+              <Search />
+            </Suspense>
+
+            {/* Toggle layoout */}
+            <Suspense>
+              <ViewToggle searchParams={props.searchParams} />
+            </Suspense>
+
+            {/* Load the projects */}
+            <Suspense>
+              <Projects searchParams={props.searchParams} />
+            </Suspense>
+          </section>
         </TerminalSection>
       </div>
     </section>
@@ -25,12 +38,12 @@ const Page = (props: { searchParams: SearchParams }) => {
 };
 
 const Projects = async ({ searchParams }: { searchParams: SearchParams }) => {
-  const { query = "" } = await searchParams;
+  const { query = "", view } = await searchParams;
   const repos = await getProjects();
   const projects: ProjectSummary[] = repos.map(
     ({ readme: _readme, ...project }) => project,
   );
-  return <ProjectGrid query={query} project={projects} />;
+  return <ProjectGrid query={query} view={toView(view)} project={projects} />;
 };
 
 export default Page;
