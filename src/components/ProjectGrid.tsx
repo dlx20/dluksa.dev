@@ -18,7 +18,7 @@ function ProjectGrid({
   defaultLayout = "grid",
   project,
   children,
-  query,
+  query = '',
 }: ProjectGridProps) {
   const [cardLayout, setCardLayout] = useState<Layout>(defaultLayout);
 
@@ -29,7 +29,6 @@ function ProjectGrid({
   const filteredProjects = project.filter((data) => 
     data.name.toLowerCase().includes(query.toLowerCase())
   )
-  console.log(filteredProjects);
   
 
   if (project.length === 0) {

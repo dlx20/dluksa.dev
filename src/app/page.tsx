@@ -15,11 +15,6 @@ export default async function Home() {
     return [];
   });
 
-  const singleRepo = await getProject("dluksa.dev").catch((error) => {
-    console.error("Failed to load single project:", error);
-    return null;
-  });
-
 
 
   return (

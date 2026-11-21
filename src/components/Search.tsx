@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CiSearch } from "react-icons/ci";
 import { useDebouncedCallback } from "use-debounce";
 
-const ProjectFilter = () => {
+const Search = () => {
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -42,4 +42,4 @@ const ProjectFilter = () => {
   );
 };
 
-export default ProjectFilter;
+export default Search;
