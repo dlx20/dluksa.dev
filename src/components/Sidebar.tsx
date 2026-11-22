@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { FaTimes } from "react-icons/fa";
 
 type SidebarProps = {
   open: boolean;
@@ -29,8 +30,16 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         <aside
           id="sidebar"
           inert={!open}
-          className={`fixed top-0 right-0 z-50 flex h-dvh w-72 max-w-[85vw] flex-col gap-6 border-l border-accent/20 bg-surface-elevated p-4 transition-transform duration-300 ease-out ${open ? 'translate-x-0':'translate-x-full'}`}
-        ></aside>
+          className={`fixed top-0 right-0 z-50 flex h-dvh w-72 max-w-[85vw] flex-col gap-6 border-l border-accent/20 bg-surface-elevated p-4 transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
+        >
+          <button
+            aria-label="Close menu"
+            onClick={onClose}
+            className={`flex size-9 cursor-pointer items-center justify-center rounded-card border border-accent/20 bg-accent/10 hover:text-accent transition-colors hover:bg-accent/15`}
+          >
+            <FaTimes size={14} />
+          </button>
+        </aside>
       </div>
     </>
   );
