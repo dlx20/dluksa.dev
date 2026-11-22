@@ -1,6 +1,11 @@
 @layer theme, base, components, utilities;
 
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* shadcn dark: styles apply under the site's dark themes */
+@custom-variant dark (&:is(.palenight *, .void *, .cyberpunk *));
 @plugin "@tailwindcss/typography";
 
 /* ===========================================================================
@@ -8,7 +13,7 @@
    =========================================================================== */
 @layer base {
   html {
-    @apply bg-surface-base;
+    @apply bg-surface-base font-sans;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -46,6 +51,12 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
@@ -205,14 +216,12 @@
   }
 }
 
-
 @layer utilities {
 
   .emphasize {
     @apply text-accent underline underline-offset-4
   }
 }
-
 
 @layer components {
 
@@ -247,4 +256,47 @@
   --tw-prose-pre-bg: var(--color-surface-elevated);
   --tw-prose-th-borders: var(--color-border);
   --tw-prose-td-borders: var(--color-border);
+}
+
+/* ===========================================================================
+   shadcn/ui — component tokens mapped onto the site themes.
+   accent, primary and border come from the @theme block above, so shadcn
+   components follow whichever theme is active.
+   =========================================================================== */
+@theme inline {
+  --font-sans: var(--font-ubuntu-mono);
+  --font-heading: var(--font-ubuntu-mono);
+
+  --color-background: hsl(var(--surface-base));
+  --color-foreground: hsl(var(--fg-base));
+  --color-card: hsl(var(--surface-elevated));
+  --color-card-foreground: hsl(var(--fg-base));
+  --color-popover: hsl(var(--surface-elevated));
+  --color-popover-foreground: hsl(var(--fg-base));
+  --color-primary-foreground: hsl(var(--surface-base));
+  --color-secondary: hsl(var(--surface-hovered));
+  --color-secondary-foreground: hsl(var(--fg-base));
+  --color-muted: hsl(var(--surface-elevated));
+  --color-muted-foreground: hsl(var(--fg-muted));
+  --color-accent-foreground: hsl(var(--surface-base));
+  --color-destructive: hsl(var(--danger));
+  --color-input: hsl(var(--border));
+  --color-ring: hsl(var(--accent));
+
+  --color-sidebar: hsl(var(--surface-elevated));
+  --color-sidebar-foreground: hsl(var(--fg-base));
+  --color-sidebar-primary: hsl(var(--accent));
+  --color-sidebar-primary-foreground: hsl(var(--surface-base));
+  --color-sidebar-accent: hsl(var(--accent) / 0.1);
+  --color-sidebar-accent-foreground: hsl(var(--accent));
+  --color-sidebar-border: hsl(var(--accent) / 0.1);
+  --color-sidebar-ring: hsl(var(--accent));
+}
+
+/* A few shadcn classes read these variables directly */
+:root {
+  --foreground: hsl(var(--fg-base));
+  --secondary: hsl(var(--surface-hovered));
+  --sidebar-accent: hsl(var(--accent) / 0.1);
+  --sidebar-border: hsl(var(--accent) / 0.1);
 }
