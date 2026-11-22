@@ -46,8 +46,11 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen)
+    setIsOpen(!isOpen);
   };
+  const closeSidebar = () => {
+    setIsOpen(false);
+  }
 
   return (
     <>
@@ -99,13 +102,15 @@ const Header = () => {
             ))}
 
             <button
-              aria-label="Open Menu"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="sidebar"
               className="flex items-center justify-center size-9 shrink-0 cursor-pointer rounded-card border border-accent/25 bg-accent/5 text-accent transition-colors hover:bg-accent/15"
               onClick={toggleSidebar}
             >
-              <Sidebar open={isOpen} />
               <FaBars size={14} />
             </button>
+            <Sidebar open={isOpen} onClose={closeSidebar} />
           </nav>
         </div>
       </header>
