@@ -1,10 +1,11 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { navLinks } from "@/lib/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars } from "react-icons/fa";
+import Sidebar from "./Sidebar";
 
 // Current time, updated every second
 const subscribeToClock = (onChange: () => void) => {
@@ -31,13 +32,22 @@ const getViewport = () => `${window.innerWidth}x${window.innerHeight}`;
 const getEmptySnapshot = () => "";
 
 const Header = () => {
-  const time = useSyncExternalStore(subscribeToClock, getTime, getEmptySnapshot);
+  const time = useSyncExternalStore(
+    subscribeToClock,
+    getTime,
+    getEmptySnapshot,
+  );
   const viewport = useSyncExternalStore(
     subscribeToResize,
     getViewport,
     getEmptySnapshot,
   );
   const pathName = usePathname();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen)
+  };
 
   return (
     <>
@@ -91,7 +101,9 @@ const Header = () => {
             <button
               aria-label="Open Menu"
               className="flex items-center justify-center size-9 shrink-0 cursor-pointer rounded-card border border-accent/25 bg-accent/5 text-accent transition-colors hover:bg-accent/15"
+              onClick={toggleSidebar}
             >
+              <Sidebar open={isOpen} />
               <FaBars size={14} />
             </button>
           </nav>

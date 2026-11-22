@@ -1,7 +1,12 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 
-export default function Sidebar() {
+export default function Sidebar({open}:{open: boolean}) {
+  console.log(open);
+  
   return (
-    <div>Sidebar</div>
+    <div className='box absolute right-0 top-0 bottom-[-10] h-screen' style={{display: open ? 'none' : 'flex'}}>
+      sidebar
+    </div>
   )
 }
