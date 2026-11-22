@@ -5,7 +5,6 @@ import { navLinks } from "@/lib/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars } from "react-icons/fa";
-import { useSidebar } from "@/components/ui/sidebar";
 
 // Current time, updated every second
 const subscribeToClock = (onChange: () => void) => {
@@ -39,7 +38,6 @@ const Header = () => {
     getEmptySnapshot,
   );
   const pathName = usePathname();
-  const { toggleSidebar, open, openMobile, isMobile } = useSidebar();
 
   return (
     <>
@@ -91,9 +89,7 @@ const Header = () => {
             ))}
 
             <button
-              onClick={toggleSidebar}
-              aria-label="Toggle menu"
-              aria-expanded={isMobile ? openMobile : open}
+              aria-label="Open Menu"
               className="flex items-center justify-center size-9 shrink-0 cursor-pointer rounded-card border border-accent/25 bg-accent/5 text-accent transition-colors hover:bg-accent/15"
             >
               <FaBars size={14} />
