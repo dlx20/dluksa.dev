@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import ThemeSwitcher from "./ThemeSwitcher";
+import { navLinks, SocialLinks } from "@/lib/constants";
+import Link from "next/link";
+import Socials from "./Socials";
 
 type SidebarProps = {
   open: boolean;
@@ -31,7 +34,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         <aside
           id="sidebar"
           inert={!open}
-          className={`fixed top-0 right-0 z-50 flex h-dvh w-100 max-w-[85vw] flex-col gap-6 border-l border-accent/20 bg-surface-elevated p-4 transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
+          className={`fixed top-0 right-0 bottom-0 z-50 flex h-dvh w-100 max-w-[85vw] flex-col gap-6 border-l border-accent/20 bg-surface-elevated p-4 transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
         >
           <button
             aria-label="Close menu"
@@ -43,6 +46,25 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
 
           <div>
             <ThemeSwitcher />
+          </div>
+
+          <div>
+            <h1>Navigation</h1>
+            <div className="flex flex-col gap-2">
+              {navLinks.map(({ title, url }) => (
+                <Link href={url}>
+                  <>
+                    <span className="text-primary">~</span>
+                    <span className="text-accent">/</span>
+                  </>
+                  {title}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-auto mb-10" >
+            <Socials />
           </div>
         </aside>
       </div>
