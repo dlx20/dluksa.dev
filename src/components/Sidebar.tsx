@@ -44,7 +44,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
             <FaTimes size={14} />
           </button>
 
-          <section className="flex flex-col h-dvh justify-between">
+          <section className="flex flex-col h-lvh justify-between">
             {/* Theme switcher */}
             <div className="">
               <ThemeSwitcher />
