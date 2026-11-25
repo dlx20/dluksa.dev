@@ -50,13 +50,13 @@ const Header = () => {
   };
   const closeSidebar = () => {
     setIsOpen(false);
-  }
+  };
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex flex-col items-center justify-center">
+      <header className="sticky top-0 z-10 flex flex-col items-center justify-center">
         {/* Upper header */}
-        <div className="flex w-full justify-between items-center bg-surface-elevated border-b border-accent/10 px-4 py-2 sm:px-6 lg:px-10">
+        <div className=" flex w-full justify-between items-center bg-surface-elevated border-b border-accent/10 px-4 py-2 sm:px-6 lg:px-10">
           {/* Mac window dots */}
           <div className="flex shrink-0 gap-2">
             <span className="size-3 rounded-full bg-danger/80" />
@@ -110,9 +110,9 @@ const Header = () => {
             >
               <FaBars size={14} />
             </button>
-            <Sidebar open={isOpen} onClose={closeSidebar} />
           </nav>
         </div>
+        <Sidebar open={isOpen} onClose={closeSidebar} />
       </header>
     </>
   );
