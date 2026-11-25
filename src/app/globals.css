@@ -217,7 +217,7 @@
 @layer components {
 
   .btn {
-    @apply cursor-pointer border border-accent/20 px-2 py-1.5 rounded-card text-fg-muted text-body hover:border-accent/40 hover:text-accent    
+    @apply cursor-pointer border border-accent/20 px-1 py-1 rounded-card text-fg-muted text-body hover:border-accent/40 hover:text-accent    
   }
 
   .box {

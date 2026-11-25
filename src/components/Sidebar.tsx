@@ -34,7 +34,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         <aside
           id="sidebar"
           inert={!open}
-          className={`fixed top-0 right-0 bottom-0 flex h-dvh w-100 max-w-[100vw] flex-col gap-6 border-l border-accent/20 bg-surface-elevated p-4 transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
+          className={`fixed top-0 right-0 z-40 bottom-0 flex h-dvh w-75  sm:w-100 max-w-[100vw] flex-col gap-6 border-l border-accent/20 bg-surface-elevated p-4 transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
         >
           <button
             aria-label="Close menu"

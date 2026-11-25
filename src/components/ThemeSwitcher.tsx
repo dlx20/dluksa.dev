@@ -26,13 +26,13 @@ const ThemeSwitcher = () => {
       <div className="flex items-center gap-2">
         <MdOutlinePalette
           size={40}
-          className="fill-accent box p-1 bg-accent/10 border-none"
+          className="fill-accent box p-1.5 bg-accent/10 border-none"
         />
         <h3 className="flex flex-col text-accent">
           Appearance <span className="text-fg-muted">Themes and accents</span>
         </h3>
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-1 sm:gap-2">
         {themes.map((theme) => (
           <button
             className="btn last:col-span-2"
@@ -51,8 +51,11 @@ const ThemeSwitcher = () => {
               key={color}
               onClick={() => setAccent(color)}
               aria-pressed={isActive}
-              className={`size-10 rounded-md cursor-pointer ${isActive ? `outline-2 outline-offset-2` : ""}`}
-              style={{ backgroundColor: `var(${color}) `, outlineColor: `var(${color})` }}
+              className={`size-6 sm:size-8 lg:size-10 rounded-md cursor-pointer ${isActive ? `outline-2 outline-offset-2` : ""}`}
+              style={{
+                backgroundColor: `var(${color}) `,
+                outlineColor: `var(${color})`,
+              }}
             >
               {}
             </button>

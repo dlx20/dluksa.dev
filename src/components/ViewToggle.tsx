@@ -30,10 +30,10 @@ export default async function ViewToggle({
       className="relative box flex shrink-0 items-center gap-2 p-2"
     >
     <span className={`absolute box rounded-md left-1 inset-y-1 w-[calc(50%-4px)] transition-transform bg-accent/20 ${view === 'grid' ? 'transition-x-0': 'translate-x-full'}`} />
-      <span className="relative z-10">
+      <span className="relative">
         <CiGrid41 size={24} />
       </span>
-      <span className="relative z-10">
+      <span className="relative">
         <CiBoxList size={24} />
       </span>
     </Link>
