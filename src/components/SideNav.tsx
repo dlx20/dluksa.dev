@@ -1,7 +1,13 @@
+"use client";
+
 import { navLinks } from "@/lib/constants";
 import Link from "next/link";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
+// Panes/Sections titles
+const PANES = ["nav", "widgets", "theme", "accent", "net"] as const;
+
+// Func props
 type SideNavProps = {
   open: boolean;
   onClose: () => void;
@@ -10,26 +16,47 @@ type SideNavProps = {
 type PaneProps = {
   children?: ReactNode;
   className?: string;
+  active?: boolean;
+  onFocus?: () => void;
+  action?: ReactNode;
+  index: number;
 };
 
-const Pane = ({ children, className = "" }: PaneProps) => {
+// Panes
+const Pane = ({
+  children,
+  className = "",
+  active,
+  onFocus,
+  action,
+  index,
+}: PaneProps) => {
   return (
-    <div role="group" className={`flex flex-col gap-3 p-3 ${className}`}>
+    <div
+      role="group"
+      onFocus={onFocus}
+      className={`flex flex-col gap-3 p-3 ${className}`}
+    >
+      <div className="flex items-center justify-between">
+        <span className={`text-ui ${active ? "text-accent" : "text-fg-muted"}`}>
+          {index}:{PANES[index]}
+        </span>
+        {action}
+      </div>
       {children}
     </div>
   );
 };
 
+// main components
 export default function SideNav({ open, onClose }: SideNavProps) {
-  useEffect(() => {
-    if (!open) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key == "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleKey);
-
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [open, onClose]);
+  // Pane indexes
+  const [activePane, setActivePane] = useState(0);
+  const pane = (index: number) => ({
+    index,
+    active: activePane === index,
+    onFocus: () => setActivePane(index),
+  });
 
   return (
     <>
@@ -46,19 +73,25 @@ export default function SideNav({ open, onClose }: SideNavProps) {
         id="sidebar"
         inert={!open}
       >
-        <Pane className="flex flex-col gap-2 p-3 shrin-0" aria-label="nav">
-          <div className="flex items-center justify-between">
-            <span className="text-accent text-ui">0:nav</span>
+        <Pane
+          {...pane(0)}
+          className="flex flex-col gap-2 p-3 shrin-0"
+          aria-label="nav"
+          action={
             <button
-              className="flex items-center px-1.5 bg-accent/5 border-accent/25 hover:bg-accent/15 cursor-pointer text-accent text-ui 0 box rounded"
+              type="button"
+              aria-label="Close menu"
               onClick={onClose}
+              className="flex items-center px-1.5 bg-accent/5 border-accent/25 hover:bg-accent/15 cursor-pointer text-accent text-ui 0 box rounded"
             >
               esc
             </button>
-          </div>
+          }
+        >
           <nav className="flex flex-col" aria-label="menu">
             {navLinks.map(({ title, url }) => (
               <Link
+                key={url}
                 href={url}
                 className="flex items-center justify-between px-2 p-1 transition-colors hover:bg-surface-hovered.text-accent"
               >
