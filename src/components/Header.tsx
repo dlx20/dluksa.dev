@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars } from "react-icons/fa";
 import Sidebar from "./Sidebar";
+import SideNav from "./SideNav";
 
 // Current time, updated every second
 const subscribeToClock = (onChange: () => void) => {
@@ -43,10 +44,13 @@ const Header = () => {
     getEmptySnapshot,
   );
   const pathName = usePathname();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
+
+  // Sidebar controls
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+    
   };
   const closeSidebar = () => {
     setIsOpen(false);
@@ -112,7 +116,11 @@ const Header = () => {
             </button>
           </nav>
         </div>
-        <Sidebar open={isOpen} onClose={closeSidebar} />
+        {/* <Sidebar open={isOpen} onClose={closeSidebar} /> */}
+
+        <SideNav open={isOpen} onClose={closeSidebar} >
+
+        </SideNav>
       </header>
     </>
   );
