@@ -86,7 +86,7 @@ const fetchJson = async <T>(url: string): Promise<T> => {
 // fetch repos
 const fetchGithubRepos = async (): Promise<githubRepo[]> => {
   if (!USERNAME) {
-    throw new Error("Username not found!");
+    throw new Error("GITHUB_USERNAME is not set");
   }
 
   const repos = await request({
@@ -104,7 +104,7 @@ const fetchGithubRepos = async (): Promise<githubRepo[]> => {
 export const fetchRepoReadme = cache(
   async (repoName: string): Promise<string | null> => {
     if (!USERNAME) {
-      throw new Error("Username not found!");
+      throw new Error("GITHUB_USERNAME is not set");
     }
     try {
       const readme = await request({

@@ -13,13 +13,33 @@ type ProjectPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+// Stands in for the real slugs when GitHub can't be reached at build time.
+// With Cache Components the build needs at least one param to check, so it
+// checks this one, and real project pages render on their first visit
+const PLACEHOLDER_SLUG = "__placeholder__";
+
 export async function generateStaticParams() {
-  const projects = await getProjects();
-  return projects.map((project) => ({ slug: project.slug }));
+  try {
+    const projects = await getProjects();
+    if (projects.length > 0) {
+      return projects.map((project) => ({ slug: project.slug }));
+    }
+  } catch (error) {
+    // A missing token or a GitHub outage shouldn't fail the whole build
+    console.warn(
+      "Couldn't load projects from GitHub at build time, so project pages will render on first visit:",
+      error instanceof Error ? error.message : error,
+    );
+  }
+  return [{ slug: PLACEHOLDER_SLUG }];
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
+  // Checked before fetching, so prerendering the placeholder never calls GitHub
+  if (slug === PLACEHOLDER_SLUG) {
+    notFound();
+  }
   const project = await getProject(slug);
   if (!project) {
     notFound();
