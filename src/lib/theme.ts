@@ -1,4 +1,7 @@
 "use client";
+import { useSyncExternalStore } from "react";
+import { useTheme } from "next-themes";
+
 // Themes
 export const themes = [
   { name: "Ashlight", class: "ashlight" },
@@ -58,6 +61,24 @@ export const setAccent = (accent: string): void => {
 export const restoreAccent = (): void => {
   applyAccent(getAccent());
   // DEFAULT_ACCENT = getAccent()
+};
+
+// Active accent, empty until hydrated
+export const useAccent = () =>
+  useSyncExternalStore(subscribe, getAccent, getDefaultAccent);
+
+// The saved theme only exists in the browser, so it stays undefined until
+// hydration to keep the server and first client render identical
+const subscribeNoop = () => () => {};
+
+export const useActiveTheme = () => {
+  const { theme, setTheme } = useTheme();
+  const hydrated = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false,
+  );
+  return { theme: hydrated ? theme : undefined, setTheme };
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

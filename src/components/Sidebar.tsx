@@ -51,9 +51,9 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
             </div>
 
             {/* Site navigation links */}
-            <div className="">
-              <h1>Navigation</h1>
-              <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 border-accent/20">
+              <h1 className="flex border-b border-accent/20 w-full justify-center ">Navigation</h1>
+              <div className="flex flex-col gap-2 pl-3">
                 {navLinks.map(({ title, url }) => (
                   <Link href={url}>
                     <>
@@ -67,7 +67,8 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
             </div>
 
             {/* Social icon-links */}
-            <div className="flex items-center justify-center border-t border-accent/20">
+            <div className="flex flex-col gap-2 items-center justify-center p-3">
+            <h1 className="flex w-full justify-center border-b border-accent/20 ">Socials</h1>
               <Socials />
             </div>
           </section>

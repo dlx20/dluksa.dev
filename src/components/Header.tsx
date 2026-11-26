@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { navLinks } from "@/lib/constants";
+import { isActivePath } from "@/lib/nav";
+import type { Weather } from "@/lib/weather";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars } from "react-icons/fa";
-import Sidebar from "./Sidebar";
+import MenuPanes from "./MenuPanes";
+import MenuSheet from "./MenuSheet";
 
 // Current time, updated every second
 const subscribeToClock = (onChange: () => void) => {
@@ -31,7 +34,12 @@ const getViewport = () => `${window.innerWidth}x${window.innerHeight}`;
 // Both are empty on the server and fill in once hydrated
 const getEmptySnapshot = () => "";
 
-const Header = () => {
+type HeaderProps = {
+  // London weather for the menu, loaded on the server
+  weather: Promise<Weather | null>;
+};
+
+const Header = ({ weather }: HeaderProps) => {
   const time = useSyncExternalStore(
     subscribeToClock,
     getTime,
@@ -44,11 +52,33 @@ const Header = () => {
   );
   const pathName = usePathname();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+  // Close the menu whenever the page changes, from any link or the back button
+  const [menuPath, setMenuPath] = useState(pathName);
+  if (menuPath !== pathName) {
+    setMenuPath(pathName);
+    setIsOpen(false);
+  }
+
+  // Escape closes the menu and returns focus to its button
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setIsOpen(false);
+      menuButtonRef.current?.focus();
+    };
+
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [isOpen]);
+
+  const toggleMenu = () => {
+    setIsOpen((open) => !open);
   };
-  const closeSidebar = () => {
+  const closeMenu = () => {
     setIsOpen(false);
   };
 
@@ -92,7 +122,7 @@ const Header = () => {
                 key={title}
                 href={url}
                 className={`hidden text-ui uppercase tracking-wide transition-colors hover:text-accent sm:inline-flex ${
-                  pathName === url || (url !== "/" && pathName.startsWith(url))
+                  isActivePath(pathName, url)
                     ? "text-accent underline underline-offset-4"
                     : "text-accent/60"
                 }`}
@@ -102,17 +132,31 @@ const Header = () => {
             ))}
 
             <button
+              ref={menuButtonRef}
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
-              aria-controls="sidebar"
-              className="flex items-center justify-center size-9 shrink-0 cursor-pointer rounded-card border border-accent/25 bg-accent/5 text-accent transition-colors hover:bg-accent/15"
-              onClick={toggleSidebar}
+              aria-controls="menu-panes menu-sheet"
+              className={`flex items-center justify-center size-9 shrink-0 cursor-pointer rounded-card border text-accent transition-colors hover:bg-accent/15 ${
+                isOpen
+                  ? "border-accent/40 bg-accent/15"
+                  : "border-accent/25 bg-accent/5"
+              }`}
+              onClick={toggleMenu}
             >
               <FaBars size={14} />
             </button>
           </nav>
         </div>
-        <Sidebar open={isOpen} onClose={closeSidebar} />
+        {/* Menus: tmux panes drawer on desktop, bottom sheet on mobile.
+            Kept outside the blurred bar, because backdrop-blur would trap
+            their fixed positioning inside the bar */}
+        <MenuPanes
+          open={isOpen}
+          onClose={closeMenu}
+          time={time}
+          weather={weather}
+        />
+        <MenuSheet open={isOpen} onClose={closeMenu} />
       </header>
     </>
   );

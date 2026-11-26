@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import type { ThemeProviderProps } from "next-themes";
 import Header from "@/components/Header";
+import { getWeather } from "@/lib/weather";
 import { Suspense } from "react";
 
 // Themes properties
@@ -36,7 +37,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="scrollbar min-h-screen font-ubuntu-mono bg-surface-base text-fg-base antialiased selection:bg-accent/30">
         <ThemeProvider {...THEME_PROPS}>
           <Suspense>
-            <Header />
+            {/* Not awaited: the menu's weather pane streams in on its own */}
+            <Header weather={getWeather()} />
           </Suspense>
           {children}
         </ThemeProvider>
